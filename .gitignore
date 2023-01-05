@@ -1,0 +1,14 @@
+poc/my-app/node_modules/
+poc/my-app/.expo/
+poc/my-app/dist/
+poc/my-app/npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+poc/my-app/web-build/
+
+# macOS
+poc/my-app/.DS_Store
