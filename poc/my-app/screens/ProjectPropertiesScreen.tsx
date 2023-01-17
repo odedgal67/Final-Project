@@ -9,9 +9,9 @@ const ProjectsScreen = ({navigation, route}) => {
     navigation.setOptions({title: route.params.projectName});
     return (
       <SafeAreaView>
-        <ProjectButton projectName="שלבי בנייה" onPress={() => alert("end of the poc!")}/>
-        <ProjectButton projectName="ליקויי בנייה" onPress={() => alert("end of the poc!")}/>
-        <ProjectButton projectName="תכניות" onPress={() => alert("end of the poc!")}/>
+        <ProjectButton projectName="שלבי בנייה" onPress={() => navigation.navigate("GeneralStagesScreen")}/>
+        <ProjectButton projectName="ליקויי בנייה" onPress={() => navigation.navigate("GeneralStagesScreen")}/>
+        <ProjectButton projectName="שלבי בנייה - דירות" onPress={() => navigation.navigate("GeneralStagesScreen")}/>
       </SafeAreaView>
     );
   };
