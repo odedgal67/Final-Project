@@ -12,8 +12,8 @@ import {
 
 const statusColors: Record<string, string> = {
   "לא בוצע": "#ffa134",
-  בתהליך: "#f7e350",
-  הסתיים: "#44ce1b",
+  "בתהליך": "#f7e350",
+  "הסתיים": "#44ce1b",
   "לא תקין": "#e51f1f",
 };
 
