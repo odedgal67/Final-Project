@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Button,
-  Text,
-  Pressable,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Modal,
-  ScrollView,
-} from "react-native";
+import { Text, Pressable, StyleSheet, View, TouchableOpacity, Modal } from "react-native";
 
 const statusColors: Record<string, string> = {
   "לא בוצע": "#ffa134",
@@ -43,6 +34,7 @@ const StatusRectangle = (props: {
       flex: 1,
     },
     text: {
+      textAlign: "center",
       fontSize: 16,
       lineHeight: 21,
       fontWeight: "bold",

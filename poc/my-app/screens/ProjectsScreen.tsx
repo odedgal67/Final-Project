@@ -1,12 +1,7 @@
-import * as React from "react";
-import {
-  NavigationContainer,
-  StackNavigationState,
-} from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Button, Text } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProjectButton from "../components/ProjectButton";
+import Background from "../components/Background";
 
 const project_names = [
   "פרוייקט 1",
@@ -35,7 +30,11 @@ function get_project_buttons(navigation: any) {
 }
 
 const ProjectsScreen = ({ navigation }) => {
-  return <SafeAreaView>{get_project_buttons(navigation)}</SafeAreaView>;
+  return (
+    <Background>
+      <SafeAreaView>{get_project_buttons(navigation)}</SafeAreaView>
+    </Background>
+  );
 };
 
 export default ProjectsScreen;

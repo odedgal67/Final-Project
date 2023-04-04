@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Text, Pressable, StyleSheet } from "react-native";
+import { Text, Pressable, StyleSheet } from "react-native";
 
 const StageButton = (props: { stageName: String; onClick }) => {
   return (
@@ -11,6 +11,7 @@ const StageButton = (props: { stageName: String; onClick }) => {
 
 const styles = StyleSheet.create({
   button: {
+    alignItems: "center",
     width: "50%",
     justifyContent: "center",
     paddingVertical: 16,
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    textAlign: "right",
+    textAlign: "center",
     fontSize: 14,
     lineHeight: 21,
     color: "white",

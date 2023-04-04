@@ -5,10 +5,11 @@ import { View, Button, Text, StyleSheet, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProjectButton from "../components/ProjectButton";
 import StagesTable from "../components/StagesTable";
+import Background from "../components/Background";
 
 const MissionScreen = ({ navigation, route }) => {
   return (
-    <View>
+    <Background>
       <View style={{ alignItems: "center" }}>
         <Text style={styles.title}>תיאור משימה</Text>
         <Text style={styles.title}>{route.params.description}</Text>
@@ -25,7 +26,7 @@ const MissionScreen = ({ navigation, route }) => {
         <LinkButton title={"קישור לתוכנית"}></LinkButton>
         <LinkButton title={"קישור לתיעוד"}></LinkButton>
       </View>
-    </View>
+    </Background>
   );
 };
 
@@ -38,9 +39,17 @@ const LinkButton = (props) => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
+    margin: 10,
+  },
   button: {
     alignItems: "center",
     justifyContent: "center",
+    textAlign: "center",
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderRadius: 10,

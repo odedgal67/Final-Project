@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Button,
-  Text,
-  Pressable,
-  StyleSheet,
-  View,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
+import { View, ScrollView } from "react-native";
 import StageButton from "./StageButton";
 import StatusRectangle from "./StatusRectangle";
 
@@ -16,8 +8,8 @@ function getRows(stageNames: String[], stageStatuses: String[], ButtonHandler) {
   for (let i = 0; i < stageNames.length; i++) {
     rows.push(
       <View style={{ flexDirection: "row" }}>
-        <StatusRectangle status={stageStatuses[i]} />
         <StageButton stageName={stageNames[i]} onClick={ButtonHandler} />
+        <StatusRectangle status={stageStatuses[i]} />
       </View>
     );
   }

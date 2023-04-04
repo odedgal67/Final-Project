@@ -6,12 +6,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ProjectButton from "../components/ProjectButton";
 import StagesTable from "../components/StagesTable";
 import { View } from "react-native";
+import Background from "../components/Background";
 
 const stage_names: string[] = [
   "שלב מקדים",
   "עבודות עפר",
   "מרתף",
-  "יסודות+ כלונסאות",
+  "יסודות + כלונסאות",
   "שלד הבניין",
   "עבודות בנייה",
   "עבודות טייח",
@@ -39,16 +40,18 @@ const stage_statuses = [
 
 const GeneralStagesScreen = ({ navigation, route }) => {
   return (
-    <View>
-      <StagesTable
-        stagesNames={stage_names}
-        stagesStatuses={stage_statuses}
-        columnTitle={"שלבים"}
-        ButtonHandler={(stage_name: String) =>
-          navigation.navigate("MissionListsScreen", { stageName: stage_name })
-        }
-      />
-    </View>
+    <Background>
+      <View>
+        <StagesTable
+          stagesNames={stage_names}
+          stagesStatuses={stage_statuses}
+          columnTitle={"שלבים"}
+          ButtonHandler={(stage_name: String) =>
+            navigation.navigate("MissionListsScreen", { stageName: stage_name })
+          }
+        />
+      </View>
+    </Background>
   );
 };
 
