@@ -1,6 +1,6 @@
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ProjectButton from "../components/ProjectButton";
+import ProjectButton from "../components/LevelsButton";
 import Background from "../components/Background";
 
 const level_names = [

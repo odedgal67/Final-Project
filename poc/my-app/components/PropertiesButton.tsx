@@ -2,7 +2,7 @@ import React from "react";
 import { Text, Pressable, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-const ProjectButton = (props) => {
+const PropertiesButton = (props) => {
   return (
     <Pressable style={styles.button} onPress={props.onPress}>
       <LinearGradient
@@ -11,7 +11,7 @@ const ProjectButton = (props) => {
         end={{ x: 0, y: 1 }}
         style={styles.gradient}
       />
-      <Text style={styles.text}>{props.projectName}</Text>
+      <Text style={styles.text}>{props.propertyName}</Text>
     </Pressable>
   );
 };
@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 20,
-    elevation: 20,
-    margin: 4.5,
+    paddingVertical: "15%",
+    paddingHorizontal: "10%",
+    marginHorizontal: 10,
+    marginVertical: 0,
+    flex: 1,
   },
   gradient: {
     position: "absolute",
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProjectButton;
+export default PropertiesButton;

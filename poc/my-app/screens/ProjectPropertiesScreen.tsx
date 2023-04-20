@@ -1,32 +1,37 @@
 import * as React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ProjectButton from "../components/ProjectButton";
+import ProjectButton from "../components/PropertiesButton";
 import Background from "../components/Background";
+import { View } from "react-native";
 
-const ProjectsScreen = ({ navigation, route }) => {
-  navigation.setOptions({ title: route.params.projectName });
+const ProjectPropertiesScreen = ({ navigation, route }) => {
+  navigation.setOptions({ title: route.params.propertyName });
   return (
     <Background>
-      <SafeAreaView>
-        <ProjectButton
-          projectName="שלבים כלליים"
-          onPress={() => navigation.navigate("GeneralStagesScreen")}
-        />
-        <ProjectButton
-          projectName="תכניות"
-          onPress={() => navigation.navigate("PlansScreen")}
-        />
-        <ProjectButton
-          projectName="ליקויי בנייה"
-          onPress={() => navigation.navigate("GeneralStagesScreen")}
-        />
-        <ProjectButton
-          projectName="שלבי בנייה לפי דירות"
-          onPress={() => navigation.navigate("LevelsScreen")}
-        />
+      <SafeAreaView style={{ flexDirection: "column", justifyContent: "center", paddingTop: 40, margin: 20 }}>
+        <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 20, }}>
+          <ProjectButton
+            propertyName="שלבים כלליים"
+            onPress={() => navigation.navigate("GeneralStagesScreen")}
+          />
+          <ProjectButton
+            propertyName="תכניות"
+            onPress={() => navigation.navigate("PlansScreen")}
+          />
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <ProjectButton
+            propertyName="ליקויי בנייה"
+            onPress={() => navigation.navigate("GeneralStagesScreen")}
+          />
+          <ProjectButton
+            propertyName="שלבי בנייה לפי דירות"
+            onPress={() => navigation.navigate("LevelsScreen")}
+          />
+        </View>
       </SafeAreaView>
     </Background>
   );
 };
 
-export default ProjectsScreen;
+export default ProjectPropertiesScreen;
