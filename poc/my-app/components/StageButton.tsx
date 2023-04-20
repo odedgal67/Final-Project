@@ -12,17 +12,12 @@ const StageButton = (props: { stageName: String; onClick }) => {
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    width: "50%",
     justifyContent: "center",
     paddingVertical: 16,
     paddingHorizontal: 16,
+    backgroundColor: "#283635",
     borderRadius: 10,
-    elevation: 3,
-    backgroundColor: "#646464",
-    borderColor: "black",
-    borderWidth: 1,
-    margin: 4.5,
-    flex: 1,
+    flex: 2,
   },
   text: {
     textAlign: "center",

@@ -6,13 +6,21 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 
 const statusColors: Record<string, string> = {
   "לא בוצע": "#ffa134",
-  בתהליך: "#f7e350",
-  הסתיים: "#44ce1b",
+  "בתהליך": "#f7e350",
+  "הסתיים": "#44ce1b",
   "לא תקין": "#e51f1f",
+};
+
+const statusIMG: Record<string, string> = {
+  "לא בוצע": "https://i.ibb.co/xM7tRCw/to-do-list.png",
+  "בתהליך": "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
+  "הסתיים": "https://i.ibb.co/y8sq6Vb/check-mark.png",
+  "לא תקין": "https://i.ibb.co/58yC1H2/breakdown.png",
 };
 
 const StatusRectangle = (props: {
@@ -23,15 +31,12 @@ const StatusRectangle = (props: {
 
   const handleChange = (value: string) => {
     setModalVisible(false);
-    // props.onChange(value);
   };
 
   const styles = StyleSheet.create({
     button: {
       alignItems: "center",
       justifyContent: "center",
-      paddingVertical: 16,
-      paddingHorizontal: 32,
       borderRadius: 10,
       elevation: 3,
       backgroundColor: statusColors[props.status] || "#ff0000",
@@ -75,9 +80,12 @@ const StatusRectangle = (props: {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 0 }}>
       <Pressable style={styles.button} onPress={() => setModalVisible(true)}>
-        <Text style={styles.text}>{props.status}</Text>
+        <Image
+          source={{ uri: statusIMG[props.status] }}
+          style={{ width: 50, height: 50, margin: 2 }}
+        />
         <Modal
           animationType="slide"
           transparent={true}
