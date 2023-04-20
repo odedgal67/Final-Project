@@ -1,7 +1,9 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Text } from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { Ionicons } from "@expo/vector-icons";
+
 import ProjectsScreen from "./screens/ProjectsScreen";
 import ProjectPropertiesScreen from "./screens/ProjectPropertiesScreen";
 import GeneralStagesScreen from "./screens/GeneralStagesScreen";
@@ -16,7 +18,22 @@ const Stack = createNativeStackNavigator();
 const MyStack = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerTitleAlign: "center" }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerTitleAlign: "center",
+          headerRight: () => (
+            <HeaderButtons>
+              <Item
+                title="Menu"
+                iconName="menu-outline"
+                iconSize={30}
+                onPress={() => console.log("Pressed")}
+                IconComponent={Ionicons}
+              />
+            </HeaderButtons>
+          ),
+        }}
+      >
         <Stack.Screen
           name="projects"
           component={ProjectsScreen}
