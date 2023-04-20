@@ -6,7 +6,8 @@ const names = ["תכנית 1", "תכנית 2", "תכנית 3"];
 const links = ["https://www.example.com/plan1", "https://www.example.com/plan2", "https://www.example.com/plan3"];
 const dates = ["20/04/2023", "20/04/2023", "20/04/2023"];
 
-const PlansScreen = () => {
+const PlansScreen = ({ navigation, route }) => {
+    navigation.setOptions({ title: route.params.header + " > תכניות" });
   return (
     <Background>
       <View style={styles.container}>

@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 16,
     paddingHorizontal: 32,
-    borderRadius: 20,
-    elevation: 20,
+    borderRadius: 100,
+    elevation: 10,
     margin: 4.5,
   },
   gradient: {

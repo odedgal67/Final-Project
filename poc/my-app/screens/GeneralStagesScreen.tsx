@@ -39,6 +39,7 @@ const stage_statuses = [
 ];
 
 const GeneralStagesScreen = ({ navigation, route }) => {
+  navigation.setOptions({ title: route.params.header + " > שלבים כלליים" });
   return (
     <Background>
       <View>

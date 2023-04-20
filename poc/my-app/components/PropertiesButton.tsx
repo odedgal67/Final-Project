@@ -25,6 +25,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 0,
     flex: 1,
+    elevation: 15,
+    borderRadius: 10,
   },
   gradient: {
     position: "absolute",

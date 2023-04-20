@@ -25,7 +25,7 @@ function get_level_buttons(navigation: any) {
         levelName={level_names[i]}
         onPress={() =>
           navigation.navigate("GeneralStagesScreen", {
-            levelName: level_names[i],
+            header: level_names[i],
           })
         }
       />
@@ -34,7 +34,8 @@ function get_level_buttons(navigation: any) {
   return buttons;
 }
 
-const LevelsScreen = ({ navigation }) => {
+const LevelsScreen = ({ navigation, route }) => {
+  navigation.setOptions({ title: route.params.header + " > שלבי בנייה" });
   return (
     <Background>
       <SafeAreaView>{get_level_buttons(navigation)}</SafeAreaView>
