@@ -6,7 +6,7 @@ const Background = ({ children }) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#cce3de80", "#eaf4f4"]}
+        colors={["#f4efeb", "#f4efeb"]}
         start={{ x: 0, y: 1 }}
         end={{ x: -1, y: 0 }}
         style={styles.gradient}
