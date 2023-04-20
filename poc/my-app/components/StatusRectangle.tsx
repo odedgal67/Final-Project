@@ -1,10 +1,17 @@
 import React from "react";
-import { Text, Pressable, StyleSheet, View, TouchableOpacity, Modal } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const statusColors: Record<string, string> = {
   "לא בוצע": "#ffa134",
-  "בתהליך": "#f7e350",
-  "הסתיים": "#44ce1b",
+  בתהליך: "#f7e350",
+  הסתיים: "#44ce1b",
   "לא תקין": "#e51f1f",
 };
 
@@ -52,10 +59,13 @@ const StatusRectangle = (props: {
   function opacity_comp(value: string) {
     let _styles = {
       alignItems: "center",
+      alignSelf: "center",
+      justifyContent: "center",
+      width: "100%",
       backgroundColor: statusColors[value],
-      padding: 10,
       margin: 10,
       height: 50,
+      borderRadius: 20,
     };
     return (
       <TouchableOpacity style={_styles} onPress={() => handleChange(value)}>
@@ -70,19 +80,29 @@ const StatusRectangle = (props: {
         <Text style={styles.text}>{props.status}</Text>
         <Modal
           animationType="slide"
-          transparent={false}
+          transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
             setModalVisible(false);
           }}
         >
-          <View style={{ marginTop: 22 }}>
-            <View>
-              {opacity_comp("לא בוצע")}
-              {opacity_comp("בתהליך")}
-              {opacity_comp("הסתיים")}
-              {opacity_comp("לא תקין")}
-            </View>
+          <View style={{ backgroundColor: "#111111", flex: 2, opacity: 0 }}>
+            <Pressable
+              style={{ flex: 1 }}
+              onPress={() => setModalVisible(false)}
+            ></Pressable>
+          </View>
+          <View
+            style={{
+              backgroundColor: "rgba(52,52,52,0.5)",
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+            }}
+          >
+            {opacity_comp("לא בוצע")}
+            {opacity_comp("בתהליך")}
+            {opacity_comp("הסתיים")}
+            {opacity_comp("לא תקין")}
           </View>
         </Modal>
       </Pressable>
