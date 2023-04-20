@@ -6,7 +6,7 @@ const PropertiesButton = (props) => {
   return (
     <Pressable style={styles.button} onPress={props.onPress}>
       <LinearGradient
-        colors={["#ffb84c99", "#ffb26b"]}
+        colors={["#53A8B6", "#5585B599"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradient}
