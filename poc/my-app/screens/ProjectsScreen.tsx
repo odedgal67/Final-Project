@@ -10,7 +10,6 @@ const project_names = [
   "פרוייקט 3",
   "פרוייקט 4",
   "פרוייקט 5",
-  "פרוייקט 6",
 ];
 
 function get_project_buttons(navigation: any) {
@@ -26,14 +25,16 @@ function get_project_buttons(navigation: any) {
             })
           }
         />
-        <ProjectButton
-          projectName={project_names[i + 1]}
-          onPress={() =>
-            navigation.navigate("projectProperties", {
-              projectName: project_names[i + 1],
-            })
-          }
-        />
+        {project_names[i + 1] && (
+          <ProjectButton
+            projectName={project_names[i + 1]}
+            onPress={() =>
+              navigation.navigate("projectProperties", {
+                projectName: project_names[i + 1],
+              })
+            }
+          />
+        )}
       </View>
     );
   }
@@ -43,13 +44,7 @@ function get_project_buttons(navigation: any) {
 const ProjectsScreen = ({ navigation }) => {
   return (
     <Background>
-      <SafeAreaView
-        style={{
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          padding: "10%",
-        }}
-      >
+      <SafeAreaView style={{ paddingTop: 20 }}>
         {get_project_buttons(navigation)}
       </SafeAreaView>
     </Background>
