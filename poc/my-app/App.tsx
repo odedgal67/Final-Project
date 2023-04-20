@@ -7,6 +7,9 @@ import ProjectPropertiesScreen from "./screens/ProjectPropertiesScreen";
 import GeneralStagesScreen from "./screens/GeneralStagesScreen";
 import MissionScreen from "./screens/MissionScreen";
 import MissionListsScreen from "./screens/MissionListScreen";
+import LevelsScreen from "./screens/LevelsScreen";
+import RegistrationScreen from "./screens/RegistrationScreen";
+import PlansScreen from "./screens/PlansScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +50,27 @@ const MyStack = () => {
           component={MissionListsScreen}
           options={{
             title: "משימות",
+          }}
+        />
+        <Stack.Screen
+          name="LevelsScreen"
+          component={LevelsScreen}
+          options={{
+            title: "משימות לפי דירה",
+          }}
+        />
+        <Stack.Screen
+          name="RegistrationScreen"
+          component={RegistrationScreen}
+          options={{
+            title: "הרשמה",
+          }}
+        />
+        <Stack.Screen
+          name="PlansScreen"
+          component={PlansScreen}
+          options={{
+            title: "תכניות",
           }}
         />
       </Stack.Navigator>

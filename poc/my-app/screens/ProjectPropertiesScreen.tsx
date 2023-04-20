@@ -1,28 +1,37 @@
 import * as React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ProjectButton from "../components/ProjectButton";
+import PropertiesButton from "../components/PropertiesButton";
 import Background from "../components/Background";
+import { View } from "react-native";
 
-const ProjectsScreen = ({ navigation, route }) => {
+const ProjectPropertiesScreen = ({ navigation, route }) => {
   navigation.setOptions({ title: route.params.projectName });
   return (
     <Background>
-      <SafeAreaView>
-        <ProjectButton
-          projectName="שלבי בנייה"
-          onPress={() => navigation.navigate("GeneralStagesScreen")}
-        />
-        <ProjectButton
-          projectName="ליקויי בנייה"
-          onPress={() => navigation.navigate("GeneralStagesScreen")}
-        />
-        <ProjectButton
-          projectName="שלבי בנייה - דירות"
-          onPress={() => navigation.navigate("GeneralStagesScreen")}
-        />
+      <SafeAreaView style={{ flexDirection: "column", justifyContent: "center", paddingTop: 40, margin: 20 }}>
+        <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 20, }}>
+          <PropertiesButton
+            propertyName="שלבים כלליים"
+            onPress={() => navigation.navigate("GeneralStagesScreen")}
+          />
+          <PropertiesButton
+            propertyName="תכניות"
+            onPress={() => navigation.navigate("PlansScreen")}
+          />
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <PropertiesButton
+            propertyName="ליקויי בנייה"
+            onPress={() => navigation.navigate("GeneralStagesScreen")}
+          />
+          <PropertiesButton
+            propertyName="שלבי בנייה לפי דירות"
+            onPress={() => navigation.navigate("LevelsScreen")}
+          />
+        </View>
       </SafeAreaView>
     </Background>
   );
 };
 
-export default ProjectsScreen;
+export default ProjectPropertiesScreen;
