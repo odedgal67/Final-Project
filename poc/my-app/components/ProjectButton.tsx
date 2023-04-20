@@ -11,7 +11,12 @@ const ProjectButton = (props) => {
         end={{ x: 0, y: 1 }}
         style={styles.gradient}
       />
-      <Text style={styles.text}>{props.projectName}</Text>
+      {props.projectName && (
+        <Text style={styles.text}>{props.projectName}</Text>
+      )}
+      {props.levelName && (
+        <Text style={styles.text}>{props.levelName}</Text>
+      )}
     </Pressable>
   );
 };

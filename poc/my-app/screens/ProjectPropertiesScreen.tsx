@@ -9,16 +9,20 @@ const ProjectsScreen = ({ navigation, route }) => {
     <Background>
       <SafeAreaView>
         <ProjectButton
-          projectName="שלבי בנייה"
+          projectName="שלבים כלליים"
           onPress={() => navigation.navigate("GeneralStagesScreen")}
+        />
+        <ProjectButton
+          projectName="תכניות"
+          onPress={() => navigation.navigate("PlansScreen")}
         />
         <ProjectButton
           projectName="ליקויי בנייה"
           onPress={() => navigation.navigate("GeneralStagesScreen")}
         />
         <ProjectButton
-          projectName="שלבי בנייה - דירות"
-          onPress={() => navigation.navigate("GeneralStagesScreen")}
+          projectName="שלבי בנייה לפי דירות"
+          onPress={() => navigation.navigate("LevelsScreen")}
         />
       </SafeAreaView>
     </Background>
