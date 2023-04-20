@@ -20,11 +20,10 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    borderRadius: 20,
-    elevation: 20,
-    margin: 4.5,
+    paddingVertical: "15%",
+    paddingHorizontal: "10%",
+    marginHorizontal: 10,
+    marginVertical: 10,
   },
   gradient: {
     position: "absolute",
