@@ -24,6 +24,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: "10%",
     marginHorizontal: 10,
     marginVertical: 10,
+    elevation: 15,
+    borderRadius: 10,
   },
   gradient: {
     position: "absolute",

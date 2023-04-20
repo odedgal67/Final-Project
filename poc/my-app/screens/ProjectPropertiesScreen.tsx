@@ -12,21 +12,21 @@ const ProjectPropertiesScreen = ({ navigation, route }) => {
         <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 20, }}>
           <PropertiesButton
             propertyName="שלבים כלליים"
-            onPress={() => navigation.navigate("GeneralStagesScreen")}
+            onPress={() => navigation.navigate("GeneralStagesScreen", {header: route.params.projectName})}
           />
           <PropertiesButton
             propertyName="תכניות"
-            onPress={() => navigation.navigate("PlansScreen")}
+            onPress={() => navigation.navigate("PlansScreen", {header: route.params.projectName})}
           />
         </View>
         <View style={{ flexDirection: "row", justifyContent: "center" }}>
           <PropertiesButton
             propertyName="ליקויי בנייה"
-            onPress={() => navigation.navigate("GeneralStagesScreen")}
+            onPress={() => navigation.navigate("GeneralStagesScreen", {header: route.params.projectName})}
           />
           <PropertiesButton
             propertyName="שלבי בנייה לפי דירות"
-            onPress={() => navigation.navigate("LevelsScreen")}
+            onPress={() => navigation.navigate("LevelsScreen", {header: route.params.projectName})}
           />
         </View>
       </SafeAreaView>
