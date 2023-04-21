@@ -1,13 +1,23 @@
 import * as React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import Background from "../components/Background";
 
 const names = ["תכנית 1", "תכנית 2", "תכנית 3"];
-const links = ["https://www.example.com/plan1", "https://www.example.com/plan2", "https://www.example.com/plan3"];
+const links = [
+  "https://www.example.com/plan1",
+  "https://www.example.com/plan2",
+  "https://www.example.com/plan3",
+];
 const dates = ["20/04/2023", "20/04/2023", "20/04/2023"];
 
 const PlansScreen = ({ navigation, route }) => {
-    navigation.setOptions({ title: route.params.header + " > תכניות" });
+  navigation.setOptions({ title: route.params.header + " > תכניות" });
   return (
     <Background>
       <View style={styles.container}>
@@ -21,7 +31,9 @@ const PlansScreen = ({ navigation, route }) => {
             <View style={styles.tableRow} key={index}>
               <Text>{name}</Text>
               <TouchableOpacity onPress={() => Linking.openURL(links[index])}>
-                <Text style={{ textDecorationLine: "underline" }}>{links[index]}</Text>
+                <Text style={{ textDecorationLine: "underline" }}>
+                  {links[index]}
+                </Text>
               </TouchableOpacity>
               <Text>{dates[index]}</Text>
             </View>

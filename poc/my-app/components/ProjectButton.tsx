@@ -7,7 +7,6 @@ import {
   View,
   ScrollView,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 const ProjectButton = (props) => {
   let image_location = "./imgs/folder.png";

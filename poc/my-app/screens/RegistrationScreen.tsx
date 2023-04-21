@@ -10,8 +10,15 @@ const RegistrationScreen = () => {
         <View style={styles.form}>
           <Text style={styles.heading}>הרשמה</Text>
           <TextInput style={styles.input} placeholder="תעודת זהות" />
-          <TextInput style={styles.input} placeholder="סיסמה" secureTextEntry={true} />
-          <ProjectButton onPress={() => alert("Registration button pressed")} projectName="הרשמה" />
+          <TextInput
+            style={styles.input}
+            placeholder="סיסמה"
+            secureTextEntry={true}
+          />
+          <ProjectButton
+            onPress={() => alert("Registration button pressed")}
+            projectName="הרשמה"
+          />
         </View>
       </View>
     </Background>

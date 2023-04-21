@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-const Background = ({ children }) => {
+const Background = ( {children}: {children: JSX.Element}) => {
   return (
     <View style={styles.container}>
       <LinearGradient

@@ -37,14 +37,14 @@ const stage_statuses = [
 const MissionListsScreen = ({ navigation, route }) => {
   return (
     <Background>
-        <StagesTable
-          stagesNames={stage_names}
-          stagesStatuses={stage_statuses}
-          columnTitle={"משימות"}
-          ButtonHandler={(stage_name: String) =>
-            navigation.navigate("MissionScreen", { description: "תיאור" })
-          }
-        />
+      <StagesTable
+        stagesNames={stage_names}
+        stagesStatuses={stage_statuses}
+        columnTitle={"משימות"}
+        ButtonHandler={(stage_name: String) =>
+          navigation.navigate("MissionScreen", { description: "תיאור" })
+        }
+      />
     </Background>
   );
 };
