@@ -11,15 +11,15 @@ import {
 
 const statusColors: Record<string, string> = {
   "לא בוצע": "#ffa134",
-  "בתהליך": "#f7e350",
-  "הסתיים": "#44ce1b",
+  בתהליך: "#f7e350",
+  הסתיים: "#44ce1b",
   "לא תקין": "#e51f1f",
 };
 
 const statusIMG: Record<string, string> = {
   "לא בוצע": "https://i.ibb.co/xM7tRCw/to-do-list.png",
-  "בתהליך": "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
-  "הסתיים": "https://i.ibb.co/y8sq6Vb/check-mark.png",
+  בתהליך: "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
+  הסתיים: "https://i.ibb.co/y8sq6Vb/check-mark.png",
   "לא תקין": "https://i.ibb.co/58yC1H2/breakdown.png",
 };
 
@@ -66,11 +66,13 @@ const StatusRectangle = (props: {
       alignItems: "center",
       alignSelf: "center",
       justifyContent: "center",
-      width: "100%",
+      width: "50%",
       backgroundColor: statusColors[value],
       margin: 10,
       height: 50,
       borderRadius: 20,
+      borderColor: "black",
+      borderWidth: 2,
     };
     return (
       <TouchableOpacity style={_styles} onPress={() => handleChange(value)}>
@@ -81,7 +83,10 @@ const StatusRectangle = (props: {
 
   return (
     <View style={{ flex: 0 }}>
-      <Pressable style={styles.button} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setModalVisible(true)}
+      >
         <Image
           source={{ uri: statusIMG[props.status] }}
           style={{ width: 50, height: 50, margin: 2 }}
@@ -113,7 +118,7 @@ const StatusRectangle = (props: {
             {opacity_comp("לא תקין")}
           </View>
         </Modal>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };

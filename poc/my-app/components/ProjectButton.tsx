@@ -1,17 +1,24 @@
 import React from "react";
-import { Text, Pressable, StyleSheet } from "react-native";
+import {
+  Text,
+  Pressable,
+  StyleSheet,
+  Image,
+  View,
+  ScrollView,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 const ProjectButton = (props) => {
+  let image_location = "./imgs/folder.png";
   return (
     <Pressable style={styles.button} onPress={props.onPress}>
-      <LinearGradient
-        colors={["#c2c0b2", "#c2c0b2"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.gradient}
-      />
-      <Text style={styles.text}>{props.projectName}</Text>
+      <View style={styles.text_bg}>
+        <Text style={styles.text}>{props.projectName}</Text>
+      </View>
+      <View style={styles.image_background}>
+        <Image source={require(image_location)} style={styles.image} />
+      </View>
     </Pressable>
   );
 };
@@ -19,21 +26,16 @@ const ProjectButton = (props) => {
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: "15%",
-    paddingHorizontal: "10%",
-    marginHorizontal: 10,
-    marginVertical: 10,
+    justifyContent: "flex-start",
+    paddingVertical: "5%",
+    paddingHorizontal: "8%",
+    marginHorizontal: "4%",
+    marginVertical: "7%",
     elevation: 15,
     borderRadius: 10,
-  },
-  gradient: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    borderRadius: 20,
+    backgroundColor: "#c2c0b2",
+    maxHeight: "70%",
+    maxWidth: "40%",
   },
   text: {
     fontSize: 16,
@@ -41,6 +43,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+    flex: 1,
+    paddingBottom: 4,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+  },
+  image_background: {
+    flex: 1,
+    backgroundColor: "#e2e0d2",
+    borderRadius: 10,
+    maxHeight: 80,
+    maxWidth: 80,
+  },
+  text_bg: {
+    flex: 1,
   },
 });
 
