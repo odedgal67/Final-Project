@@ -66,11 +66,13 @@ const StatusRectangle = (props: {
       alignItems: "center",
       alignSelf: "center",
       justifyContent: "center",
-      width: "100%",
+      width: "50%",
       backgroundColor: statusColors[value],
       margin: 10,
       height: 50,
       borderRadius: 20,
+      borderColor: "black",
+      borderWidth: 2,
     };
     return (
       <TouchableOpacity style={_styles} onPress={() => handleChange(value)}>
@@ -81,7 +83,10 @@ const StatusRectangle = (props: {
 
   return (
     <View style={{ flex: 0 }}>
-      <Pressable style={styles.button} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setModalVisible(true)}
+      >
         <Image
           source={{ uri: statusIMG[props.status] }}
           style={{ width: 50, height: 50, margin: 2 }}
@@ -113,7 +118,7 @@ const StatusRectangle = (props: {
             {opacity_comp("לא תקין")}
           </View>
         </Modal>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
