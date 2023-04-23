@@ -17,8 +17,16 @@ function getRows(stageNames: String[], stageStatuses: String[], ButtonHandler) {
           borderRadius: 10,
         }}
       >
-        <StageButton stageName={stageNames[i]} onClick={ButtonHandler} />
-        <StatusRectangle status={stageStatuses[i]} />
+        <StageButton
+          stageName={stageNames[i]}
+          onClick={ButtonHandler(stageNames[i], stageStatuses[i])}
+        />
+        <StatusRectangle
+          status={stageStatuses[i]}
+          borderRad={5}
+          height={undefined}
+          width={undefined}
+        />
       </View>
     );
   }
@@ -29,7 +37,7 @@ const StagesTable = (props: {
   stagesNames: String[];
   stagesStatuses: String[];
   columnTitle: String;
-  ButtonHandler: (arg0: String) => any;
+  ButtonHandler: (arg0: String, arg1: String) => any;
 }) => {
   return (
     <ScrollView>

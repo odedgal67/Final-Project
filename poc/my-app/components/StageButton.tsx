@@ -1,11 +1,11 @@
 import React from "react";
-import { Text, Pressable, StyleSheet } from "react-native";
+import { Text, TouchableHighlight, StyleSheet } from "react-native";
 
 const StageButton = (props: { stageName: String; onClick }) => {
   return (
-    <Pressable style={styles.button} onPress={props.onClick}>
+    <TouchableHighlight style={styles.button} onPress={props.onClick}>
       <Text style={styles.text}>{props.stageName}</Text>
-    </Pressable>
+    </TouchableHighlight>
   );
 };
 
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: "#2d3c3b",
     borderRadius: 10,
-    flex: 2,
+    flex: 4.5,
   },
   text: {
     textAlign: "center",

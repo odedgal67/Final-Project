@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Dimensions,
 } from "react-native";
 
 const statusColors: Record<string, string> = {
@@ -25,10 +26,14 @@ const statusIMG: Record<string, string> = {
 
 const StatusRectangle = (props: {
   status: string;
+  borderRad: number;
+  width: number | string | undefined;
+  height: number | string | undefined;
+  border: boolean;
   onChange: (status: string) => void;
 }) => {
+  let border_width = props.border ? 1 : 0;
   const [modalVisible, setModalVisible] = React.useState(false);
-
   const handleChange = (value: string) => {
     setModalVisible(false);
   };
@@ -37,11 +42,15 @@ const StatusRectangle = (props: {
     button: {
       alignItems: "center",
       justifyContent: "center",
-      borderRadius: 10,
+      borderRadius: props.borderRad,
+      width: props.width,
+      maxWidth: props.width,
+      maxHeight: props.height,
+      height: props.height,
       elevation: 3,
       backgroundColor: statusColors[props.status] || "#ff0000",
       borderColor: "black",
-      borderWidth: 1,
+      borderWidth: border_width,
       margin: 4.5,
       flex: 1,
     },
@@ -62,34 +71,38 @@ const StatusRectangle = (props: {
   });
 
   function opacity_comp(value: string) {
-    let _styles = {
-      alignItems: "center",
-      alignSelf: "center",
-      justifyContent: "center",
-      width: "50%",
-      backgroundColor: statusColors[value],
-      margin: 10,
-      height: 50,
-      borderRadius: 20,
-      borderColor: "black",
-      borderWidth: 2,
-    };
+    let _styles = StyleSheet.create({
+      s: {
+        alignItems: "center",
+        alignSelf: "center",
+        justifyContent: "center",
+        width: "50%",
+        backgroundColor: statusColors[value],
+        margin: 10,
+        height: 50,
+        borderRadius: 50,
+        borderColor: "black",
+        borderWidth: 1,
+      },
+    });
     return (
-      <TouchableOpacity style={_styles} onPress={() => handleChange(value)}>
+      <TouchableOpacity style={_styles.s} onPress={() => handleChange(value)}>
         <Text style={styles.text}>{value}</Text>
       </TouchableOpacity>
     );
   }
 
+  let image_width =
+    (props.width && props.width - 55) || Dimensions.get("window").width * 0.1;
   return (
-    <View style={{ flex: 0 }}>
+    <View style={{ flex: 1 }}>
       <TouchableOpacity
         style={styles.button}
         onPress={() => setModalVisible(true)}
       >
         <Image
           source={{ uri: statusIMG[props.status] }}
-          style={{ width: 50, height: 50, margin: 2 }}
+          style={{ width: image_width, height: image_width, margin: 2 }}
         />
         <Modal
           animationType="slide"

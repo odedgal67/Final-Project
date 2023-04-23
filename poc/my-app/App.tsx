@@ -1,6 +1,7 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -12,6 +13,7 @@ import MissionListsScreen from "./screens/MissionListScreen";
 import LevelsScreen from "./screens/LevelsScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
+import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,13 +25,15 @@ const MyStack = () => {
           headerTitleAlign: "center",
           headerRight: () => (
             <HeaderButtons>
-              <Item
-                title="Menu"
-                iconName="menu-outline"
-                iconSize={30}
-                onPress={() => console.log("Pressed")}
-                IconComponent={Ionicons}
-              />
+              <TouchableOpacity>
+                <Image
+                  source={require("./components/imgs/crane.gif")}
+                  style={{
+                    width: useHeaderHeight() / 2,
+                    height: useHeaderHeight() / 2,
+                  }}
+                />
+              </TouchableOpacity>
             </HeaderButtons>
           ),
         }}
