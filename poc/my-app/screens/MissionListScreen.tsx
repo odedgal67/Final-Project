@@ -31,7 +31,7 @@ const stage_statuses = [
   "הסתיים",
   "בתהליך",
   "לא בוצע",
-  "לא בוצע",
+  "לא תקין",
 ];
 
 const MissionListsScreen = ({ navigation, route }) => {
@@ -41,9 +41,14 @@ const MissionListsScreen = ({ navigation, route }) => {
         stagesNames={stage_names}
         stagesStatuses={stage_statuses}
         columnTitle={"משימות"}
-        ButtonHandler={(stage_name: String) =>
-          navigation.navigate("MissionScreen", { description: "תיאור" })
-        }
+        ButtonHandler={(mission_name: String, mission_status: String) => {
+          return () =>
+            navigation.navigate("MissionScreen", {
+              description: "Description",
+              status: mission_status,
+              mission_name: mission_name,
+            });
+        }}
       />
     </Background>
   );

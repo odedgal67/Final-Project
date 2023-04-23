@@ -39,7 +39,7 @@ const stage_statuses = [
 ];
 
 const GeneralStagesScreen = ({ navigation, route }) => {
-  navigation.setOptions({ title: route.params.header + " > שלבים כלליים" });
+  navigation.setOptions({ title: route.params.header + " שלבים כלליים" });
   return (
     <Background>
       <View>
@@ -47,9 +47,12 @@ const GeneralStagesScreen = ({ navigation, route }) => {
           stagesNames={stage_names}
           stagesStatuses={stage_statuses}
           columnTitle={"שלבים"}
-          ButtonHandler={(stage_name: String) =>
-            navigation.navigate("MissionListsScreen", { stageName: stage_name })
-          }
+          ButtonHandler={() => {
+            return (stage_name: String) =>
+              navigation.navigate("MissionListsScreen", {
+                stageName: stage_name,
+              });
+          }}
         />
       </View>
     </Background>
