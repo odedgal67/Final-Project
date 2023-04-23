@@ -10,6 +10,10 @@ const project_names = [
   "פרוייקט 3",
   "פרוייקט 4",
   "פרוייקט 5",
+  "פרוייקט 6",
+  "פרוייקט 7",
+  "פרוייקט 8",
+  "פרוייקט 9",
 ];
 
 function get_project_buttons(navigation: any) {
