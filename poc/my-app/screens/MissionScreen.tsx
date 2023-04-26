@@ -41,6 +41,7 @@ const MissionScreen = ({ navigation, route }) => {
           </View>
           <View style={styles.status_rectangle_view}>
             <StatusRectangle
+              activated={true}
               status={route.params.status}
               width={Dimensions.get("window").width * 0.5}
               height={Dimensions.get("window").width * 0.5}

@@ -60,7 +60,8 @@ const ProjectButton = (props) => {
                 backgroundColor: "white",
                 borderRadius: 5,
                 opacity: 1,
-                maxWidth: "90%",
+                width: "75%",
+                maxWidth: "75%",
               }}
             >
               <Text style={styles.rename_text}>{choose_new_project_text}</Text>

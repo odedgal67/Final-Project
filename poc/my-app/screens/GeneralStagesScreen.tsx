@@ -47,11 +47,18 @@ const GeneralStagesScreen = ({ navigation, route }) => {
           stagesNames={stage_names}
           stagesStatuses={stage_statuses}
           columnTitle={"שלבים"}
+          allow_change_status={false}
           ButtonHandler={() => {
             return (stage_name: String) =>
               navigation.navigate("MissionListsScreen", {
                 stageName: stage_name,
               });
+          }}
+          addStagehandler={(getter: () => string, modal_visibility_setter) => {
+            return () => {
+              alert("adding a stage: " + getter());
+              modal_visibility_setter(false);
+            };
           }}
         />
       </View>

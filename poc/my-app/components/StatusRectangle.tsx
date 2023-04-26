@@ -12,15 +12,15 @@ import {
 
 const statusColors: Record<string, string> = {
   "לא בוצע": "#ffa134",
-  "בתהליך": "#f7e350",
-  "הסתיים": "#44ce1b",
+  בתהליך: "#f7e350",
+  הסתיים: "#44ce1b",
   "לא תקין": "#e51f1f",
 };
 
 const statusIMG: Record<string, string> = {
   "לא בוצע": "https://i.ibb.co/xM7tRCw/to-do-list.png",
-  "בתהליך": "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
-  "הסתיים": "https://i.ibb.co/y8sq6Vb/check-mark.png",
+  בתהליך: "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
+  הסתיים: "https://i.ibb.co/y8sq6Vb/check-mark.png",
   "לא תקין": "https://i.ibb.co/58yC1H2/breakdown.png",
 };
 
@@ -31,7 +31,11 @@ const StatusRectangle = (props: {
   height: number | string | undefined;
   border: boolean;
   onChange: (status: string) => void;
+  activated: boolean;
 }) => {
+  if (props.activated == undefined) {
+    props.activated = true;
+  }
   let border_width = props.border ? 1 : 0;
   const [modalVisible, setModalVisible] = React.useState(false);
   const handleChange = (value: string) => {
@@ -99,6 +103,7 @@ const StatusRectangle = (props: {
       <TouchableOpacity
         style={styles.button}
         onPress={() => setModalVisible(true)}
+        disabled={!props.activated}
       >
         <Image
           source={{ uri: statusIMG[props.status] }}

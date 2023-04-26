@@ -41,6 +41,7 @@ const MissionListsScreen = ({ navigation, route }) => {
         stagesNames={stage_names}
         stagesStatuses={stage_statuses}
         columnTitle={"משימות"}
+        allow_change_status={true}
         ButtonHandler={(mission_name: String, mission_status: String) => {
           return () =>
             navigation.navigate("MissionScreen", {
@@ -48,6 +49,12 @@ const MissionListsScreen = ({ navigation, route }) => {
               status: mission_status,
               mission_name: mission_name,
             });
+        }}
+        addStagehandler={(getter: () => string, modal_visibility_setter) => {
+          return () => {
+            alert("adding a mission: " + getter());
+            modal_visibility_setter(false);
+          };
         }}
       />
     </Background>
