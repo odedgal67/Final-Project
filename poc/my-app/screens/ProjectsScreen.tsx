@@ -2,7 +2,8 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProjectButton from "../components/ProjectButton";
 import Background from "../components/Background";
-import { ScrollView, View } from "react-native";
+import { Button, ScrollView, View } from "react-native";
+import CreateProjectButton from "../components/CreateProjectButton";
 
 const project_names = [
   "פרוייקט 1",
@@ -48,9 +49,18 @@ function get_project_buttons(navigation: any) {
 const ProjectsScreen = ({ navigation }) => {
   return (
     <Background>
-      <ScrollView style={{ paddingTop: 20, flexDirection: "column" }}>
-        {get_project_buttons(navigation)}
-      </ScrollView>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          style={{
+            flexDirection: "column",
+            height: "80%",
+            alignContent: "center",
+          }}
+        >
+          {get_project_buttons(navigation)}
+        </ScrollView>
+        <CreateProjectButton />
+      </View>
     </Background>
   );
 };
