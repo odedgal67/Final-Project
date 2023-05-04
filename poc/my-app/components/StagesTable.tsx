@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import StageButton from "./StageButton";
 import StatusRectangle from "./StatusRectangle";
+import { Status } from "../types";
 
 function getRows(
   stageNames: String[],
-  stageStatuses: String[],
+  stageStatuses: Status[],
+  stageIDs: number[],
   ButtonHandler,
   allow_change_status: boolean
 ) {
@@ -32,7 +34,7 @@ function getRows(
       >
         <StageButton
           stageName={stageNames[i]}
-          onClick={ButtonHandler(stageNames[i], stageStatuses[i])}
+          onClick={ButtonHandler(stageNames[i], stageIDs[i])}
         />
         <StatusRectangle
           status={stageStatuses[i]}
@@ -49,9 +51,10 @@ function getRows(
 
 const StagesTable = (props: {
   stagesNames: String[];
-  stagesStatuses: String[];
+  stagesStatuses: Status[];
+  stageIDs: number[];
   columnTitle: String;
-  ButtonHandler: (arg0: String, arg1: String) => any;
+  ButtonHandler: (stage: String, id: number) => any;
   addStagehandler: (
     getter: () => string,
     modal_visibility_setter: (vis: boolean) => void
@@ -74,6 +77,7 @@ const StagesTable = (props: {
         {getRows(
           props.stagesNames,
           props.stagesStatuses,
+          props.stageIDs,
           props.ButtonHandler,
           props.allow_change_status
         )}

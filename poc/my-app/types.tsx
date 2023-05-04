@@ -40,18 +40,18 @@ export enum Status {
   Done = "Done",
   InProgress = "InProgress",
   Open = "Open",
+  Invalid = "Invalid",
 }
-
 export type Project = {
+  id: number;
   name: string;
-  stages: Stage[];
 };
 
 export type GeneralStage = {
   name: string;
   status: Status;
   completion_date: Date;
-  missions: Mission[];
+  id: number;
 };
 
 type UnitProperties = {
@@ -64,6 +64,7 @@ export type UnitStage = GeneralStage & UnitProperties;
 export type Stage = UnitStage | GeneralStage;
 
 export type Mission = {
+  id: number;
   name: string;
   status: Status;
   proof: number;
@@ -71,6 +72,7 @@ export type Mission = {
   green_building: boolean;
   completion_date: Date;
   completing_user: string;
+  comment: string;
 };
 
 export type User = {

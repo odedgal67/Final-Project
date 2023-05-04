@@ -7,57 +7,57 @@ import ProjectButton from "../components/ProjectButton";
 import StagesTable from "../components/StagesTable";
 import { View } from "react-native";
 import Background from "../components/Background";
-
-const stage_names: string[] = [
-  "שלב מקדים",
-  "עבודות עפר",
-  "מרתף",
-  "יסודות + כלונסאות",
-  "שלד הבניין",
-  "עבודות בנייה",
-  "עבודות טייח",
-  "עבודות איטום",
-  "עבודות קדם ריצוף",
-  "עבודות ריצוף וחיפוי",
-  "עבודות חשמל",
-  "עבודות אינסטלציה",
-];
-
-const stage_statuses = [
-  "הסתיים",
-  "הסתיים",
-  "הסתיים",
-  "הסתיים",
-  "בתהליך",
-  "בתהליך",
-  "בתהליך",
-  "לא תקין",
-  "לא בוצע",
-  "לא בוצע",
-  "לא בוצע",
-  "לא בוצע",
-];
+import {
+  ProjectContext,
+  ProjectContextProvider,
+} from "../utils/ProjectContext";
+import { Stage, Status } from "../types";
+import API from "../API/api_bridge";
+import { UserContext } from "../utils/UserContext";
 
 const GeneralStagesScreen = ({ navigation, route }) => {
-  navigation.setOptions({ title: route.params.header + " שלבים כלליים" });
+  const { project, setProject, getProject, notify } =
+    React.useContext(ProjectContext);
+  const { user, setUser, getUser } = React.useContext(UserContext);
+  const [ismodalVisible, setModalVisible] = React.useState(false);
+  setProject(route.params.project);
+  navigation.setOptions({ title: getProject().name + " שלבים כלליים" });
+  let stages = API.get_instance().get_all_stages(
+    getProject().id,
+    getUser().name
+  );
+  const stage_names: string[] = stages.map((stage: Stage) => stage.name);
+  const stage_ids: number[] = stages.map((stage: Stage) => stage.id);
+  const stage_statuses: Status[] = stages.map((stage: Stage) => stage.status);
   return (
     <Background>
       <View>
         <StagesTable
           stagesNames={stage_names}
           stagesStatuses={stage_statuses}
+          stageIDs={stage_ids}
           columnTitle={"שלבים"}
           allow_change_status={false}
-          ButtonHandler={() => {
-            return (stage_name: String) =>
+          ButtonHandler={(stage_name: String, stage_id: number) => {
+            return () =>
               navigation.navigate("MissionListsScreen", {
+                stage: stages.find((stage: any) => stage.id == stage_id),
                 stageName: stage_name,
+                stage_id: stage_id,
               });
           }}
-          addStagehandler={(getter: () => string, modal_visibility_setter) => {
+          addStagehandler={(
+            get_name: () => string,
+            modal_visibility_setter
+          ) => {
             return () => {
-              alert("adding a stage: " + getter());
+              API.get_instance().add_stage(
+                getProject().id,
+                get_name(),
+                getUser().name
+              );
               modal_visibility_setter(false);
+              setModalVisible(!ismodalVisible);
             };
           }}
         />

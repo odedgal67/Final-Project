@@ -4,39 +4,31 @@ import ProjectButton from "../components/ProjectButton";
 import Background from "../components/Background";
 import { Button, ScrollView, View } from "react-native";
 import CreateProjectButton from "../components/CreateProjectButton";
-
-const project_names = [
-  "פרוייקט 1",
-  "פרוייקט 2",
-  "פרוייקט 3",
-  "פרוייקט 4",
-  "פרוייקט 5",
-  "פרוייקט 6",
-  "פרוייקט 7",
-  "פרוייקט 8",
-  "פרוייקט 9",
-  "1234567891234567891234567",
-];
+import { log_in } from "../API/api_real";
+import API from "../API/api_bridge";
+import { UserContext } from "../utils/UserContext";
 
 function get_project_buttons(navigation: any) {
+  const { user, setUser, getUser } = React.useContext(UserContext);
+  let projects = API.get_instance().get_all_projects(user.name);
   let buttons = [];
-  for (let i = 0; i < project_names.length; i += 2) {
+  for (let i = 0; i < projects.length; i += 2) {
     buttons.push(
       <SafeAreaView style={{ flexDirection: "row", justifyContent: "center" }}>
         <ProjectButton
-          projectName={project_names[i]}
+          projectName={projects[i].name}
           onPress={() =>
             navigation.navigate("projectProperties", {
-              projectName: project_names[i],
+              project: projects[i],
             })
           }
         />
-        {project_names[i + 1] && (
+        {projects[i + 1] && (
           <ProjectButton
-            projectName={project_names[i + 1]}
+            projectName={projects[i + 1].name}
             onPress={() =>
               navigation.navigate("projectProperties", {
-                projectName: project_names[i + 1],
+                project: projects[i + 1],
               })
             }
           />
