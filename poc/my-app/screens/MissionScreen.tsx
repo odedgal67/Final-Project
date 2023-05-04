@@ -22,11 +22,11 @@ const MissionScreen = ({ navigation, route }) => {
     React.useContext(ProjectContext);
   const { user, setUser, getUser } = React.useContext(UserContext);
   const [ismodalVisible, setModalVisible] = React.useState(false);
-  const { status, getStatus, setStatus } = React.useContext(
-    MissionStatusContext(route.params.mission.status)
-  );
+  const { status, getStatus, setStatus, _setStatus } =
+    React.useContext(MissionStatusContext);
   const { stage, setStage, getStage } = React.useContext(StageContext);
   let mission: Mission = route.params.mission;
+  _setStatus(mission.status);
   let _mission_name =
     mission.name.length > 25
       ? mission.name.substring(0, 15) + "..."
@@ -54,7 +54,7 @@ const MissionScreen = ({ navigation, route }) => {
             <StatusRectangle
               border={false}
               activated={true}
-              status={status}
+              status={getStatus()}
               width={Dimensions.get("window").width * 0.5}
               height={Dimensions.get("window").width * 0.5}
               borderRad={
