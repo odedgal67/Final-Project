@@ -111,6 +111,18 @@ class MockAPI extends api_interface {
     comment: string,
     username: string
   ): void {
+    console.log(
+      "edited comment!" +
+        comment +
+        " mission id: " +
+        mission_id +
+        " username: " +
+        username +
+        " stage_id: " +
+        stage_id +
+        " project_id: " +
+        project_id
+    );
     this.missions[mission_id].comment = comment;
   }
 }

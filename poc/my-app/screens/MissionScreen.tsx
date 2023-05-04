@@ -24,6 +24,7 @@ import {
   MissionStatusContextProvider,
 } from "../utils/MissionStatusContext";
 import { StageContext, StageContextProvider } from "../utils/StageContext";
+import API from "../API/api_bridge";
 
 const MissionScreen = ({ navigation, route }) => {
   const { project, setProject, getProject } = React.useContext(ProjectContext);
@@ -41,6 +42,17 @@ const MissionScreen = ({ navigation, route }) => {
       : mission.name;
   navigation.setOptions({ title: _mission_name });
   const [comment, setComment] = React.useState(mission.comment);
+  let onSubmitEdit = () => {
+    API.get_instance().edit_comment_in_mission(
+      getProject().id,
+      getStage().id,
+      mission.id,
+      comment,
+      getUser().name
+    );
+    () => alert("שינויים נשמרו בהצלחה!");
+    setEditable(false);
+  };
   return (
     <Background>
       <KeyboardAvoidingView
@@ -68,6 +80,7 @@ const MissionScreen = ({ navigation, route }) => {
                     comm.length < 250 ? setComment(comm) : null
                   }
                   editable={isEditable}
+                  onSubmitEditing={onSubmitEdit}
                 ></TextInput>
               </View>
             </TouchableNativeFeedback>
