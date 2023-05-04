@@ -60,6 +60,26 @@ class MockAPI extends api_interface {
     return this.last_mission_id - 1;
   }
 
+  private check_update_stages_statuses() {
+    if (this.missions.some((mission) => mission.status == Status.Invalid)) {
+      this.stages.forEach((stage) => (stage.status = Status.Invalid));
+      return;
+    } else if (
+      this.missions.some((mission) => mission.status == Status.InProgress)
+    ) {
+      this.stages.forEach((stage) => (stage.status = Status.InProgress));
+      return;
+    } else if (
+      this.missions.every((mission) => mission.status == Status.Done)
+    ) {
+      this.stages.forEach((stage) => (stage.status = Status.Done));
+      return;
+    } else {
+      this.stages.forEach((stage) => (stage.status = Status.Open));
+      return;
+    }
+  }
+
   set_mission_status(
     project_id: number,
     stage_id: number,
@@ -69,6 +89,7 @@ class MockAPI extends api_interface {
   ): void {
     console.log(this.missions);
     this.missions[mission_id].status = new_status;
+    this.check_update_stages_statuses();
   }
 
   get_all_missions(

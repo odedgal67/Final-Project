@@ -5,23 +5,31 @@ import {
   StyleSheet,
   Dimensions,
   TouchableHighlight,
+  TouchableNativeFeedback,
+  TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from "react-native";
 import Background from "../components/Background";
 import StatusRectangle from "../components/StatusRectangle";
-import { ProjectContext } from "../utils/ProjectContext";
+import {
+  ProjectContext,
+  ProjectContextProvider,
+} from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
 import { Mission, Status } from "../types";
 import {
   MissionStatusContext,
   MissionStatusContextProvider,
 } from "../utils/MissionStatusContext";
-import { StageContext } from "../utils/StageContext";
+import { StageContext, StageContextProvider } from "../utils/StageContext";
 
 const MissionScreen = ({ navigation, route }) => {
-  const { project, setProject, getProject, notify } =
-    React.useContext(ProjectContext);
-  const { user, setUser, getUser } = React.useContext(UserContext);
+  const { project, setProject, getProject } = React.useContext(ProjectContext);
+  const { user, setUser, getUser, notify } = React.useContext(UserContext);
   const [ismodalVisible, setModalVisible] = React.useState(false);
+  const [isEditable, setEditable] = React.useState(false);
   const { status, getStatus, setStatus, _setStatus } =
     React.useContext(MissionStatusContext);
   const { stage, setStage, getStage } = React.useContext(StageContext);
@@ -32,52 +40,75 @@ const MissionScreen = ({ navigation, route }) => {
       ? mission.name.substring(0, 15) + "..."
       : mission.name;
   navigation.setOptions({ title: _mission_name });
+  const [comment, setComment] = React.useState(mission.comment);
   return (
     <Background>
-      <View style={{ height: "100%" }}>
-        <View style={styles.title_view_style}>
-          <Text style={styles.title}>תיאור משימה</Text>
-          <View style={styles.description_bg}>
-            <Text style={styles.description_text}>
-              {route.params.description}
-            </Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={styles.title_view_style}>
+            <Text style={styles.title}>תיאור משימה</Text>
+            <TouchableNativeFeedback
+              onLongPress={() => setEditable(true)}
+              delayLongPress={5}
+            >
+              <View
+                style={
+                  isEditable
+                    ? styles.description_bg_editable
+                    : styles.description_bg
+                }
+              >
+                <TextInput
+                  style={styles.description_text}
+                  value={comment}
+                  onChangeText={(comm) =>
+                    comm.length < 250 ? setComment(comm) : null
+                  }
+                  editable={isEditable}
+                ></TextInput>
+              </View>
+            </TouchableNativeFeedback>
+          </View>
+          <View style={styles.status_and_links}>
+            <View style={styles.links_view}>
+              <LinkButton title={"קישור לתקן"}></LinkButton>
+              <LinkButton title={"קישור לתוכנית"}></LinkButton>
+              <LinkButton title={"קישור לתיעוד"}></LinkButton>
+            </View>
+            <View style={styles.status_rectangle_view}>
+              <MissionStatusContextProvider>
+                <StatusRectangle
+                  border={false}
+                  activated={true}
+                  status={getStatus()}
+                  width={Dimensions.get("window").height * 0.25}
+                  height={Dimensions.get("window").height * 0.25}
+                  borderRad={
+                    Math.round(
+                      Dimensions.get("window").height +
+                        Dimensions.get("window").height
+                    ) / 2
+                  }
+                  onChange={function (new_status: Status): void {
+                    setStatus(
+                      getProject().id,
+                      getStage().id,
+                      mission.id,
+                      new_status,
+                      getUser().name
+                    );
+                    setModalVisible(!ismodalVisible);
+                    notify();
+                  }}
+                />
+              </MissionStatusContextProvider>
+            </View>
           </View>
         </View>
-        <View style={styles.status_and_links}>
-          <View style={styles.links_view}>
-            <LinkButton title={"קישור לתקן"}></LinkButton>
-            <LinkButton title={"קישור לתוכנית"}></LinkButton>
-            <LinkButton title={"קישור לתיעוד"}></LinkButton>
-          </View>
-          <View style={styles.status_rectangle_view}>
-            {/* <MissionStatusContextProvider> */}
-            <StatusRectangle
-              border={false}
-              activated={true}
-              status={getStatus()}
-              width={Dimensions.get("window").width * 0.5}
-              height={Dimensions.get("window").width * 0.5}
-              borderRad={
-                Math.round(
-                  Dimensions.get("window").width +
-                    Dimensions.get("window").width
-                ) / 2
-              }
-              onChange={function (new_status: Status): void {
-                setStatus(
-                  getProject().id,
-                  getStage().id,
-                  mission.id,
-                  new_status,
-                  getUser().name
-                );
-                setModalVisible(!ismodalVisible);
-              }}
-            />
-            {/* </MissionStatusContextProvider> */}
-          </View>
-        </View>
-      </View>
+      </KeyboardAvoidingView>
     </Background>
   );
 };
@@ -146,9 +177,23 @@ const styles = StyleSheet.create({
   },
   description_text: {
     textAlign: "center",
+    color: "black",
+    flex: 1,
+    textAlignVertical: "top",
   },
   description_bg: {
     backgroundColor: "#d4cfcb",
+    width: "80%",
+    alignContent: "center",
+    textAlign: "center",
+    flex: 1,
+    marginBottom: "5%",
+    borderRadius: 5,
+    borderColor: "#b4afab",
+    borderWidth: 1,
+  },
+  description_bg_editable: {
+    backgroundColor: "#e4dfdb",
     width: "80%",
     alignContent: "center",
     textAlign: "center",

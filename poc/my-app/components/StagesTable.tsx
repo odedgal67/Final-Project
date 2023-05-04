@@ -79,8 +79,7 @@ const StagesTable = (props: {
           props.stagesStatuses,
           props.stageIDs,
           props.ButtonHandler,
-          props.allow_change_status,
-          props.stageIDs
+          props.allow_change_status
         )}
         <View style={{ flex: 1, flexDirection: "row" }}>
           <StageButton

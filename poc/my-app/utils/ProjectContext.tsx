@@ -19,6 +19,7 @@ const ProjectContextWrapper = (component?: React.Component) => ({
   },
   notify: () => {
     ProjectState.api_answer++;
+    console.log("project context wrapper notified");
     component?.setState({ context: ProjectContextWrapper(component) });
   },
 });

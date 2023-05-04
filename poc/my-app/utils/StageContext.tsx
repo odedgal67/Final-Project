@@ -16,6 +16,10 @@ const StageContextWrapper = (component?: React.Component) => ({
   getStage: () => {
     return StageState.stage;
   },
+  notify: () => {
+    console.log("stage context wrapper notified");
+    component?.setState({ context: StageContextWrapper(component) });
+  },
 });
 
 type Context = ReturnType<typeof StageContextWrapper>;

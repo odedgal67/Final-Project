@@ -30,41 +30,39 @@ const GeneralStagesScreen = ({ navigation, route }) => {
   const stage_ids: number[] = stages.map((stage: Stage) => stage.id);
   const stage_statuses: Status[] = stages.map((stage: Stage) => stage.status);
   return (
-    <ProjectContextProvider>
-      <Background>
-        <View>
-          <StagesTable
-            stagesNames={stage_names}
-            stagesStatuses={stage_statuses}
-            stageIDs={stage_ids}
-            columnTitle={"שלבים"}
-            allow_change_status={false}
-            ButtonHandler={(stage_name: String, stage_id: number) => {
-              return () =>
-                navigation.navigate("MissionListsScreen", {
-                  stage: stages.find((stage: any) => stage.id == stage_id),
-                  stageName: stage_name,
-                  stage_id: stage_id,
-                });
-            }}
-            addStagehandler={(
-              get_name: () => string,
-              modal_visibility_setter
-            ) => {
-              return () => {
-                API.get_instance().add_stage(
-                  getProject().id,
-                  get_name(),
-                  getUser().name
-                );
-                modal_visibility_setter(false);
-                setModalVisible(!ismodalVisible);
-              };
-            }}
-          />
-        </View>
-      </Background>
-    </ProjectContextProvider>
+    <Background>
+      <View>
+        <StagesTable
+          stagesNames={stage_names}
+          stagesStatuses={stage_statuses}
+          stageIDs={stage_ids}
+          columnTitle={"שלבים"}
+          allow_change_status={false}
+          ButtonHandler={(stage_name: String, stage_id: number) => {
+            return () =>
+              navigation.navigate("MissionListsScreen", {
+                stage: stages.find((stage: any) => stage.id == stage_id),
+                stageName: stage_name,
+                stage_id: stage_id,
+              });
+          }}
+          addStagehandler={(
+            get_name: () => string,
+            modal_visibility_setter
+          ) => {
+            return () => {
+              API.get_instance().add_stage(
+                getProject().id,
+                get_name(),
+                getUser().name
+              );
+              modal_visibility_setter(false);
+              setModalVisible(!ismodalVisible);
+            };
+          }}
+        />
+      </View>
+    </Background>
   );
 };
 

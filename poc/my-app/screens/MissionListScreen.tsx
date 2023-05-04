@@ -1,17 +1,22 @@
 import * as React from "react";
 import StagesTable from "../components/StagesTable";
 import Background from "../components/Background";
-import { ProjectContext } from "../utils/ProjectContext";
+import {
+  ProjectContext,
+  ProjectContextProvider,
+} from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
 import API from "../API/api_bridge";
 import { Mission, Status } from "../types";
-import { StageContext } from "../utils/StageContext";
+import { StageContext, StageContextProvider } from "../utils/StageContext";
+import { MissionStatusContext } from "../utils/MissionStatusContext";
 
 const MissionListsScreen = ({ navigation, route }) => {
   const { project, setProject, getProject, notify } =
     React.useContext(ProjectContext);
   const { user, setUser, getUser } = React.useContext(UserContext);
   const { stage, setStage, getStage } = React.useContext(StageContext);
+  const obj = React.useContext(MissionStatusContext);
   setStage(route.params.stage);
   const [ismodalVisible, setModalVisible] = React.useState(false);
   let missions = API.get_instance().get_all_missions(
