@@ -12,10 +12,13 @@ import {
   TouchableHighlight,
   TextInput,
 } from "react-native";
+import { UserContext } from "../utils/UserContext";
+import API from "../API/api_bridge";
 
 const CreateProjectButton = (props) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [project_name, setProject_Name] = React.useState("");
+  const { user, setUser, getUser, notify } = React.useContext(UserContext);
   let borderRadius = 20;
 
   const styles = StyleSheet.create({
@@ -66,7 +69,8 @@ const CreateProjectButton = (props) => {
 
   let add_project_click = () => {
     setModalVisible(false);
-    alert("added project " + project_name);
+    API.get_instance().add_project(project_name, user.name);
+    notify();
   };
 
   return (

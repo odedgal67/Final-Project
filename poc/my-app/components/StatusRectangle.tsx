@@ -9,28 +9,30 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import { Status } from "../types";
+import { StatusContext } from "../utils/MissionStatusContext";
 
-const statusColors: Record<string, string> = {
-  "לא בוצע": "#ffa134",
-  בתהליך: "#f7e350",
-  הסתיים: "#44ce1b",
-  "לא תקין": "#e51f1f",
+const statusColors: Record<Status, string> = {
+  Open: "#ffa134",
+  InProgress: "#f7e350",
+  Done: "#44ce1b",
+  Invalid: "#e51f1f",
 };
 
-const statusIMG: Record<string, string> = {
-  "לא בוצע": "https://i.ibb.co/xM7tRCw/to-do-list.png",
-  בתהליך: "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
-  הסתיים: "https://i.ibb.co/y8sq6Vb/check-mark.png",
-  "לא תקין": "https://i.ibb.co/58yC1H2/breakdown.png",
+const statusIMG: Record<Status, string> = {
+  Open: "https://i.ibb.co/xM7tRCw/to-do-list.png",
+  InProgress: "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
+  Done: "https://i.ibb.co/y8sq6Vb/check-mark.png",
+  Invalid: "https://i.ibb.co/58yC1H2/breakdown.png",
 };
 
 const StatusRectangle = (props: {
-  status: string;
+  status: Status;
   borderRad: number;
   width: number | string | undefined;
   height: number | string | undefined;
   border: boolean;
-  onChange: (status: string) => void;
+  onChange: (status: Status) => void;
   activated: boolean;
 }) => {
   if (props.activated == undefined) {
@@ -38,7 +40,9 @@ const StatusRectangle = (props: {
   }
   let border_width = props.border ? 1 : 0;
   const [modalVisible, setModalVisible] = React.useState(false);
-  const handleChange = (value: string) => {
+
+  const handleChange = (new_status: Status) => {
+    props.onChange(new_status);
     setModalVisible(false);
   };
 
@@ -74,7 +78,7 @@ const StatusRectangle = (props: {
     },
   });
 
-  function opacity_comp(value: string) {
+  function opacity_comp(value: Status) {
     let _styles = StyleSheet.create({
       s: {
         alignItems: "center",
@@ -130,10 +134,10 @@ const StatusRectangle = (props: {
               borderTopRightRadius: 20,
             }}
           >
-            {opacity_comp("לא בוצע")}
-            {opacity_comp("בתהליך")}
-            {opacity_comp("הסתיים")}
-            {opacity_comp("לא תקין")}
+            {opacity_comp(Status.Open)}
+            {opacity_comp(Status.InProgress)}
+            {opacity_comp(Status.Done)}
+            {opacity_comp(Status.Invalid)}
           </View>
         </Modal>
       </TouchableOpacity>

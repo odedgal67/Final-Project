@@ -1,26 +1,36 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   View,
-  Button,
   Text,
   StyleSheet,
-  Pressable,
   Dimensions,
   TouchableHighlight,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import ProjectButton from "../components/ProjectButton";
-import StagesTable from "../components/StagesTable";
 import Background from "../components/Background";
 import StatusRectangle from "../components/StatusRectangle";
+import { ProjectContext } from "../utils/ProjectContext";
+import { UserContext } from "../utils/UserContext";
+import { Mission, Status } from "../types";
+import {
+  MissionStatusContext,
+  MissionStatusContextProvider,
+} from "../utils/MissionStatusContext";
+import { StageContext } from "../utils/StageContext";
 
 const MissionScreen = ({ navigation, route }) => {
+  const { project, setProject, getProject, notify } =
+    React.useContext(ProjectContext);
+  const { user, setUser, getUser } = React.useContext(UserContext);
+  const [ismodalVisible, setModalVisible] = React.useState(false);
+  const { status, getStatus, setStatus } = React.useContext(
+    MissionStatusContext(route.params.mission.status)
+  );
+  const { stage, setStage, getStage } = React.useContext(StageContext);
+  let mission: Mission = route.params.mission;
   let _mission_name =
-    route.params.mission_name.length > 25
-      ? route.params.mission_name.substring(0, 15) + "..."
-      : route.params.mission_name;
+    mission.name.length > 25
+      ? mission.name.substring(0, 15) + "..."
+      : mission.name;
   navigation.setOptions({ title: _mission_name });
   return (
     <Background>
@@ -40,9 +50,11 @@ const MissionScreen = ({ navigation, route }) => {
             <LinkButton title={"קישור לתיעוד"}></LinkButton>
           </View>
           <View style={styles.status_rectangle_view}>
+            {/* <MissionStatusContextProvider> */}
             <StatusRectangle
+              border={false}
               activated={true}
-              status={route.params.status}
+              status={status}
               width={Dimensions.get("window").width * 0.5}
               height={Dimensions.get("window").width * 0.5}
               borderRad={
@@ -51,10 +63,18 @@ const MissionScreen = ({ navigation, route }) => {
                     Dimensions.get("window").width
                 ) / 2
               }
-              onChange={function (status: string): void {
-                console.log("not implemented");
+              onChange={function (new_status: Status): void {
+                setStatus(
+                  getProject().id,
+                  getStage().id,
+                  mission.id,
+                  new_status,
+                  getUser().name
+                );
+                setModalVisible(!ismodalVisible);
               }}
             />
+            {/* </MissionStatusContextProvider> */}
           </View>
         </View>
       </View>
