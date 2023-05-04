@@ -14,10 +14,12 @@ import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { UserContext, UserContextProvider } from "./utils/UserContext";
-
+import { LogBox } from "react-native";
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
+  LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
   return (
     <UserContextProvider>
       <NavigationContainer>
