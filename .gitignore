@@ -2,6 +2,7 @@ poc/my-app/node_modules/
 poc/my-app/.expo/
 poc/my-app/dist/
 poc/my-app/npm-debug.*
+poc/node_modules/*
 poc/my-app/.env
 *.jks
 *.p8
