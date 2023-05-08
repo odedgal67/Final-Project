@@ -5,13 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 const PropertiesButton = (props) => {
   return (
     <Pressable style={styles.button} onPress={props.onPress}>
-      <LinearGradient
-        colors={["#c2c0b2", "#c2c0b2"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={styles.gradient}
-      />
-      <Text style={styles.text}>{props.propertyName}</Text>
+      <Text style={styles.text}>{props.title}</Text>
     </Pressable>
   );
 };
@@ -27,14 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
     elevation: 15,
     borderRadius: 10,
-  },
-  gradient: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    borderRadius: 20,
+    backgroundColor: "#c2c0b2",
   },
   text: {
     fontSize: 16,
@@ -42,6 +29,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+    alignSelf: "center",
+    textAlign: "center",
   },
 });
 

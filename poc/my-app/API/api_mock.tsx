@@ -1,4 +1,4 @@
-import { Mission, Project, Stage, Status } from "../types";
+import { Mission, Project, Stage, Status, Title } from "../types";
 import api_interface from "./api_interface";
 
 class MockAPI extends api_interface {
@@ -11,6 +11,11 @@ class MockAPI extends api_interface {
 
   constructor() {
     super();
+    this.init_data();
+  }
+
+  private init_data() {
+    this.add_project("פרויקט דוגמא", "דוגמא");
   }
 
   get_all_projects(username: string): Project[] {
@@ -28,12 +33,18 @@ class MockAPI extends api_interface {
     return this.last_project_id - 1;
   }
 
-  add_stage(project_id: number, stage_name: string, username: string): number {
+  add_stage(
+    project_id: number,
+    title: Title,
+    stage_name: string,
+    username: string
+  ): number {
     this.stages.push({
       name: stage_name,
       status: Status.Open,
       completion_date: new Date(),
-      stage_id: this.last_stage_id,
+      id: this.last_stage_id,
+      title: title,
     });
     this.last_stage_id++;
     return this.last_stage_id - 1;
@@ -42,6 +53,7 @@ class MockAPI extends api_interface {
   add_mission(
     project_id: number,
     stage_id: number,
+    title: Title,
     mission_name: string,
     username: string
   ): number {
@@ -55,7 +67,11 @@ class MockAPI extends api_interface {
       completing_user: "",
       comment: "",
       id: this.last_mission_id,
+      title: title,
     });
+    console.log(
+      "added mission!  with title:" + this.missions[this.last_mission_id].title
+    );
     this.last_mission_id++;
     return this.last_mission_id - 1;
   }
@@ -82,30 +98,43 @@ class MockAPI extends api_interface {
 
   set_mission_status(
     project_id: number,
+    title: Title,
     stage_id: number,
     mission_id: number,
     new_status: Status,
     username: string
   ): void {
     console.log(this.missions);
+    if (this.missions[mission_id] == undefined) {
+      console.warn(
+        "mission id " + mission_id + " not found in project " + project_id
+      );
+      return;
+    }
     this.missions[mission_id].status = new_status;
     this.check_update_stages_statuses();
   }
 
   get_all_missions(
     project_id: number,
+    title: Title,
     stage_id: number,
     username: string
   ): Mission[] {
-    return this.missions;
+    console.log("returning all missions for title " + title);
+    let output = this.missions.filter((mission) => mission.title == title);
+    console.log("filtered missions: " + output);
+    console.log("all missions: " + this.missions);
+    return output;
   }
 
-  get_all_stages(project_id: number, username: string): Stage[] {
-    return this.stages;
+  get_all_stages(project_id: number, title: Title, username: string): Stage[] {
+    return this.stages.filter((stage) => stage.title == title);
   }
 
   edit_comment_in_mission(
     project_id: number,
+    title: Title,
     stage_id: number,
     mission_id: number,
     comment: string,

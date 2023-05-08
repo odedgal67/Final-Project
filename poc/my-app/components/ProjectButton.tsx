@@ -30,7 +30,6 @@ const ProjectButton = (props) => {
     <TouchableNativeFeedback
       style={styles.button}
       onPress={props.onPress}
-      delayLongPress={2}
       onLongPress={() => {
         setModalVisible(true);
         setProject_Name("");

@@ -8,34 +8,27 @@ import {
   TouchableNativeFeedback,
   TextInput,
   KeyboardAvoidingView,
-  ScrollView,
   Platform,
 } from "react-native";
 import Background from "../components/Background";
 import StatusRectangle from "../components/StatusRectangle";
-import {
-  ProjectContext,
-  ProjectContextProvider,
-} from "../utils/ProjectContext";
+import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
-import { Mission, Status } from "../types";
-import {
-  MissionStatusContext,
-  MissionStatusContextProvider,
-} from "../utils/MissionStatusContext";
-import { StageContext, StageContextProvider } from "../utils/StageContext";
+import { Mission, Stage, Status, Title } from "../types";
 import API from "../API/api_bridge";
 
-const MissionScreen = ({ navigation, route }) => {
-  const { project, setProject, getProject } = React.useContext(ProjectContext);
-  const { user, setUser, getUser, notify } = React.useContext(UserContext);
-  const [ismodalVisible, setModalVisible] = React.useState(false);
+const MissionScreen = ({
+  navigation,
+  route,
+}: {
+  navigation: any;
+  route: { params: { mission: Mission; title: Title; stage: Stage } };
+}) => {
+  const { getProject } = React.useContext(ProjectContext);
+  const { getUser, notify } = React.useContext(UserContext);
+  const [status, setStatus] = React.useState(route.params.mission.status);
   const [isEditable, setEditable] = React.useState(false);
-  const { status, getStatus, setStatus, _setStatus } =
-    React.useContext(MissionStatusContext);
-  const { stage, setStage, getStage } = React.useContext(StageContext);
   let mission: Mission = route.params.mission;
-  _setStatus(mission.status);
   let _mission_name =
     mission.name.length > 25
       ? mission.name.substring(0, 15) + "..."
@@ -45,7 +38,8 @@ const MissionScreen = ({ navigation, route }) => {
   let onSubmitEdit = () => {
     API.get_instance().edit_comment_in_mission(
       getProject().id,
-      getStage().id,
+      route.params.stage.id,
+      route.params.title,
       mission.id,
       comment,
       getUser().name
@@ -92,32 +86,32 @@ const MissionScreen = ({ navigation, route }) => {
               <LinkButton title={"קישור לתיעוד"}></LinkButton>
             </View>
             <View style={styles.status_rectangle_view}>
-              <MissionStatusContextProvider>
-                <StatusRectangle
-                  border={false}
-                  activated={true}
-                  status={getStatus()}
-                  width={Dimensions.get("window").height * 0.25}
-                  height={Dimensions.get("window").height * 0.25}
-                  borderRad={
-                    Math.round(
-                      Dimensions.get("window").height +
-                        Dimensions.get("window").height
-                    ) / 2
-                  }
-                  onChange={function (new_status: Status): void {
-                    setStatus(
-                      getProject().id,
-                      getStage().id,
-                      mission.id,
-                      new_status,
-                      getUser().name
-                    );
-                    setModalVisible(!ismodalVisible);
-                    notify();
-                  }}
-                />
-              </MissionStatusContextProvider>
+              <StatusRectangle
+                border={false}
+                activated={true}
+                status={status}
+                width={Dimensions.get("window").height * 0.25}
+                height={Dimensions.get("window").height * 0.25}
+                borderRad={
+                  Math.round(
+                    Dimensions.get("window").height +
+                      Dimensions.get("window").height
+                  ) / 2
+                }
+                onChange={function (new_status: Status): void {
+                  API.get_instance().set_mission_status(
+                    getProject().id,
+                    route.params.stage.id,
+                    route.params.title,
+                    mission.id,
+                    new_status,
+                    getUser().name
+                  );
+                  setStatus(new_status);
+                  mission.status = new_status;
+                  notify();
+                }}
+              />
             </View>
           </View>
         </View>
@@ -126,7 +120,7 @@ const MissionScreen = ({ navigation, route }) => {
   );
 };
 
-const LinkButton = (props) => {
+const LinkButton = (props: { title: string }) => {
   return (
     <TouchableHighlight
       style={styles.button}

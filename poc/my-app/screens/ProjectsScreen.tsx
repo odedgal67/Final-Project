@@ -39,7 +39,7 @@ function get_project_buttons(navigation: any) {
   return buttons;
 }
 
-const ProjectsScreen = ({ navigation }) => {
+const ProjectsScreen = ({ navigation }: { navigation: any }) => {
   return (
     <Background>
       <View style={{ flex: 1 }}>

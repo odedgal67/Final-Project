@@ -10,7 +10,6 @@ import {
   Dimensions,
 } from "react-native";
 import { Status } from "../types";
-import { StatusContext } from "../utils/MissionStatusContext";
 
 const statusColors: Record<Status, string> = {
   Open: "#ffa134",
@@ -29,8 +28,8 @@ const statusIMG: Record<Status, string> = {
 const StatusRectangle = (props: {
   status: Status;
   borderRad: number;
-  width: number | string | undefined;
-  height: number | string | undefined;
+  width: number | undefined;
+  height: number | undefined;
   border: boolean;
   onChange: (status: Status) => void;
   activated: boolean;
@@ -101,7 +100,8 @@ const StatusRectangle = (props: {
   }
 
   let image_width =
-    (props.width && props.width - 55) || Dimensions.get("window").width * 0.1;
+    (props.width != undefined && props.width - 55) ||
+    Dimensions.get("window").width * 0.1;
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity
