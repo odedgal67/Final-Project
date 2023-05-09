@@ -1,62 +1,64 @@
 import * as React from "react";
 import StagesTable from "../components/StagesTable";
 import Background from "../components/Background";
-import {
-  ProjectContext,
-  ProjectContextProvider,
-} from "../utils/ProjectContext";
+import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
 import API from "../API/api_bridge";
-import { Mission, Status } from "../types";
-import { StageContext, StageContextProvider } from "../utils/StageContext";
-import { MissionStatusContext } from "../utils/MissionStatusContext";
+import { Mission, Stage, Title } from "../types";
 
-const MissionListsScreen = ({ navigation, route }) => {
-  const { project, setProject, getProject, notify } =
-    React.useContext(ProjectContext);
-  const { user, setUser, getUser } = React.useContext(UserContext);
-  const { stage, setStage, getStage } = React.useContext(StageContext);
-  const obj = React.useContext(MissionStatusContext);
-  setStage(route.params.stage);
-  const [ismodalVisible, setModalVisible] = React.useState(false);
-  let missions = API.get_instance().get_all_missions(
-    getProject().id,
-    route.params.stage_id,
-    getUser().name
-  );
-  const mission_names: string[] = missions.map(
-    (mission: Mission) => mission.name
-  );
-  const mission_ids: number[] = missions.map((mission: Mission) => mission.id);
-  const mission_statuses: Status[] = missions.map(
-    (mission: Mission) => mission.status
-  );
+const MissionListsScreen = ({
+  navigation,
+  route,
+}: {
+  navigation: any;
+  route: { params: { stage: Stage; title: Title } };
+}) => {
+  const { getProject } = React.useContext(ProjectContext);
+  const { getUser } = React.useContext(UserContext);
+  const [missions, setMissions] = React.useState([] as Mission[]);
+  React.useEffect(() => {
+    setMissions(
+      API.get_instance().get_all_missions(
+        getProject().id,
+        route.params.title,
+        route.params.stage.id,
+        getUser().name
+      )
+    );
+  }, []);
   return (
     <Background>
       <StagesTable
-        stagesNames={mission_names}
-        stagesStatuses={mission_statuses}
-        stageIDs={mission_ids}
-        columnTitle={"משימות"}
+        stages={missions}
         allow_change_status={true}
-        ButtonHandler={(mission_name: String, mission_id: number) => {
+        ButtonHandler={(_mission_name: String, mission_id: number) => {
           return () =>
             navigation.navigate("MissionScreen", {
               mission: missions.find(
                 (mission: any) => mission.id == mission_id
               ),
+              title: route.params.title,
+              stage: route.params.stage,
             });
         }}
         addStagehandler={(getter: () => string, modal_visibility_setter) => {
           return () => {
             API.get_instance().add_mission(
               getProject().id,
-              route.params.stage_id,
+              route.params.stage.id,
+              route.params.title,
               getter(),
               getUser().name
             );
+            setMissions(
+              API.get_instance().get_all_missions(
+                getProject().id,
+                route.params.title,
+                route.params.stage.id,
+                getUser().name
+              )
+            );
             modal_visibility_setter(false);
-            setModalVisible(!ismodalVisible);
           };
         }}
       />

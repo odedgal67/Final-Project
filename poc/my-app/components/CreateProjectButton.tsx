@@ -6,19 +6,18 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image,
-  Dimensions,
-  Button,
-  TouchableHighlight,
   TextInput,
 } from "react-native";
-import { UserContext } from "../utils/UserContext";
-import API from "../API/api_bridge";
+import { hebrew } from "../utils/text_dictionary";
 
-const CreateProjectButton = (props) => {
+const CreateProjectButton = (props: {
+  onAddClick: (
+    projectName: string,
+    modal_visibility_setter: (b: boolean) => void
+  ) => void;
+}) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [project_name, setProject_Name] = React.useState("");
-  const { user, setUser, getUser, notify } = React.useContext(UserContext);
   let borderRadius = 20;
 
   const styles = StyleSheet.create({
@@ -64,14 +63,8 @@ const CreateProjectButton = (props) => {
   });
 
   const add_new_project_text = (
-    <Text style={styles.white_text}>הוספת פרוייקט חדש</Text>
+    <Text style={styles.white_text}>{hebrew.add_new_project}</Text>
   );
-
-  let add_project_click = () => {
-    setModalVisible(false);
-    API.get_instance().add_project(project_name, user.name);
-    notify();
-  };
 
   return (
     <View style={styles.initial_view}>
@@ -110,16 +103,18 @@ const CreateProjectButton = (props) => {
                   maxLength={25}
                   numberOfLines={1}
                   style={styles.text_input}
-                  placeholder="שם הפרוייקט החדש"
+                  placeholder={hebrew.add_new_project_place_holder}
                   placeholderTextColor={"black"}
                   textAlign="center"
                   onChangeText={(proj_name) => setProject_Name(proj_name)}
                 />
                 <TouchableOpacity
                   style={styles.add_project_button}
-                  onPress={add_project_click}
+                  onPress={() =>
+                    props.onAddClick(project_name, setModalVisible)
+                  }
                 >
-                  <Text style={styles.white_text}>אישור</Text>
+                  <Text style={styles.white_text}>{hebrew.accept}</Text>
                 </TouchableOpacity>
               </View>
             </View>

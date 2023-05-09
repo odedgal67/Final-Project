@@ -10,13 +10,14 @@ import {
 } from "react-native";
 import StageButton from "./StageButton";
 import StatusRectangle from "./StatusRectangle";
-import { Status } from "../types";
+import { ListedStatusItem, Stage, Status } from "../types";
+import { hebrew } from "../utils/text_dictionary";
 
 function getRows(
   stageNames: String[],
   stageStatuses: Status[],
   stageIDs: number[],
-  ButtonHandler,
+  ButtonHandler: (stage_name: String, stage_id: number) => () => void,
   allow_change_status: boolean
 ) {
   let rows = [];
@@ -42,6 +43,8 @@ function getRows(
           height={undefined}
           width={undefined}
           activated={allow_change_status}
+          onChange={() => {}}
+          border={false}
         />
       </View>
     );
@@ -50,10 +53,7 @@ function getRows(
 }
 
 const StagesTable = (props: {
-  stagesNames: String[];
-  stagesStatuses: Status[];
-  stageIDs: number[];
-  columnTitle: String;
+  stages: ListedStatusItem[];
   ButtonHandler: (stage: String, id: number) => any;
   addStagehandler: (
     getter: () => string,
@@ -63,7 +63,15 @@ const StagesTable = (props: {
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_stage_name, set_stage_name] = React.useState("");
-  let add_new_text = "הוספה";
+  let stagesNames: String[] = props.stages.map(
+    (stage: ListedStatusItem) => stage.name
+  );
+  let stageIDs: number[] = props.stages.map(
+    (stage: ListedStatusItem) => stage.id
+  );
+  let stagesStatuses: Status[] = props.stages.map(
+    (stage: ListedStatusItem) => stage.status
+  );
   return (
     <ScrollView>
       <View
@@ -72,18 +80,19 @@ const StagesTable = (props: {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: "#c2c0b2",
+          flex: 1,
         }}
       >
         {getRows(
-          props.stagesNames,
-          props.stagesStatuses,
-          props.stageIDs,
+          stagesNames,
+          stagesStatuses,
+          stageIDs,
           props.ButtonHandler,
           props.allow_change_status
         )}
         <View style={{ flex: 1, flexDirection: "row" }}>
           <StageButton
-            stageName={"הוספה"}
+            stageName={hebrew.add_new_stage}
             onClick={() => setModalVisible(true)}
           />
           <Modal
@@ -112,7 +121,7 @@ const StagesTable = (props: {
                   width: "75%",
                 }}
               >
-                <Text style={styles.rename_text}>{add_new_text}</Text>
+                <Text style={styles.rename_text}>{hebrew.add_new_stage}</Text>
                 <TextInput
                   maxLength={25}
                   numberOfLines={1}
