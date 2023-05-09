@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Status } from "../types";
+import { status_to_hebrew, title_to_hebrew } from "../utils/text_dictionary";
 
 const statusColors: Record<Status, string> = {
   Open: "#ffa134",
@@ -94,7 +95,7 @@ const StatusRectangle = (props: {
     });
     return (
       <TouchableOpacity style={_styles.s} onPress={() => handleChange(value)}>
-        <Text style={styles.text}>{value}</Text>
+        <Text style={styles.text}>{status_to_hebrew[value]}</Text>
       </TouchableOpacity>
     );
   }

@@ -16,6 +16,7 @@ import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
 import { Mission, Stage, Status, Title } from "../types";
 import API from "../API/api_bridge";
+import { hebrew } from "../utils/text_dictionary";
 
 const MissionScreen = ({
   navigation,
@@ -44,7 +45,6 @@ const MissionScreen = ({
       comment,
       getUser().name
     );
-    () => alert("שינויים נשמרו בהצלחה!");
     setEditable(false);
   };
   return (
@@ -55,7 +55,7 @@ const MissionScreen = ({
       >
         <View style={{ flex: 1 }}>
           <View style={styles.title_view_style}>
-            <Text style={styles.title}>תיאור משימה</Text>
+            <Text style={styles.title}>{hebrew.mission_description}</Text>
             <TouchableNativeFeedback
               onLongPress={() => setEditable(true)}
               delayLongPress={5}
@@ -81,9 +81,9 @@ const MissionScreen = ({
           </View>
           <View style={styles.status_and_links}>
             <View style={styles.links_view}>
-              <LinkButton title={"קישור לתקן"}></LinkButton>
-              <LinkButton title={"קישור לתוכנית"}></LinkButton>
-              <LinkButton title={"קישור לתיעוד"}></LinkButton>
+              <LinkButton title={hebrew.link_to_document}></LinkButton>
+              <LinkButton title={hebrew.link_to_plan}></LinkButton>
+              <LinkButton title={hebrew.link_to_documentation}></LinkButton>
             </View>
             <View style={styles.status_rectangle_view}>
               <StatusRectangle
@@ -124,7 +124,7 @@ const LinkButton = (props: { title: string }) => {
   return (
     <TouchableHighlight
       style={styles.button}
-      onPress={() => alert("לא קיים קישור")}
+      onPress={() => alert(hebrew.link_doesnt_exist)}
     >
       <Text style={styles.link_button_text}>{props.title}</Text>
     </TouchableHighlight>

@@ -11,6 +11,7 @@ import {
 import StageButton from "./StageButton";
 import StatusRectangle from "./StatusRectangle";
 import { ListedStatusItem, Stage, Status } from "../types";
+import { hebrew } from "../utils/text_dictionary";
 
 function getRows(
   stageNames: String[],
@@ -52,7 +53,6 @@ function getRows(
 }
 
 const StagesTable = (props: {
-  columnTitle: String;
   stages: ListedStatusItem[];
   ButtonHandler: (stage: String, id: number) => any;
   addStagehandler: (
@@ -72,7 +72,6 @@ const StagesTable = (props: {
   let stagesStatuses: Status[] = props.stages.map(
     (stage: ListedStatusItem) => stage.status
   );
-  let add_new_text = "הוספה";
   return (
     <ScrollView>
       <View
@@ -93,7 +92,7 @@ const StagesTable = (props: {
         )}
         <View style={{ flex: 1, flexDirection: "row" }}>
           <StageButton
-            stageName={"הוספה"}
+            stageName={hebrew.add_new_stage}
             onClick={() => setModalVisible(true)}
           />
           <Modal
@@ -122,7 +121,7 @@ const StagesTable = (props: {
                   width: "75%",
                 }}
               >
-                <Text style={styles.rename_text}>{add_new_text}</Text>
+                <Text style={styles.rename_text}>{hebrew.add_new_stage}</Text>
                 <TextInput
                   maxLength={25}
                   numberOfLines={1}

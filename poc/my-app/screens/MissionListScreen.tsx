@@ -20,8 +20,8 @@ const MissionListsScreen = ({
     setMissions(
       API.get_instance().get_all_missions(
         getProject().id,
-        route.params.stage.id,
         route.params.title,
+        route.params.stage.id,
         getUser().name
       )
     );
@@ -30,7 +30,6 @@ const MissionListsScreen = ({
     <Background>
       <StagesTable
         stages={missions}
-        columnTitle={"משימות"}
         allow_change_status={true}
         ButtonHandler={(_mission_name: String, mission_id: number) => {
           return () =>
@@ -54,8 +53,8 @@ const MissionListsScreen = ({
             setMissions(
               API.get_instance().get_all_missions(
                 getProject().id,
-                route.params.stage.id,
                 route.params.title,
+                route.params.stage.id,
                 getUser().name
               )
             );

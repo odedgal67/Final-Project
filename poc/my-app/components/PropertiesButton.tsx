@@ -1,8 +1,7 @@
 import React from "react";
 import { Text, Pressable, StyleSheet } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
-const PropertiesButton = (props) => {
+const PropertiesButton = (props: { title: string; onPress: () => void }) => {
   return (
     <Pressable style={styles.button} onPress={props.onPress}>
       <Text style={styles.text}>{props.title}</Text>

@@ -19,7 +19,7 @@ class MockAPI extends api_interface {
   }
 
   get_all_projects(username: string): Project[] {
-    return this.projects;
+    return this.projects.filter((project) => true);
   }
 
   login(username: string, password: string): boolean {

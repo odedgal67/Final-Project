@@ -1,26 +1,24 @@
 import React from "react";
 import {
   Text,
-  Pressable,
   StyleSheet,
   Image,
   View,
-  ScrollView,
-  TouchableHighlight,
   TouchableNativeFeedback,
   Modal,
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { hebrew } from "../utils/text_dictionary";
 
-const ProjectButton = (props) => {
+const ProjectButton = (props: { projectName: string; onPress: () => void }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_project_name, setProject_Name] = React.useState("");
   let image_location = "./imgs/folder.png";
   let choose_new_project_text = "שינוי שם עבור " + props.projectName;
   let rename_project_click = () => {
     if (new_project_name.length == 0) {
-      alert("שם פרוייקט לא יכול להיות ריק");
+      alert(hebrew.project_name_cant_be_empty);
       return;
     }
     setModalVisible(false);
@@ -68,7 +66,7 @@ const ProjectButton = (props) => {
                 maxLength={25}
                 numberOfLines={1}
                 style={styles.text_input}
-                placeholder="שם הפרוייקט החדש"
+                placeholder={hebrew.add_new_project_place_holder}
                 placeholderTextColor={"black"}
                 textAlign="center"
                 onChangeText={(proj_name) => setProject_Name(proj_name)}
@@ -77,7 +75,7 @@ const ProjectButton = (props) => {
                 style={styles.accept_name_change_button}
                 onPress={rename_project_click}
               >
-                <Text style={styles.rename_text_white}>אישור</Text>
+                <Text style={styles.rename_text_white}>{hebrew.accept}</Text>
               </TouchableOpacity>
             </View>
           </View>

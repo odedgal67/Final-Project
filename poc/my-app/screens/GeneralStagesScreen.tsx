@@ -1,17 +1,9 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Button, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import ProjectButton from "../components/ProjectButton";
 import StagesTable from "../components/StagesTable";
 import { View } from "react-native";
 import Background from "../components/Background";
-import {
-  ProjectContext,
-  ProjectContextProvider,
-} from "../utils/ProjectContext";
-import { Stage, Status, Project, Title } from "../types";
+import { ProjectContext } from "../utils/ProjectContext";
+import { Stage, Project, Title } from "../types";
 import API from "../API/api_bridge";
 import { UserContext } from "../utils/UserContext";
 import { title_to_hebrew } from "../utils/text_dictionary";
@@ -44,7 +36,6 @@ const GeneralStagesScreen = ({
       <View>
         <StagesTable
           stages={stages}
-          columnTitle={"שלבים"}
           allow_change_status={false}
           ButtonHandler={(stage_name: String, stage_id: number) => {
             return () =>

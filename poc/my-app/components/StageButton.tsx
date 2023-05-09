@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableHighlight, StyleSheet } from "react-native";
 
-const StageButton = (props: { stageName: String; onClick }) => {
+const StageButton = (props: { stageName: String; onClick: () => void }) => {
   return (
     <TouchableHighlight style={styles.button} onPress={props.onClick}>
       <Text style={styles.text}>{props.stageName}</Text>
