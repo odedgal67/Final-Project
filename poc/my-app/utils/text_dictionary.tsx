@@ -20,6 +20,10 @@ export var hebrew = {
   plan_name_cant_be_empty: "שם התכנית לא יכול להיות ריק",
   plan_link_cant_be_empty: "קישור לתכנית לא יכול להיות ריק",
   date_of_edit: "תאריך עריכה",
+  register: "הרשמה",
+  login: "התחברות",
+  id: "תעודת זהות",
+  password: "סיסמה",
 };
 
 export var title_to_hebrew = {
