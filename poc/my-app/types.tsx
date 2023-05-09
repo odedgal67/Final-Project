@@ -90,3 +90,10 @@ export type User = {
   name: string;
   id: string;
 };
+
+export type Plan = {
+  name: string;
+  link: string;
+  date: Date;
+  project_id: number;
+};
