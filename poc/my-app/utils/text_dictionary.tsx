@@ -14,7 +14,11 @@ export var hebrew = {
   project_name_cant_be_empty: "שם הפרויקט לא יכול להיות ריק",
   mission_description: "תיאור משימה",
   link_to_document: "קישור לתקן",
+  link_to_plan: "קישור לתכנית",
+  link_to_documentation: "קישור לתיעוד",
   change_name_for_projectName: "שינוי שם עבור ${projectName}",
+  projectSettings: "הגדרות פרויקט",
+  saved_changes_successfully: "השינויים נשמרו בהצלחה",
 };
 
 export var title_to_hebrew = {

@@ -1,10 +1,12 @@
 // CounterContext.tsx
 import React from "react";
 import { User } from "../types";
+import { roles } from "./Permissions";
 
 // Declaring the state object globally.
 const UserState = {
   user: { name: "guest", id: "-1" },
+  role: roles.CONTRACTOR,
   api_answer: 0,
 };
 
@@ -16,6 +18,13 @@ const UserContextWrapper = (component?: React.Component) => ({
   },
   getUser: () => {
     return UserState.user;
+  },
+  getRole: () => {
+    return UserState.role;
+  },
+  setRole: (role: roles) => {
+    UserState.role = role;
+    component?.setState({ context: UserContextWrapper(component) });
   },
   notify: () => {
     UserState.api_answer++;

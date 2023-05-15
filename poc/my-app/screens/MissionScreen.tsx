@@ -45,6 +45,7 @@ const MissionScreen = ({
       comment,
       getUser().name
     );
+    alert(hebrew.saved_changes_successfully);
     setEditable(false);
   };
   return (
@@ -58,7 +59,7 @@ const MissionScreen = ({
             <Text style={styles.title}>{hebrew.mission_description}</Text>
             <TouchableNativeFeedback
               onLongPress={() => setEditable(true)}
-              delayLongPress={5}
+              delayLongPress={500}
             >
               <View
                 style={

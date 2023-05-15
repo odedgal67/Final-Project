@@ -9,7 +9,7 @@ import MissionListsScreen from "./screens/MissionListScreen";
 import LevelsScreen from "./screens/LevelsScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
-import { UserContextProvider } from "./utils/UserContext";
+import { UserContext, UserContextProvider } from "./utils/UserContext";
 import { LogBox } from "react-native";
 import Crane from "./components/Crane";
 const Stack = createNativeStackNavigator();
@@ -17,6 +17,7 @@ const Stack = createNativeStackNavigator();
 const MyStack = () => {
   LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
   LogBox.ignoreAllLogs(); //Ignore all log notifications
+  const { getUser } = React.useContext(UserContext);
   return (
     <UserContextProvider>
       <NavigationContainer>
@@ -27,7 +28,7 @@ const MyStack = () => {
               Crane({
                 ...props,
                 onClick: () => {
-                  console.log("clicked crane from main navigator");
+                  console.log("logged as: " + getUser().name);
                 },
               }),
           }}

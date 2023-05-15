@@ -2,7 +2,7 @@ import * as React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PropertiesButton from "../components/PropertiesButton";
 import Background from "../components/Background";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   ProjectContext,
   ProjectContextProvider,
@@ -11,7 +11,8 @@ import { hebrew } from "../utils/text_dictionary";
 import { Project, Title } from "../types";
 import API from "../API/api_bridge";
 import { UserContext } from "../utils/UserContext";
-import DrawerMenu from "../components/DrawerMenu/DrawerMenu";
+import ProjectSettingsModal from "../components/ProjectSettingsModal";
+import { actions, hasPermission } from "../utils/Permissions";
 
 const ProjectPropertiesScreen = ({
   navigation,
@@ -21,13 +22,11 @@ const ProjectPropertiesScreen = ({
   route: { params: { project: Project } };
 }) => {
   let projectName = route.params.project.name;
-  navigation.setOptions({ title: projectName });
-  const { project, setProject, getProject, setRole } =
-    React.useContext(ProjectContext);
-  const { getUser } = React.useContext(UserContext);
+  const { setProject, getProject, setRole } = React.useContext(ProjectContext);
+  const { getUser, getRole } = React.useContext(UserContext);
   setProject(route.params.project);
   setRole(API.get_instance().get_role(getUser().name, getProject().id));
-
+  navigation.setOptions({ title: projectName });
   function getButton(ButtonProps: {
     propertyName: string;
     ScreenName: String;
@@ -102,16 +101,23 @@ const ProjectPropertiesScreen = ({
   return (
     <ProjectContextProvider>
       <Background>
-        <SafeAreaView
-          style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            paddingTop: 40,
-            margin: 20,
-          }}
-        >
-          {getRows()}
-        </SafeAreaView>
+        <View style={{ flex: 1 }}>
+          <SafeAreaView
+            style={{
+              flexDirection: "column",
+              justifyContent: "center",
+              margin: 20,
+              flex: 5,
+            }}
+          >
+            {getRows()}
+          </SafeAreaView>
+          {hasPermission(getRole(), actions.MANAGE_PROJECT_SETTINGS) ? (
+            <ProjectSettingsModal project={getProject()} />
+          ) : (
+            <View style={{ flex: 1 }} />
+          )}
+        </View>
       </Background>
     </ProjectContextProvider>
   );
