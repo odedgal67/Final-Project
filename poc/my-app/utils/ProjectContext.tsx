@@ -1,10 +1,12 @@
 // CounterContext.tsx
 import React from "react";
 import { Project } from "../types";
+import { roles } from "./Permissions";
 
 // Declaring the state object globally.
 const ProjectState = {
   project: { name: "", id: 0 },
+  role: "",
   api_answer: 0,
 };
 
@@ -21,6 +23,13 @@ const ProjectContextWrapper = (component?: React.Component) => ({
     ProjectState.api_answer++;
     console.log("project context wrapper notified");
     component?.setState({ context: ProjectContextWrapper(component) });
+  },
+  setRole: (role: roles) => {
+    ProjectState.role = role;
+    component?.setState({ context: ProjectContextWrapper(component) });
+  },
+  getRole: () => {
+    return ProjectState.role;
   },
 });
 
