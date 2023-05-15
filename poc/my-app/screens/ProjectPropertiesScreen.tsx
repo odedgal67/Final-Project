@@ -9,6 +9,9 @@ import {
 } from "../utils/ProjectContext";
 import { hebrew } from "../utils/text_dictionary";
 import { Project, Title } from "../types";
+import API from "../API/api_bridge";
+import { UserContext } from "../utils/UserContext";
+import DrawerMenu from "../components/DrawerMenu/DrawerMenu";
 
 const ProjectPropertiesScreen = ({
   navigation,
@@ -19,10 +22,13 @@ const ProjectPropertiesScreen = ({
 }) => {
   let projectName = route.params.project.name;
   navigation.setOptions({ title: projectName });
-  const { project, setProject, getProject } = React.useContext(ProjectContext);
+  const { setProject, getProject, setRole } = React.useContext(ProjectContext);
+  const { getUser } = React.useContext(UserContext);
+  setProject(route.params.project);
+  setRole(API.get_instance().get_role(getUser().name, getProject().id));
 
   function getButton(ButtonProps: {
-    propertyName: String;
+    propertyName: string;
     ScreenName: String;
     title: Title;
   }) {
@@ -92,8 +98,6 @@ const ProjectPropertiesScreen = ({
     }
     return rows;
   }
-
-  setProject(route.params.project);
   return (
     <ProjectContextProvider>
       <Background>
