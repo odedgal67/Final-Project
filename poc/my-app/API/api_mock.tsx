@@ -1,4 +1,5 @@
 import { Mission, Project, Stage, Status, Title } from "../types";
+import { roles } from "../utils/Permissions";
 import api_interface from "./api_interface";
 
 class MockAPI extends api_interface {
@@ -153,6 +154,10 @@ class MockAPI extends api_interface {
         project_id
     );
     this.missions[mission_id].comment = comment;
+  }
+
+  get_role(username: string, project_id: number): roles {
+    return roles.CONTRACTOR;
   }
 }
 export default MockAPI;

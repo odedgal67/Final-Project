@@ -1,4 +1,5 @@
 import { Mission, Project, Stage, Status, Title } from "../types";
+import { roles } from "../utils/Permissions";
 
 abstract class api_interface {
   abstract login(username: string, password: string): boolean;
@@ -44,6 +45,7 @@ abstract class api_interface {
     comment: string,
     username: string
   ): void;
+  abstract get_role(username: string, project_id: number): roles;
 }
 
 export default api_interface;
