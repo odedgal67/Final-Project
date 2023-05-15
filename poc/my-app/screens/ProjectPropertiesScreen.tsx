@@ -22,7 +22,8 @@ const ProjectPropertiesScreen = ({
 }) => {
   let projectName = route.params.project.name;
   navigation.setOptions({ title: projectName });
-  const { setProject, getProject, setRole } = React.useContext(ProjectContext);
+  const { project, setProject, getProject, setRole } =
+    React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
   setProject(route.params.project);
   setRole(API.get_instance().get_role(getUser().name, getProject().id));

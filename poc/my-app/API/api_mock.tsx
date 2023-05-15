@@ -159,5 +159,12 @@ class MockAPI extends api_interface {
   get_role(username: string, project_id: number): roles {
     return roles.CONTRACTOR;
   }
+  edit_project_name(
+    usernaem: string,
+    project_id: number,
+    new_name: string
+  ): void {
+    this.projects[project_id].name = new_name;
+  }
 }
 export default MockAPI;

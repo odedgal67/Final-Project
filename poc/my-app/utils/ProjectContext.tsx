@@ -31,6 +31,12 @@ const ProjectContextWrapper = (component?: React.Component) => ({
   getRole: () => {
     return ProjectState.role;
   },
+  clearProjectState: () => {
+    ProjectState.project = { name: "", id: 0 };
+    ProjectState.role = "";
+    ProjectState.api_answer = 0;
+    component?.setState({ context: ProjectContextWrapper(component) });
+  },
 });
 
 type Context = ReturnType<typeof ProjectContextWrapper>;

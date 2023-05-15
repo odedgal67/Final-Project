@@ -46,6 +46,11 @@ abstract class api_interface {
     username: string
   ): void;
   abstract get_role(username: string, project_id: number): roles;
+  abstract edit_project_name(
+    usernaem: string,
+    project_id: number,
+    new_name: string
+  ): void;
 }
 
 export default api_interface;

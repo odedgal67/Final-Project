@@ -23,7 +23,13 @@ const MyStack = () => {
         <Stack.Navigator
           screenOptions={{
             headerTitleAlign: "center",
-            headerRight: (props) => Crane({ ...props, onClick: () => {} }),
+            headerRight: (props) =>
+              Crane({
+                ...props,
+                onClick: () => {
+                  console.log("clicked crane from main navigator");
+                },
+              }),
           }}
         >
           <Stack.Screen name="projects" component={ProjectsScreen} />
