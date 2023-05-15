@@ -16,6 +16,7 @@ const MissionListsScreen = ({
   const { getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
   const [missions, setMissions] = React.useState([] as Mission[]);
+  navigation.setOptions({ title: route.params.stage.name });
   React.useEffect(() => {
     setMissions(
       API.get_instance().get_all_missions(
