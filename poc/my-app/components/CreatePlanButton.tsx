@@ -1,5 +1,13 @@
 import React from "react";
-import { Modal, Pressable, StyleSheet, Text, TouchableOpacity, View, TextInput, } from "react-native";
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from "react-native";
 import { hebrew } from "../utils/text_dictionary";
 
 const CreatePlanButton = (props: {
@@ -65,6 +73,7 @@ const CreatePlanButton = (props: {
       <TouchableOpacity
         style={styles.button}
         onPress={() => setModalVisible(true)}
+        testID="addButton"
       >
         <View>
           {add_new_plan_text}
@@ -76,7 +85,10 @@ const CreatePlanButton = (props: {
               setModalVisible(false);
             }}
           >
-            <View style={{ backgroundColor: "#111111", flex: 2, opacity: 0 }}>
+            <View
+              style={{ backgroundColor: "#111111", flex: 2, opacity: 0 }}
+              testID="closeButton"
+            >
               <Pressable
                 style={{ flex: 1 }}
                 onPress={() => setModalVisible(false)}

@@ -94,7 +94,11 @@ const StatusRectangle = (props: {
       },
     });
     return (
-      <TouchableOpacity style={_styles.s} onPress={() => handleChange(value)}>
+      <TouchableOpacity
+        style={_styles.s}
+        onPress={() => handleChange(value)}
+        testID={value}
+      >
         <Text style={styles.text}>{status_to_hebrew[value]}</Text>
       </TouchableOpacity>
     );
@@ -104,15 +108,17 @@ const StatusRectangle = (props: {
     (props.width != undefined && props.width - 55) ||
     Dimensions.get("window").width * 0.1;
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }} testID="status-rectangle">
       <TouchableOpacity
         style={styles.button}
         onPress={() => setModalVisible(true)}
         disabled={!props.activated}
+        testID="status-rectangle-button"
       >
         <Image
           source={{ uri: statusIMG[props.status] }}
           style={{ width: image_width, height: image_width, margin: 2 }}
+          testID="status-rectangle-image"
         />
         <Modal
           animationType="slide"
