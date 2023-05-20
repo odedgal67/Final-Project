@@ -1,44 +1,53 @@
 import * as React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Linking, } from "react-native";
 import Background from "../components/Background";
-
-const names = ["תכנית 1", "תכנית 2", "תכנית 3"];
-const links = [
-  "https://www.example.com/plan1",
-  "https://www.example.com/plan2",
-  "https://www.example.com/plan3",
-];
-const dates = ["20/04/2023", "20/04/2023", "20/04/2023"];
+import CreatePlanButton from "../components/CreatePlanButton";
+import API from "../API/api_bridge";
+import { UserContext } from "../utils/UserContext";
+import { ProjectContext } from "../utils/ProjectContext";
+import { Plan } from "../types";
+import { hebrew } from "../utils/text_dictionary";
 
 const PlansScreen = ({ navigation, route }) => {
-  navigation.setOptions({ title: route.params.header + " > תכניות" });
+  const { getUser } = React.useContext(UserContext);
+  const { getProject } = React.useContext(ProjectContext);
+  const [plans, setPlans] = React.useState([] as Plan[]);
+  let add_plan_click = (
+    planName: string,
+    link: string,
+    modal_visibility_setter: (b: boolean) => void
+  ) => {
+    API.get_instance().add_plan(getProject().id, planName, link, getUser().name);
+    modal_visibility_setter(false);
+    setPlans((_plans) => {
+      const updatedPlans = API.get_instance().get_all_plans(getProject().id);
+      return updatedPlans;
+    });
+  };
+  React.useEffect(() => {
+    setPlans(API.get_instance().get_all_plans(getProject().id));
+  }, []);
+  navigation.setOptions({ title: route.params.header + " > " + hebrew.plans });
   return (
     <Background>
-      <View style={styles.container}>
-        <View style={styles.tableHeader}>
-          <Text style={styles.headerText}>תכנית</Text>
-          <Text style={styles.headerText}>קישור</Text>
-          <Text style={styles.headerText}>תאריך</Text>
-        </View>
-        <View>
-          {names.map((name, index) => (
-            <View style={styles.tableRow} key={index}>
-              <Text>{name}</Text>
-              <TouchableOpacity onPress={() => Linking.openURL(links[index])}>
-                <Text style={{ textDecorationLine: "underline" }}>
-                  {links[index]}
-                </Text>
+      <View style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.headerText}>{hebrew.plans}</Text>
+            <Text style={styles.headerText}>{hebrew.date_of_edit}</Text>
+          </View>
+          <View>
+            {plans.map((plan, index) => (
+              <TouchableOpacity key={index} onPress={() => Linking.openURL(plan.link)}>
+                <View style={styles.tableRow}>
+                  <Text style={styles.nameText}>{plan.name}</Text>
+                  <Text style={styles.dateText}>{new Date(plan.date).toLocaleDateString()}</Text>
+                </View>
               </TouchableOpacity>
-              <Text>{dates[index]}</Text>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
+        <CreatePlanButton onAddClick={add_plan_click} />
       </View>
     </Background>
   );
@@ -46,19 +55,23 @@ const PlansScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 8,
     padding: 20,
   },
   tableHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: "#007AFF",
+    paddingBottom: 5,
   },
   headerText: {
     fontWeight: "bold",
     fontSize: 16,
     flex: 1,
     textAlign: "center",
+    color: "#007AFF",
   },
   tableRow: {
     flexDirection: "row",
@@ -67,6 +80,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#CCCCCC",
     paddingVertical: 10,
+  },
+  nameText: {
+    textAlign: "center",
+    flex: 1,
+    fontSize: 16,
+    color: "#007AFF",
+  },
+  dateText: {
+    flex: 1,
+    fontSize: 14,
+    color: "#555555",
+    textAlign: "center",
   },
 });
 

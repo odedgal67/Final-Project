@@ -1,5 +1,5 @@
-import { Mission, Project, Stage, Status, Title } from "../types";
 import { roles } from "../utils/Permissions";
+import { Mission, Plan, Project, Stage, Status, Title } from "../types";
 import api_interface from "./api_interface";
 
 class MockAPI extends api_interface {
@@ -9,6 +9,8 @@ class MockAPI extends api_interface {
   last_stage_id: number = 0;
   missions: Mission[] = [];
   last_mission_id: number = 0;
+  plans: Plan[] = [];
+  last_plan_id: number = 0;
 
   constructor() {
     super();
@@ -17,6 +19,12 @@ class MockAPI extends api_interface {
 
   private init_data() {
     this.add_project("פרויקט דוגמא", "דוגמא");
+    this.plans.push({
+      name: "ynet",
+      link: "https://www.ynet.co.il",
+      date: new Date(),
+      project_id: 0,
+    });
   }
 
   get_all_projects(username: string): Project[] {
@@ -75,6 +83,28 @@ class MockAPI extends api_interface {
     );
     this.last_mission_id++;
     return this.last_mission_id - 1;
+  }
+
+  add_plan(
+    project_id: number,
+    plan_name: string,
+    link: string,
+    username: string
+  ): number {
+    console.log("added plan!");
+    this.plans.push({
+      id: this.last_plan_id,
+      name: plan_name,
+      link: link,
+      date: new Date(),
+      project_id: project_id,
+    });
+    this.last_plan_id++;
+    return this.last_plan_id - 1;
+  }
+
+  get_all_plans(project_id: number): Plan[] {
+    return this.plans.filter((plan) => true);
   }
 
   private check_update_stages_statuses() {

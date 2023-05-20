@@ -3,12 +3,12 @@ import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import Background from "../components/Background";
 import { hebrew } from "../utils/text_dictionary";
 
-const RegistrationScreen = () => {
+const LoginScreen = () => {
   return (
     <Background>
       <View style={styles.container}>
         <View style={styles.form}>
-          <Text style={styles.heading}>{hebrew.register}</Text>
+          <Text style={styles.heading}>{hebrew.login}</Text>
           <TextInput style={styles.input} placeholder={hebrew.id} placeholderTextColor="#B4B4B4" />
           <TextInput
             style={styles.input}
@@ -16,8 +16,8 @@ const RegistrationScreen = () => {
             secureTextEntry={true}
             placeholderTextColor="#B4B4B4"
           />
-          <Pressable style={styles.button} onPress={() => alert("Registration button pressed")}>
-            <Text style={styles.buttonText}>{hebrew.register}</Text>
+          <Pressable style={styles.button} onPress={() => alert("Login button pressed")}>
+            <Text style={styles.buttonText}>{hebrew.login}</Text>
           </Pressable>
         </View>
       </View>
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrationScreen;
+export default LoginScreen;

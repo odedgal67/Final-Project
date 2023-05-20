@@ -1,5 +1,5 @@
-import { Mission, Project, Stage, Status, Title } from "../types";
 import { roles } from "../utils/Permissions";
+import { Mission, Project, Stage, Status, Title, Plan } from "../types";
 
 abstract class api_interface {
   abstract login(username: string, password: string): boolean;
@@ -15,6 +15,12 @@ abstract class api_interface {
     stage_id: number,
     title: Title,
     mission_name: string,
+    username: string
+  ): number;
+  abstract add_plan(
+    project_id: number,
+    plan_name: string,
+    link: string,
     username: string
   ): number;
   abstract set_mission_status(
@@ -36,6 +42,7 @@ abstract class api_interface {
     title: Title,
     username: string
   ): Stage[];
+  abstract get_all_plans(project_id: number): Plan[];
   abstract get_all_projects(username: string): Project[];
   abstract edit_comment_in_mission(
     project_id: number,
