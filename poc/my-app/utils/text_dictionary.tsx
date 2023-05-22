@@ -36,6 +36,17 @@ export var hebrew = {
   remove: "הסרה",
   change_role: "שינוי תפקיד",
   are_you_sure_you_want_to_remove: "האם אתה בטוח שברצונך להסיר את ${userName}?",
+  add_user: "הוספת משתמש או מתן גישה",
+  register_user_explanation: "רשימת משתמש חדש למערכת",
+  name: "שם",
+  verify_password: "אימות סיסמה",
+  passwords_dont_match: "הסיסמאות אינן תואמות",
+  fill_all_fields: "אנא מלא את כל השדות",
+  user_registered_successfully: "המשתמש נרשם בהצלחה",
+  invalid_id: "תעודת זהות לא תקינה",
+  user_assigned_successfully: "המשתמש קיבל גישה בהצלחה",
+  assign_existing_user_a_role_explanation: "מתן גישה למשתמש קיים",
+  back: "חזרה",
 };
 
 export var title_to_hebrew = {

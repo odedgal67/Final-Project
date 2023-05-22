@@ -5,8 +5,9 @@ import { roles } from "./Permissions";
 
 // Declaring the state object globally.
 const UserState = {
-  user: { name: "guest", id: "-1", role: roles.CONTRACTOR },
+  user: { name: "guest", id: "-1" },
   api_answer: 0,
+  role: roles.CONTRACTOR,
 };
 
 const UserContextWrapper = (component?: React.Component) => ({
@@ -19,10 +20,10 @@ const UserContextWrapper = (component?: React.Component) => ({
     return UserState.user;
   },
   getRole: () => {
-    return UserState.user.role;
+    return UserState.role;
   },
   setRole: (role: roles) => {
-    UserState.user.role = role;
+    UserState.role = role;
     component?.setState({ context: UserContextWrapper(component) });
   },
   notify: () => {

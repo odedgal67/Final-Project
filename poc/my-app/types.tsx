@@ -90,7 +90,6 @@ export type Mission = {
 export type User = {
   name: string;
   id: string;
-  role: roles;
 };
 
 export type Plan = {
@@ -98,4 +97,9 @@ export type Plan = {
   link: string;
   date: Date;
   project_id: number;
+};
+
+export type UserRecord = {
+  user: User;
+  role: roles;
 };

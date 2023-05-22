@@ -6,6 +6,7 @@ export enum roles {
   WORK_MANAGER = "WORK_MANAGER",
   PROJECT_MANAGER = "PROJECT_MANAGER",
   CONTRACTOR = "CONTRACTOR",
+  UNDEFINED = "UNDEFINED",
 }
 
 const mapRoleToActions = new Map();

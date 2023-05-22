@@ -5,8 +5,8 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 type RoleSelectionProps = {
-  title: string;
   onPress: (val: roles) => void;
+  title: string;
 };
 
 const RoleSelection = (props: RoleSelectionProps) => {
@@ -26,7 +26,7 @@ const RoleSelection = (props: RoleSelectionProps) => {
         setSelected={props.onPress}
         dropdownItemStyles={styles.dropDown}
         boxStyles={styles.box}
-        placeholder=" "
+        placeholder={props.title}
       />
     </View>
   );

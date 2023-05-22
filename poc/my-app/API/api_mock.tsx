@@ -1,8 +1,17 @@
 import { roles } from "../utils/Permissions";
-import { Mission, Plan, Project, Stage, Status, Title, User } from "../types";
+import {
+  Mission,
+  Plan,
+  Project,
+  Stage,
+  Status,
+  Title,
+  User,
+  UserRecord,
+} from "../types";
 import api_interface from "./api_interface";
 
-type UserRecord = { user: User; project_id: number };
+type UserRecordMock = { user: User; project_id: number; role: roles };
 
 class MockAPI extends api_interface {
   projects: Project[] = [];
@@ -13,7 +22,7 @@ class MockAPI extends api_interface {
   last_mission_id: number = 0;
   plans: Plan[] = [];
   last_plan_id: number = 0;
-  users: UserRecord[] = [];
+  users: UserRecordMock[] = [];
 
   constructor() {
     super();
@@ -32,16 +41,18 @@ class MockAPI extends api_interface {
       user: {
         name: "oded very long name",
         id: "1234",
-        role: roles.PROJECT_MANAGER,
       },
       project_id: 0,
+      role: roles.PROJECT_MANAGER,
     });
     this.users.push({
-      user: { name: "liron", id: "1235", role: roles.CONTRACTOR },
+      user: { name: "liron", id: "1235" },
+      role: roles.CONTRACTOR,
       project_id: 0,
     });
     this.users.push({
-      user: { name: "hadar", id: "1236", role: roles.WORK_MANAGER },
+      user: { name: "hadar", id: "1236" },
+      role: roles.WORK_MANAGER,
       project_id: 0,
     });
   }
@@ -172,10 +183,7 @@ class MockAPI extends api_interface {
     stage_id: number,
     username: string
   ): Mission[] {
-    console.log("returning all missions for title " + title);
     let output = this.missions.filter((mission) => mission.title == title);
-    console.log("filtered missions: " + output);
-    console.log("all missions: " + this.missions);
     return output;
   }
 
@@ -217,18 +225,25 @@ class MockAPI extends api_interface {
     this.projects[project_id].name = new_name;
   }
 
-  get_all_users(project_id: number, username: string): User[] {
-    let output: User[] = [];
+  get_all_users(project_id: number, username: string): UserRecord[] {
+    let output: UserRecord[] = [];
     this.users.forEach((user_record) => {
       if (user_record.project_id == project_id) {
-        output.push(user_record.user);
+        output.push({ user: user_record.user, role: user_record.role });
       }
     });
     return output;
   }
 
-  register_user(project_id: number, user: User, username: string): void {
-    this.users.push({ project_id: project_id, user: user });
+  register(username: string, id: string, password: string): void {
+    this.users.push({
+      user: {
+        name: username,
+        id: id,
+      },
+      project_id: -1,
+      role: roles.WORK_MANAGER,
+    });
   }
 
   remove_user(project_id: number, user: User, username: string): void {
@@ -240,17 +255,16 @@ class MockAPI extends api_interface {
 
   edit_user_role(
     project_id: number,
-    user: User,
+    id: string,
     new_role: roles,
     username: string
   ): void {
-    console.log("changing role of user " + user.name + " to " + new_role);
+    console.log("editing user role id: " + id + " new role: " + new_role);
     this.users.forEach((user_record) => {
-      if (
-        user_record.user.id == user.id &&
-        user_record.project_id == project_id
-      ) {
-        user_record.user.role = new_role;
+      console.log("user_record.user.id: " + user_record.user.id);
+      if (user_record.user.id == id) {
+        user_record.role = new_role;
+        user_record.project_id = project_id;
       }
     });
   }

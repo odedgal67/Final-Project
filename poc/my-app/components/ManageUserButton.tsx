@@ -14,11 +14,12 @@ type ManageUserButtonProps = {
   navigation: any;
   user: User;
   onRemove: (user: User) => void;
+  role: roles;
 };
 
 const ManageUserButton = (props: ManageUserButtonProps) => {
   let name = truncate_with_dots(props.user.name, 15);
-  const [role, setRole] = useState(role_to_hebrew[props.user.role]);
+  const [role, setRole] = useState(role_to_hebrew[props.role]);
   const [pressed, setPressed] = useState(false);
   const { getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
