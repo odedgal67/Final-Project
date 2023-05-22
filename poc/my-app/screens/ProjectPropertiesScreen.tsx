@@ -2,13 +2,17 @@ import * as React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PropertiesButton from "../components/PropertiesButton";
 import Background from "../components/Background";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   ProjectContext,
   ProjectContextProvider,
 } from "../utils/ProjectContext";
 import { hebrew } from "../utils/text_dictionary";
 import { Project, Title } from "../types";
+import API from "../API/api_bridge";
+import { UserContext } from "../utils/UserContext";
+import ProjectSettingsModal from "../components/ProjectSettingsModal";
+import { actions, hasPermission } from "../utils/Permissions";
 
 const ProjectPropertiesScreen = ({
   navigation,
@@ -18,16 +22,23 @@ const ProjectPropertiesScreen = ({
   route: { params: { project: Project } };
 }) => {
   let projectName = route.params.project.name;
-  navigation.setOptions({ title: projectName });
-  const { project, setProject, getProject } = React.useContext(ProjectContext);
-
+  const { setProject, getProject, setRole } = React.useContext(ProjectContext);
+  const { getUser, getRole } = React.useContext(UserContext);
+  React.useEffect(() => {
+    setProject(route.params.project);
+    setRole(API.get_instance().get_role(getUser().name, getProject().id));
+  }, []);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ title: projectName });
+  }, [navigation]);
   function getButton(ButtonProps: {
-    propertyName: String;
+    propertyName: string;
     ScreenName: String;
     title: Title;
   }) {
     return (
       <PropertiesButton
+        key={ButtonProps.propertyName}
         title={ButtonProps.propertyName}
         onPress={() =>
           navigation.navigate(ButtonProps.ScreenName, {
@@ -40,9 +51,10 @@ const ProjectPropertiesScreen = ({
     );
   }
 
-  function getRow(button1: JSX.Element, button2: JSX.Element) {
+  function getRow(button1: JSX.Element, button2: JSX.Element, key: number) {
     return (
       <View
+        key={key}
         style={{
           flexDirection: "row",
           justifyContent: "center",
@@ -88,25 +100,33 @@ const ProjectPropertiesScreen = ({
     for (let i = 0; i < buttonProperties.length; i += 2) {
       let button1 = getButton(buttonProperties[i]);
       let button2 = getButton(buttonProperties[i + 1]);
-      rows.push(getRow(button1, button2));
+      rows.push(getRow(button1, button2, i));
     }
     return rows;
   }
-
-  setProject(route.params.project);
   return (
     <ProjectContextProvider>
       <Background>
-        <SafeAreaView
-          style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            paddingTop: 40,
-            margin: 20,
-          }}
-        >
-          {getRows()}
-        </SafeAreaView>
+        <View style={{ flex: 1 }}>
+          <SafeAreaView
+            style={{
+              flexDirection: "column",
+              justifyContent: "center",
+              margin: 20,
+              flex: 5,
+            }}
+          >
+            {getRows()}
+          </SafeAreaView>
+          {hasPermission(getRole(), actions.MANAGE_PROJECT_SETTINGS) ? (
+            <ProjectSettingsModal
+              project={getProject()}
+              navigation={navigation}
+            />
+          ) : (
+            <View style={{ flex: 1 }} />
+          )}
+        </View>
       </Background>
     </ProjectContextProvider>
   );

@@ -1,5 +1,17 @@
-import { Mission, Plan, Project, Stage, Status, Title } from "../types";
+import { roles } from "../utils/Permissions";
+import {
+  Mission,
+  Plan,
+  Project,
+  Stage,
+  Status,
+  Title,
+  User,
+  UserRecord,
+} from "../types";
 import api_interface from "./api_interface";
+
+type UserRecordMock = { user: User; project_id: number; role: roles };
 
 class MockAPI extends api_interface {
   projects: Project[] = [];
@@ -10,6 +22,7 @@ class MockAPI extends api_interface {
   last_mission_id: number = 0;
   plans: Plan[] = [];
   last_plan_id: number = 0;
+  users: UserRecordMock[] = [];
 
   constructor() {
     super();
@@ -22,6 +35,24 @@ class MockAPI extends api_interface {
       name: "ynet",
       link: "https://www.ynet.co.il",
       date: new Date(),
+      project_id: 0,
+    });
+    this.users.push({
+      user: {
+        name: "oded very long name",
+        id: "1234",
+      },
+      project_id: 0,
+      role: roles.PROJECT_MANAGER,
+    });
+    this.users.push({
+      user: { name: "liron", id: "1235" },
+      role: roles.CONTRACTOR,
+      project_id: 0,
+    });
+    this.users.push({
+      user: { name: "hadar", id: "1236" },
+      role: roles.WORK_MANAGER,
       project_id: 0,
     });
   }
@@ -37,6 +68,7 @@ class MockAPI extends api_interface {
   add_project(project_name: string, username: string): number {
     console.log("added project!");
     this.projects.push({ id: this.last_project_id, name: project_name });
+    console.log("current projects: " + this.projects.length);
     this.last_project_id++;
     return this.last_project_id - 1;
   }
@@ -151,10 +183,7 @@ class MockAPI extends api_interface {
     stage_id: number,
     username: string
   ): Mission[] {
-    console.log("returning all missions for title " + title);
     let output = this.missions.filter((mission) => mission.title == title);
-    console.log("filtered missions: " + output);
-    console.log("all missions: " + this.missions);
     return output;
   }
 
@@ -183,6 +212,61 @@ class MockAPI extends api_interface {
         project_id
     );
     this.missions[mission_id].comment = comment;
+  }
+
+  get_role(username: string, project_id: number): roles {
+    return roles.CONTRACTOR;
+  }
+  edit_project_name(
+    usernaem: string,
+    project_id: number,
+    new_name: string
+  ): void {
+    this.projects[project_id].name = new_name;
+  }
+
+  get_all_users(project_id: number, username: string): UserRecord[] {
+    let output: UserRecord[] = [];
+    this.users.forEach((user_record) => {
+      if (user_record.project_id == project_id) {
+        output.push({ user: user_record.user, role: user_record.role });
+      }
+    });
+    return output;
+  }
+
+  register(username: string, id: string, password: string): void {
+    this.users.push({
+      user: {
+        name: username,
+        id: id,
+      },
+      project_id: -1,
+      role: roles.WORK_MANAGER,
+    });
+  }
+
+  remove_user(project_id: number, user: User, username: string): void {
+    this.users = this.users.filter(
+      (user_record) =>
+        user_record.user.id != user.id || user_record.project_id != project_id
+    );
+  }
+
+  edit_user_role(
+    project_id: number,
+    id: string,
+    new_role: roles,
+    username: string
+  ): void {
+    console.log("editing user role id: " + id + " new role: " + new_role);
+    this.users.forEach((user_record) => {
+      console.log("user_record.user.id: " + user_record.user.id);
+      if (user_record.user.id == id) {
+        user_record.role = new_role;
+        user_record.project_id = project_id;
+      }
+    });
   }
 }
 export default MockAPI;

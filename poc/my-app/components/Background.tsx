@@ -1,10 +1,10 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-const Background = ( {children}: {children: JSX.Element}) => {
+const Background = ({ children }: { children: JSX.Element }) => {
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <LinearGradient
         colors={["#f4efeb", "#f4efeb"]}
         start={{ x: 0, y: 1 }}
@@ -12,7 +12,7 @@ const Background = ( {children}: {children: JSX.Element}) => {
         style={styles.gradient}
       />
       {children}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
