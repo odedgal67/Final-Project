@@ -9,6 +9,7 @@ import {
   NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { roles } from "./utils/Permissions";
 
 declare global {
   namespace ReactNavigation {
@@ -89,6 +90,7 @@ export type Mission = {
 export type User = {
   name: string;
   id: string;
+  role: roles;
 };
 
 export type Plan = {

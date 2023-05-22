@@ -12,6 +12,7 @@ import PlansScreen from "./screens/PlansScreen";
 import { UserContext, UserContextProvider } from "./utils/UserContext";
 import { LogBox } from "react-native";
 import Crane from "./components/Crane";
+import ManageUsersScreen from "./screens/ManageUsersScreen";
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
@@ -37,6 +38,10 @@ const MyStack = () => {
           <Stack.Screen
             name="projectProperties"
             component={ProjectPropertiesScreen}
+          />
+          <Stack.Screen
+            name="ManageUsersScreen"
+            component={ManageUsersScreen}
           />
           <Stack.Screen
             name="GeneralStagesScreen"

@@ -1,4 +1,5 @@
 import { Status, Title } from "../types";
+import { roles } from "./Permissions";
 
 export var hebrew = {
   general_stages: "פיתוח וכללי לבניין",
@@ -11,6 +12,7 @@ export var hebrew = {
   add_new_project_place_holder: "שם הפרויקט",
   add_new_project: "הוספת פרויקט חדש",
   accept: "אישור",
+  decline: "ביטול",
   project_name_cant_be_empty: "שם הפרויקט לא יכול להיות ריק",
   mission_description: "תיאור משימה",
   link_to_document: "קישור לתקן",
@@ -29,6 +31,11 @@ export var hebrew = {
   login: "התחברות",
   id: "תעודת זהות",
   password: "סיסמה",
+  manage_users: "ניהול משתמשים",
+  close: "סגור",
+  remove: "הסרה",
+  change_role: "שינוי תפקיד",
+  are_you_sure_you_want_to_remove: "האם אתה בטוח שברצונך להסיר את ${userName}?",
 };
 
 export var title_to_hebrew = {
@@ -44,4 +51,10 @@ export var status_to_hebrew = {
   [Status.InProgress]: "בתהליך",
   [Status.Done]: "סגור",
   [Status.Invalid]: "לא תקין",
+};
+
+export var role_to_hebrew = {
+  [roles.WORK_MANAGER]: "מנהל עבודה",
+  [roles.PROJECT_MANAGER]: "מנהל פרויקט",
+  [roles.CONTRACTOR]: "קבלן",
 };

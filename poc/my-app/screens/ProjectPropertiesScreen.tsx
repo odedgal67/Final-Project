@@ -24,9 +24,13 @@ const ProjectPropertiesScreen = ({
   let projectName = route.params.project.name;
   const { setProject, getProject, setRole } = React.useContext(ProjectContext);
   const { getUser, getRole } = React.useContext(UserContext);
-  setProject(route.params.project);
-  setRole(API.get_instance().get_role(getUser().name, getProject().id));
-  navigation.setOptions({ title: projectName });
+  React.useEffect(() => {
+    setProject(route.params.project);
+    setRole(API.get_instance().get_role(getUser().name, getProject().id));
+  }, []);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ title: projectName });
+  }, [navigation]);
   function getButton(ButtonProps: {
     propertyName: string;
     ScreenName: String;
@@ -34,6 +38,7 @@ const ProjectPropertiesScreen = ({
   }) {
     return (
       <PropertiesButton
+        key={ButtonProps.propertyName}
         title={ButtonProps.propertyName}
         onPress={() =>
           navigation.navigate(ButtonProps.ScreenName, {
@@ -46,9 +51,10 @@ const ProjectPropertiesScreen = ({
     );
   }
 
-  function getRow(button1: JSX.Element, button2: JSX.Element) {
+  function getRow(button1: JSX.Element, button2: JSX.Element, key: number) {
     return (
       <View
+        key={key}
         style={{
           flexDirection: "row",
           justifyContent: "center",
@@ -94,7 +100,7 @@ const ProjectPropertiesScreen = ({
     for (let i = 0; i < buttonProperties.length; i += 2) {
       let button1 = getButton(buttonProperties[i]);
       let button2 = getButton(buttonProperties[i + 1]);
-      rows.push(getRow(button1, button2));
+      rows.push(getRow(button1, button2, i));
     }
     return rows;
   }
@@ -113,7 +119,10 @@ const ProjectPropertiesScreen = ({
             {getRows()}
           </SafeAreaView>
           {hasPermission(getRole(), actions.MANAGE_PROJECT_SETTINGS) ? (
-            <ProjectSettingsModal project={getProject()} />
+            <ProjectSettingsModal
+              project={getProject()}
+              navigation={navigation}
+            />
           ) : (
             <View style={{ flex: 1 }} />
           )}

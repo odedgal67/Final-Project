@@ -1,8 +1,16 @@
-import { TouchableOpacity, StyleSheet, Text, View, Modal } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  Pressable,
+} from "react-native";
 import { Project } from "../types";
 import { hebrew } from "../utils/text_dictionary";
 import { useState } from "react";
 import Background from "./Background";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface ProjectSettingsModalProps {
   project: Project;
@@ -11,17 +19,17 @@ interface ProjectSettingsModalProps {
 
 const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
   const [modalVisible, setModalVisible] = useState(false);
-
   return (
     <View style={{ flex: 1 }}>
-      <TouchableOpacity
+      <Pressable
         style={styles.button}
         onPress={() => {
           setModalVisible(true);
+          console.log("clicked projectsettings");
         }}
       >
         <Text style={styles.text}>{hebrew.projectSettings}</Text>
-      </TouchableOpacity>
+      </Pressable>
       <Modal
         visible={modalVisible}
         transparent={true}
@@ -37,10 +45,13 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => {
-                  alert("wip");
+                  setModalVisible(false);
+                  props.navigation.navigate("ManageUsersScreen");
                 }}
               >
-                <Text style={styles.modalButtonText}>Manage Users</Text>
+                <Text style={styles.modalButtonText}>
+                  {hebrew.manage_users}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalButton}
@@ -48,7 +59,7 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
                   setModalVisible(false);
                 }}
               >
-                <Text style={styles.modalButtonText}>Close</Text>
+                <Text style={styles.modalButtonText}>{hebrew.close}</Text>
               </TouchableOpacity>
             </View>
           </Background>

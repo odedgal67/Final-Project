@@ -14,7 +14,10 @@ function get_project_buttons(navigation: any, projects: Project[]) {
   let buttons = [];
   for (let i = 0; i < projects.length; i += 2) {
     buttons.push(
-      <SafeAreaView style={{ flexDirection: "row", justifyContent: "center" }}>
+      <SafeAreaView
+        style={{ flexDirection: "row", justifyContent: "center" }}
+        key={i}
+      >
         <ProjectButton
           project={projects[i]}
           projectName={projects[i].name}
@@ -45,7 +48,6 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
   const { getUser } = React.useContext(UserContext);
   const [projects, setProjects] = React.useState([] as Project[]);
   const { clearProjectState } = React.useContext(ProjectContext);
-  navigation.setOptions({ title: "" });
   let add_project_click = (
     projectName: string,
     modal_visibility_setter: (b: boolean) => void
@@ -61,6 +63,7 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
   };
   React.useEffect(() => {
     setProjects(API.get_instance().get_all_projects(getUser().name));
+    navigation.setOptions({ title: "" });
   }, []);
   useFocusEffect(() => {
     clearProjectState();

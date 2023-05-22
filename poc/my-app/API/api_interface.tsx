@@ -1,5 +1,5 @@
 import { roles } from "../utils/Permissions";
-import { Mission, Project, Stage, Status, Title, Plan } from "../types";
+import { Mission, Project, Stage, Status, Title, Plan, User } from "../types";
 
 abstract class api_interface {
   abstract login(username: string, password: string): boolean;
@@ -57,6 +57,19 @@ abstract class api_interface {
     usernaem: string,
     project_id: number,
     new_name: string
+  ): void;
+  abstract get_all_users(project_id: number, username: string): User[];
+  abstract register_user(
+    project_id: number,
+    user: User,
+    username: string
+  ): void;
+  abstract remove_user(project_id: number, user: User, username: string): void;
+  abstract edit_user_role(
+    project_id: number,
+    user: User,
+    new_role: roles,
+    username: string
   ): void;
 }
 

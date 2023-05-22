@@ -2,7 +2,7 @@ export const enum actions {
   MANAGE_PROJECT_SETTINGS = "MANAGE_PROJECT_SETTINGS",
 }
 
-export const enum roles {
+export enum roles {
   WORK_MANAGER = "WORK_MANAGER",
   PROJECT_MANAGER = "PROJECT_MANAGER",
   CONTRACTOR = "CONTRACTOR",
