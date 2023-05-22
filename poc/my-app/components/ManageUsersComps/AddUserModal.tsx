@@ -13,6 +13,7 @@ import { useState } from "react";
 import Background from "../Background";
 import RegisterNewUser from "./RegisterNewUser";
 import AssignUserToProject from "./AssignUserToProject";
+import { roles } from "../../utils/Permissions";
 
 type AddUserModalProps = {
   onAssignUserToProject: (user_id: string, role: roles) => void;
