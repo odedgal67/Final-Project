@@ -19,11 +19,11 @@ const statusColors: Record<Status, string> = {
   Invalid: "#e51f1f",
 };
 
-const statusIMG: Record<Status, string> = {
-  Open: "https://i.ibb.co/xM7tRCw/to-do-list.png",
-  InProgress: "https://i.ibb.co/JtRgY2S/work-in-progress2.png",
-  Done: "https://i.ibb.co/y8sq6Vb/check-mark.png",
-  Invalid: "https://i.ibb.co/58yC1H2/breakdown.png",
+const statusIMG = {
+  Open: require("./imgs/open_status.png"),
+  InProgress: require("./imgs/inprogress_status.png"),
+  Done: require("./imgs/done_status.png"),
+  Invalid: require("./imgs/invalid_status.png"),
 };
 
 const StatusRectangle = (props: {
@@ -94,7 +94,11 @@ const StatusRectangle = (props: {
       },
     });
     return (
-      <TouchableOpacity style={_styles.s} onPress={() => handleChange(value)}>
+      <TouchableOpacity
+        style={_styles.s}
+        onPress={() => handleChange(value)}
+        testID={value}
+      >
         <Text style={styles.text}>{status_to_hebrew[value]}</Text>
       </TouchableOpacity>
     );
@@ -104,15 +108,17 @@ const StatusRectangle = (props: {
     (props.width != undefined && props.width - 55) ||
     Dimensions.get("window").width * 0.1;
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }} testID="status-rectangle">
       <TouchableOpacity
         style={styles.button}
         onPress={() => setModalVisible(true)}
         disabled={!props.activated}
+        testID="status-rectangle-button"
       >
         <Image
-          source={{ uri: statusIMG[props.status] }}
+          source={statusIMG[props.status]}
           style={{ width: image_width, height: image_width, margin: 2 }}
+          testID="status-rectangle-image"
         />
         <Modal
           animationType="slide"

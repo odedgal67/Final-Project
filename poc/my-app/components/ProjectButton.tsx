@@ -10,19 +10,39 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { hebrew } from "../utils/text_dictionary";
+import { Project } from "../types";
+import { UserContext } from "../utils/UserContext";
+import API from "../API/api_bridge";
 
-const ProjectButton = (props: { projectName: string; onPress: () => void }) => {
+const ProjectButton = (props: {
+  project: Project;
+  projectName: string;
+  onPress: () => void;
+}) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_project_name, setProject_Name] = React.useState("");
+  const { getUser } = React.useContext(UserContext);
+  const [curr_project_name, setCurr_Project_Name] = React.useState(
+    props.project.name
+  );
   let image_location = "./imgs/folder.png";
-  let choose_new_project_text = "שינוי שם עבור " + props.projectName;
+  let projectName = props.project.name;
+  let choose_new_project_text = hebrew.change_name_for_projectName.replace(
+    "${projectName}",
+    projectName
+  );
   let rename_project_click = () => {
     if (new_project_name.length == 0) {
       alert(hebrew.project_name_cant_be_empty);
       return;
     }
     setModalVisible(false);
-    alert("changed project name to " + new_project_name);
+    API.get_instance().edit_project_name(
+      getUser().name,
+      props.project.id,
+      new_project_name
+    );
+    setCurr_Project_Name(new_project_name);
   };
   return (
     <TouchableNativeFeedback
@@ -81,7 +101,7 @@ const ProjectButton = (props: { projectName: string; onPress: () => void }) => {
           </View>
         </Modal>
         <View style={styles.text_bg}>
-          <Text style={styles.text}>{props.projectName}</Text>
+          <Text style={styles.text}>{curr_project_name}</Text>
         </View>
         <View style={styles.image_background}>
           <Image source={require(image_location)} style={styles.image} />

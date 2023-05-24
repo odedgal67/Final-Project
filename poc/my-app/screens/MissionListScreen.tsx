@@ -16,6 +16,9 @@ const MissionListsScreen = ({
   const { getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
   const [missions, setMissions] = React.useState([] as Mission[]);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ title: route.params.stage.name });
+  }, [navigation]);
   React.useEffect(() => {
     setMissions(
       API.get_instance().get_all_missions(
@@ -30,7 +33,7 @@ const MissionListsScreen = ({
     <Background>
       <StagesTable
         stages={missions}
-        allow_change_status={true}
+        allow_change_status={false}
         ButtonHandler={(_mission_name: String, mission_id: number) => {
           return () =>
             navigation.navigate("MissionScreen", {

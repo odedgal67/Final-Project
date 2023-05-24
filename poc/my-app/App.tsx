@@ -1,9 +1,6 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useHeaderHeight } from "@react-navigation/elements";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-
 import ProjectsScreen from "./screens/ProjectsScreen";
 import ProjectPropertiesScreen from "./screens/ProjectPropertiesScreen";
 import GeneralStagesScreen from "./screens/GeneralStagesScreen";
@@ -14,90 +11,53 @@ import FaultScreen from "./screens/FaultScreen";
 import FaultListScreen from "./screens/FaultListScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
-import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { UserContext, UserContextProvider } from "./utils/UserContext";
 import { LogBox } from "react-native";
+import Crane from "./components/Crane";
+import ManageUsersScreen from "./screens/ManageUsersScreen";
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
   LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
   LogBox.ignoreAllLogs(); //Ignore all log notifications
+  const { getUser } = React.useContext(UserContext);
   return (
     <UserContextProvider>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
             headerTitleAlign: "center",
-            headerRight: () => (
-              <HeaderButtons>
-                <TouchableOpacity>
-                  <Image
-                    source={require("./components/imgs/crane.gif")}
-                    style={{
-                      width: useHeaderHeight() / 2,
-                      height: useHeaderHeight() / 2,
-                    }}
-                  />
-                </TouchableOpacity>
-              </HeaderButtons>
-            ),
+            headerRight: (props) =>
+              Crane({
+                ...props,
+                onClick: () => {
+                  console.log("logged as: " + getUser().name);
+                },
+              }),
           }}
         >
-          <Stack.Screen
-            name="projects"
-            component={ProjectsScreen}
-            options={{
-              title: "פרוייקטים",
-            }}
-          />
+          <Stack.Screen name="projects" component={ProjectsScreen} />
           <Stack.Screen
             name="projectProperties"
             component={ProjectPropertiesScreen}
-            options={{
-              title: "פרטי פרוייקט",
-            }}
+          />
+          <Stack.Screen
+            name="ManageUsersScreen"
+            component={ManageUsersScreen}
           />
           <Stack.Screen
             name="GeneralStagesScreen"
             component={GeneralStagesScreen}
-            options={{
-              title: "שלבים כלליים",
-            }}
           />
-          <Stack.Screen
-            name="MissionScreen"
-            component={MissionScreen}
-            options={{
-              title: "משימה",
-            }}
-          />
+          <Stack.Screen name="MissionScreen" component={MissionScreen} />
           <Stack.Screen
             name="MissionListsScreen"
             component={MissionListsScreen}
-            options={{
-              title: "משימות",
-            }}
           />
-          <Stack.Screen
-            name="LevelsScreen"
-            component={LevelsScreen}
-            options={{
-              title: "משימות לפי דירה",
-            }}
-          />
+          <Stack.Screen name="LevelsScreen" component={LevelsScreen} />
           <Stack.Screen
             name="RegistrationScreen"
             component={RegistrationScreen}
-            options={{
-              title: "הרשמה",
-            }}
-          />
-          <Stack.Screen
-            name="PlansScreen"
-            component={PlansScreen}
-            options={{
-              title: "תכניות",
-            }}
           />
           <Stack.Screen
             name="FaultScreen"
@@ -113,6 +73,7 @@ const MyStack = () => {
               title: "ליקויי בנייה",
             }}
           />
+          <Stack.Screen name="PlansScreen" component={PlansScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </UserContextProvider>

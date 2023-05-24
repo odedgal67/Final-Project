@@ -34,7 +34,9 @@ const MissionScreen = ({
     mission.name.length > 25
       ? mission.name.substring(0, 15) + "..."
       : mission.name;
-  navigation.setOptions({ title: _mission_name });
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ title: _mission_name });
+  }, [navigation]);
   const [comment, setComment] = React.useState(mission.comment);
   let onSubmitEdit = () => {
     API.get_instance().edit_comment_in_mission(
@@ -45,6 +47,7 @@ const MissionScreen = ({
       comment,
       getUser().name
     );
+    alert(hebrew.saved_changes_successfully);
     setEditable(false);
   };
   return (
@@ -58,7 +61,7 @@ const MissionScreen = ({
             <Text style={styles.title}>{hebrew.mission_description}</Text>
             <TouchableNativeFeedback
               onLongPress={() => setEditable(true)}
-              delayLongPress={5}
+              delayLongPress={500}
             >
               <View
                 style={
