@@ -7,6 +7,8 @@ import GeneralStagesScreen from "./screens/GeneralStagesScreen";
 import MissionScreen from "./screens/MissionScreen";
 import MissionListsScreen from "./screens/MissionListScreen";
 import LevelsScreen from "./screens/LevelsScreen";
+import FaultScreen from "./screens/FaultScreen";
+import FaultListScreen from "./screens/FaultListScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
 import { UserContext, UserContextProvider } from "./utils/UserContext";
@@ -56,6 +58,20 @@ const MyStack = () => {
           <Stack.Screen
             name="RegistrationScreen"
             component={RegistrationScreen}
+          />
+          <Stack.Screen
+            name="FaultScreen"
+            component={FaultScreen}
+            options={{
+              title: "ליקוי",
+            }}
+          />
+          <Stack.Screen
+            name="FaultListScreen"
+            component={FaultListScreen}
+            options={{
+              title: "ליקויי בנייה",
+            }}
           />
           <Stack.Screen name="PlansScreen" component={PlansScreen} />
         </Stack.Navigator>

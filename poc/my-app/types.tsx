@@ -99,6 +99,17 @@ export type Plan = {
   project_id: number;
 };
 
+export type Fault = {
+  urgency: string;
+  floor: number;
+  apartment_number: number;
+  date: Date;
+  photo: number;
+  proof: number;
+  project_id: number;
+  comment: string;
+} & ListedStatusItem;
+
 export type UserRecord = {
   user: User;
   role: roles;

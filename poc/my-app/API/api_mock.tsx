@@ -6,6 +6,7 @@ import {
   Stage,
   Status,
   Title,
+  Fault,
   User,
   UserRecord,
 } from "../types";
@@ -22,6 +23,8 @@ class MockAPI extends api_interface {
   last_mission_id: number = 0;
   plans: Plan[] = [];
   last_plan_id: number = 0;
+  faults: any[] = [];
+  last_fault_id: number = 0;
   users: UserRecordMock[] = [];
 
   constructor() {
@@ -138,6 +141,36 @@ class MockAPI extends api_interface {
     return this.plans.filter((plan) => true);
   }
 
+  add_fault(
+    project_id: number,
+    floor: number,
+    apartment_number: number,
+    fault_name: string,
+    username: string
+    ): number {
+    console.log("added fault!");
+    this.faults.push({
+      urgency: "",
+      status: Status.Open,
+      floor: floor,
+      apartment_number: apartment_number,
+      photo: 0,
+      proof: 0,
+      comment: "",
+      id: this.last_fault_id,
+      name: fault_name,
+      date: new Date(),
+      project_id: project_id,
+      title: Title.BuildingFaults,
+    });
+    this.last_fault_id++;
+    return this.last_fault_id - 1;
+  }
+
+  get_all_faults(project_id: number): Fault[] {
+    return this.faults.filter((fault) => true);
+  }
+
   private check_update_stages_statuses() {
     if (this.missions.some((mission) => mission.status == Status.Invalid)) {
       this.stages.forEach((stage) => (stage.status = Status.Invalid));
@@ -228,6 +261,40 @@ class MockAPI extends api_interface {
         project_id
     );
     this.missions[mission_id].comment = comment;
+  }
+
+  edit_fault_comment(
+    project_id: number,
+    fault_id: number,
+    comment: string,
+    username: string
+  ): void {
+    console.log(
+      "edited comment!" +
+        comment +
+        " fault id: " +
+        fault_id +
+        " username: " +
+        username +
+        " project_id: " +
+        project_id
+    );
+    this.faults[fault_id].comment = comment;
+  }
+
+  set_fault_status(
+    project_id: number,
+    fault_id: number,
+    new_status: Status,
+    username: string
+  ): void {
+    if (this.faults[fault_id] == undefined) {
+      console.warn(
+        "fault id " + fault_id + " not found in project " + project_id
+      );
+      return;
+    }
+    this.faults[fault_id].status = new_status;
   }
 
   get_role(username: string, project_id: number): roles {
