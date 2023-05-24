@@ -52,6 +52,11 @@ export var hebrew = {
   assign_existing_user_a_role_explanation: "מתן גישה למשתמש קיים",
   back: "חזרה",
   link_doesnt_exist: "הקישור אינו קיים",
+  not_found: "לא נמצא",
+  no_image_found: "לא נבחרה תמונה",
+  please_aprove_camera_permissions: "אנא אשר הרשאות למצלמה",
+  link_was_found_would_you_like_to_change_it:
+    "נמצא קישור קיים, האם ברצונך להחליף אותו?",
 };
 
 export var title_to_hebrew = {

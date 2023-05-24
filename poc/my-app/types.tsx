@@ -79,8 +79,9 @@ export type UnitStage = GeneralStage & UnitProperties;
 export type Stage = UnitStage | GeneralStage;
 
 export type Mission = {
-  proof: number;
-  link: string;
+  proof_link?: string;
+  plan_link?: string;
+  document_link?: string;
   green_building: boolean;
   completion_date: Date;
   completing_user: string;
