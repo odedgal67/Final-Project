@@ -52,6 +52,7 @@ const MissionScreen = ({
     alert(hebrew.saved_changes_successfully);
     setEditable(false);
   };
+  console.log("mission screen rendered " + mission.id + " " + mission.name);
   return (
     <Background>
       <KeyboardAvoidingView
@@ -89,9 +90,10 @@ const MissionScreen = ({
               <LinkButton title={hebrew.link_to_document}></LinkButton>
               <LinkButton title={hebrew.link_to_plan}></LinkButton>
               <ImageMissionLink
-                mission={route.params.mission}
+                mission={mission}
                 title={route.params.title}
                 stage_id={route.params.stage.id}
+                link={mission.proof_link}
               />
             </View>
             <View style={styles.status_rectangle_view}>

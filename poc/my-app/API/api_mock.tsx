@@ -147,7 +147,7 @@ class MockAPI extends api_interface {
     apartment_number: number,
     fault_name: string,
     username: string
-    ): number {
+  ): number {
     console.log("added fault!");
     this.faults.push({
       urgency: "",
@@ -371,6 +371,10 @@ class MockAPI extends api_interface {
         "Content-Type": imageBlob.type,
       },
     });
+    this.missions[mission_id].proof_link = uri;
+    console.log(
+      "updated mission proof link: " + uri + " mission id " + mission_id
+    );
     return uri;
   }
 }
