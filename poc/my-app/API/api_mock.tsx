@@ -10,6 +10,8 @@ import {
   UserRecord,
 } from "../types";
 import api_interface from "./api_interface";
+import { generateRandomString } from "../utils/stringFunctions";
+import { createLocalFile } from "../utils/FileFunctions";
 
 type UserRecordMock = { user: User; project_id: number; role: roles };
 
@@ -100,8 +102,6 @@ class MockAPI extends api_interface {
     this.missions.push({
       name: mission_name,
       status: Status.Open,
-      proof: 0,
-      link: "",
       green_building: false,
       completion_date: new Date(),
       completing_user: "",
@@ -283,6 +283,28 @@ class MockAPI extends api_interface {
         user_record.project_id = project_id;
       }
     });
+  }
+
+  async update_mission_proof(
+    project_id: number,
+    title: Title,
+    stage_id: number,
+    mission_id: number,
+    imageBlob: Blob,
+    username: string
+  ) {
+    let formdata = new FormData();
+    formdata.append("image", imageBlob, "image.jpg");
+    let file_name = generateRandomString(10) + ".jpg";
+    let uri = "http:////192.168.50.61:5000//images//" + file_name;
+    await fetch(uri, {
+      method: "POST",
+      body: imageBlob,
+      headers: {
+        "Content-Type": imageBlob.type,
+      },
+    });
+    return uri;
   }
 }
 export default MockAPI;

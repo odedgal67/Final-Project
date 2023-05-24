@@ -83,6 +83,14 @@ abstract class api_interface {
     new_role: roles,
     username: string
   ): void;
+  abstract update_mission_proof(
+    project_id: number,
+    title: Title,
+    stage_id: number,
+    mission_id: number,
+    Image: Blob,
+    username: string
+  ): Promise<string>;
 }
 
 export default api_interface;

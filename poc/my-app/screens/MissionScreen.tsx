@@ -17,6 +17,8 @@ import { UserContext } from "../utils/UserContext";
 import { Mission, Stage, Status, Title } from "../types";
 import API from "../API/api_bridge";
 import { hebrew } from "../utils/text_dictionary";
+import ImageMissionLink from "../components/MissionLinks/ImageMissionLink";
+import PropertiesButton from "../components/PropertiesButton";
 
 const MissionScreen = ({
   navigation,
@@ -86,7 +88,11 @@ const MissionScreen = ({
             <View style={styles.links_view}>
               <LinkButton title={hebrew.link_to_document}></LinkButton>
               <LinkButton title={hebrew.link_to_plan}></LinkButton>
-              <LinkButton title={hebrew.link_to_documentation}></LinkButton>
+              <ImageMissionLink
+                mission={route.params.mission}
+                title={route.params.title}
+                stage_id={route.params.stage.id}
+              />
             </View>
             <View style={styles.status_rectangle_view}>
               <StatusRectangle

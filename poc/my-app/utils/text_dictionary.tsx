@@ -48,6 +48,9 @@ export var hebrew = {
   assign_existing_user_a_role_explanation: "מתן גישה למשתמש קיים",
   back: "חזרה",
   link_doesnt_exist: "הקישור אינו קיים",
+  not_found: "לא נמצא",
+  no_image_found: "לא נבחרה תמונה",
+  please_aprove_camera_permissions: "אנא אשר הרשאות למצלמה",
 };
 
 export var title_to_hebrew = {
