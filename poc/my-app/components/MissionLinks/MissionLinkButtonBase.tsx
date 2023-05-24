@@ -11,7 +11,7 @@ type MissionLinkButtonBaseProps = {
 const MissionLinkButtonBase = (props: MissionLinkButtonBaseProps) => {
   return (
     <TouchableHighlight
-      style={styles.button}
+      style={props.link ? styles.button_with_link : styles.button_no_link}
       onPress={() =>
         props.link ? Linking.openURL(props.link) : props.notFoundAction()
       }
@@ -31,13 +31,26 @@ const MissionLinkButtonBase = (props: MissionLinkButtonBaseProps) => {
 };
 
 const styles = StyleSheet.create({
-  button: {
+  button_no_link: {
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
     borderRadius: 10,
     elevation: 10,
     backgroundColor: "#646464",
+    borderColor: "black",
+    borderWidth: 0,
+    marginVertical: "2%",
+    marginHorizontal: 1,
+    flex: 1,
+  },
+  button_with_link: {
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    borderRadius: 10,
+    elevation: 10,
+    backgroundColor: "#649494",
     borderColor: "black",
     borderWidth: 0,
     marginVertical: "2%",
