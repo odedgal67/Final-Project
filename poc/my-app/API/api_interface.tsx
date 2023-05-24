@@ -1,4 +1,4 @@
-import { Mission, Project, Stage, Status, Title, Plan } from "../types";
+import { Mission, Project, Stage, Status, Title, Plan, Fault } from "../types";
 
 abstract class api_interface {
   abstract login(username: string, password: string): boolean;
@@ -36,6 +36,21 @@ abstract class api_interface {
     stage_id: number,
     username: string
   ): Mission[];
+  // abstract get_all_faults(
+  //   project_id: number,
+  //   title: Title,
+  //   username: string
+  // ): Fault[];
+  abstract get_all_faults(
+    project_id: number
+  ): Fault[];
+  abstract add_fault(
+    project_id: number,
+    floor: number,
+    apartment_number: number,
+    fault_name: string,
+    username: string
+  ): number;
   abstract get_all_stages(
     project_id: number,
     title: Title,
@@ -49,6 +64,18 @@ abstract class api_interface {
     stage_id: number,
     mission_id: number,
     comment: string,
+    username: string
+  ): void;
+  abstract edit_fault_comment(
+    project_id: number,
+    fault_id: number,
+    comment: string,
+    username: string
+  ): void;
+  abstract set_fault_status(
+    project_id: number,
+    fault_id: number,
+    new_status: Status,
     username: string
   ): void;
 }

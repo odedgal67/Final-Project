@@ -10,6 +10,8 @@ import GeneralStagesScreen from "./screens/GeneralStagesScreen";
 import MissionScreen from "./screens/MissionScreen";
 import MissionListsScreen from "./screens/MissionListScreen";
 import LevelsScreen from "./screens/LevelsScreen";
+import FaultScreen from "./screens/FaultScreen";
+import FaultListScreen from "./screens/FaultListScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
 import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
@@ -95,6 +97,20 @@ const MyStack = () => {
             component={PlansScreen}
             options={{
               title: "תכניות",
+            }}
+          />
+          <Stack.Screen
+            name="FaultScreen"
+            component={FaultScreen}
+            options={{
+              title: "ליקוי",
+            }}
+          />
+          <Stack.Screen
+            name="FaultListScreen"
+            component={FaultListScreen}
+            options={{
+              title: "ליקויי בנייה",
             }}
           />
         </Stack.Navigator>

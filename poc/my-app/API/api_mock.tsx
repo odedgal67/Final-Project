@@ -1,4 +1,4 @@
-import { Mission, Plan, Project, Stage, Status, Title } from "../types";
+import { Mission, Plan, Project, Stage, Status, Title, Fault } from "../types";
 import api_interface from "./api_interface";
 
 class MockAPI extends api_interface {
@@ -10,6 +10,8 @@ class MockAPI extends api_interface {
   last_mission_id: number = 0;
   plans: any[] = [];
   last_plan_id: number = 0;
+  faults: any[] = [];
+  last_fault_id: number = 0;
 
   constructor() {
     super();
@@ -78,7 +80,12 @@ class MockAPI extends api_interface {
     return this.last_mission_id - 1;
   }
 
-  add_plan(project_id: number, plan_name: string, link: string, username: string): number {
+  add_plan(
+    project_id: number,
+    plan_name: string,
+    link: string,
+    username: string
+    ): number {
     console.log("added plan!");
     this.plans.push({
       id: this.last_plan_id,
@@ -93,6 +100,36 @@ class MockAPI extends api_interface {
 
   get_all_plans(project_id: number): Plan[] {
     return this.plans.filter((plan) => true);
+  }
+
+  add_fault(
+    project_id: number,
+    floor: number,
+    apartment_number: number,
+    fault_name: string,
+    username: string
+    ): number {
+    console.log("added fault!");
+    this.faults.push({
+      urgency: "",
+      status: Status.Open,
+      floor: floor,
+      apartment_number: apartment_number,
+      photo: 0,
+      proof: 0,
+      comment: "",
+      id: this.last_fault_id,
+      name: fault_name,
+      date: new Date(),
+      project_id: project_id,
+      title: Title.BuildingFaults,
+    });
+    this.last_fault_id++;
+    return this.last_fault_id - 1;
+  }
+
+  get_all_faults(project_id: number): Fault[] {
+    return this.faults.filter((fault) => true);
   }
 
   private check_update_stages_statuses() {
@@ -172,6 +209,40 @@ class MockAPI extends api_interface {
         project_id
     );
     this.missions[mission_id].comment = comment;
+  }
+
+  edit_fault_comment(
+    project_id: number,
+    fault_id: number,
+    comment: string,
+    username: string
+  ): void {
+    console.log(
+      "edited comment!" +
+        comment +
+        " fault id: " +
+        fault_id +
+        " username: " +
+        username +
+        " project_id: " +
+        project_id
+    );
+    this.faults[fault_id].comment = comment;
+  }
+
+  set_fault_status(
+    project_id: number,
+    fault_id: number,
+    new_status: Status,
+    username: string
+  ): void {
+    if (this.faults[fault_id] == undefined) {
+      console.warn(
+        "fault id " + fault_id + " not found in project " + project_id
+      );
+      return;
+    }
+    this.faults[fault_id].status = new_status;
   }
 }
 export default MockAPI;
