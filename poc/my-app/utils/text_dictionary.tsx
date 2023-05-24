@@ -47,6 +47,7 @@ export var hebrew = {
   user_assigned_successfully: "המשתמש קיבל גישה בהצלחה",
   assign_existing_user_a_role_explanation: "מתן גישה למשתמש קיים",
   back: "חזרה",
+  link_doesnt_exist: "הקישור אינו קיים",
 };
 
 export var title_to_hebrew = {
