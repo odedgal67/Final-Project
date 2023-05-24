@@ -18,12 +18,14 @@ function getRows(
   stageStatuses: Status[],
   stageIDs: number[],
   ButtonHandler: (stage_name: String, stage_id: number) => () => void,
-  allow_change_status: boolean
+  allow_change_status: boolean,
+  onChangeStatus?: (stage_id: number) => (new_status: Status) => void
 ) {
   let rows = [];
   for (let i = 0; i < stageNames.length; i++) {
     rows.push(
       <View
+        key={i}
         style={{
           flexDirection: "row",
           backgroundColor: "#121e26",
@@ -43,7 +45,7 @@ function getRows(
           height={undefined}
           width={undefined}
           activated={allow_change_status}
-          onChange={() => {}}
+          onChange={onChangeStatus ? onChangeStatus(stageIDs[i]) : () => {}}
           border={false}
         />
       </View>
@@ -60,6 +62,7 @@ const StagesTable = (props: {
     modal_visibility_setter: (vis: boolean) => void
   ) => () => void;
   allow_change_status: boolean;
+  onChangeStatus?: (stage_id: number) => (new_status: Status) => void;
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_stage_name, set_stage_name] = React.useState("");
@@ -88,7 +91,8 @@ const StagesTable = (props: {
           stagesStatuses,
           stageIDs,
           props.ButtonHandler,
-          props.allow_change_status
+          props.allow_change_status,
+          props.onChangeStatus
         )}
         <View style={{ flex: 1, flexDirection: "row" }}>
           <StageButton

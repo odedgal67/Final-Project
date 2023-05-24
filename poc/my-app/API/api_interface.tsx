@@ -40,6 +40,13 @@ abstract class api_interface {
     new_status: Status,
     username: string
   ): void;
+  abstract set_stage_status(
+    project_id: number,
+    title: Title,
+    stage_id: number,
+    new_status: Status,
+    username: string
+  ): void;
   abstract get_all_missions(
     project_id: number,
     title: Title,

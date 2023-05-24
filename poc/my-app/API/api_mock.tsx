@@ -177,6 +177,22 @@ class MockAPI extends api_interface {
     this.check_update_stages_statuses();
   }
 
+  set_stage_status(
+    project_id: number,
+    title: Title,
+    stage_id: number,
+    new_status: Status,
+    username: string
+  ): void {
+    if (this.stages[stage_id] == undefined) {
+      console.warn(
+        "stage id " + stage_id + " not found in project " + project_id
+      );
+      return;
+    }
+    this.stages[stage_id].status = new_status;
+  }
+
   get_all_missions(
     project_id: number,
     title: Title,
