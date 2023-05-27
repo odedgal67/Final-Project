@@ -12,21 +12,24 @@ import {
 } from "../types";
 
 abstract class api_interface {
-  abstract login(username: string, password: string): Promise<boolean>;
-  abstract add_project(project_name: string, username: string): Promise<number>;
+  abstract login(username: string, password: string): Promise<boolean | User>;
+  abstract add_project(
+    project_name: string,
+    username: string
+  ): Promise<Project>;
   abstract add_stage(
     project_id: number,
     title: Title,
     stage_name: string,
     username: string
-  ): Promise<number>;
+  ): Promise<void>;
   abstract add_mission(
     project_id: number,
     stage_id: number,
     title: Title,
     mission_name: string,
     username: string
-  ): Promise<number>;
+  ): Promise<void>;
   abstract add_plan(
     project_id: number,
     plan_name: string,
@@ -80,7 +83,8 @@ abstract class api_interface {
     stage_id: number,
     mission_id: number,
     comment: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<void>;
   abstract edit_fault_comment(
     project_id: number,
@@ -107,7 +111,8 @@ abstract class api_interface {
   abstract register(
     username: string,
     id: string,
-    password: string
+    password: string,
+    name: string
   ): Promise<void>;
   abstract remove_user(
     project_id: number,

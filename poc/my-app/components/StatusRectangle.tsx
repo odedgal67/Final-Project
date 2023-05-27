@@ -13,17 +13,17 @@ import { Status } from "../types";
 import { status_to_hebrew, title_to_hebrew } from "../utils/text_dictionary";
 
 const statusColors: Record<Status, string> = {
-  Open: "#ffa134",
-  InProgress: "#f7e350",
-  Done: "#44ce1b",
-  Invalid: "#e51f1f",
+  [Status.Open]: "#ffa134",
+  [Status.InProgress]: "#f7e350",
+  [Status.Done]: "#44ce1b",
+  [Status.Invalid]: "#e51f1f",
 };
 
 const statusIMG = {
-  Open: require("./imgs/open_status.png"),
-  InProgress: require("./imgs/inprogress_status.png"),
-  Done: require("./imgs/done_status.png"),
-  Invalid: require("./imgs/invalid_status.png"),
+  [Status.Open]: require("./imgs/open_status.png"),
+  [Status.InProgress]: require("./imgs/inprogress_status.png"),
+  [Status.Done]: require("./imgs/done_status.png"),
+  [Status.Invalid]: require("./imgs/invalid_status.png"),
 };
 
 const StatusRectangle = (props: {

@@ -3,10 +3,10 @@ export const enum actions {
 }
 
 export enum roles {
-  WORK_MANAGER = "WORK_MANAGER",
-  PROJECT_MANAGER = "PROJECT_MANAGER",
-  CONTRACTOR = "CONTRACTOR",
-  UNDEFINED = "UNDEFINED",
+  WORK_MANAGER = 1,
+  PROJECT_MANAGER = 2,
+  CONTRACTOR = 3,
+  UNDEFINED = 0,
 }
 
 const mapRoleToActions = new Map();

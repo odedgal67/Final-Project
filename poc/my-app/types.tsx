@@ -38,13 +38,14 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   >;
 
 export enum Status {
-  Done = "Done",
-  InProgress = "InProgress",
-  Open = "Open",
-  Invalid = "Invalid",
+  Done = 3,
+  InProgress = 2,
+  Open = 1,
+  Invalid = 4,
+  Undefined = 0,
 }
 
-export enum Title {
+export enum Title /*same as backend*/ {
   EarlyStages = 0,
   SkeletalStages = 1,
   ApartmentStages = 2,
@@ -53,7 +54,7 @@ export enum Title {
 }
 
 export type Project = {
-  id: number;
+  id: string;
   name: string;
 };
 
@@ -61,7 +62,7 @@ export type ListedStatusItem = {
   name: string;
   status: Status;
   id: number;
-  title: Title;
+  title?: Title;
 };
 
 export type GeneralStage = {

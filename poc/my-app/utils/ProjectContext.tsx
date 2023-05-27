@@ -5,7 +5,7 @@ import { roles } from "./Permissions";
 
 // Declaring the state object globally.
 const ProjectState = {
-  project: { name: "", id: 0 },
+  project: { name: "", id: -1 },
   role: "",
   api_answer: 0,
 };

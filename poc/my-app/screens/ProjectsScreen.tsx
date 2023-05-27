@@ -12,6 +12,8 @@ import { ProjectContext } from "../utils/ProjectContext";
 
 function get_project_buttons(navigation: any, projects: Project[]) {
   let buttons = [];
+  const { setProject, getProject, setRole } = React.useContext(ProjectContext);
+  const { getUser, getRole } = React.useContext(UserContext);
   for (let i = 0; i < projects.length; i += 2) {
     buttons.push(
       <SafeAreaView
@@ -21,21 +23,33 @@ function get_project_buttons(navigation: any, projects: Project[]) {
         <ProjectButton
           project={projects[i]}
           projectName={projects[i].name}
-          onPress={() =>
-            navigation.navigate("projectProperties", {
-              project: projects[i],
-            })
-          }
+          onPress={() => {
+            setProject(projects[i]);
+            API.get_instance()
+              .get_role(getUser().id, getProject().id)
+              .then((role) => setRole(role))
+              .then(() =>
+                navigation.navigate("projectProperties", {
+                  project: projects[i],
+                })
+              );
+          }}
         />
         {projects[i + 1] && (
           <ProjectButton
             project={projects[i + 1]}
             projectName={projects[i + 1].name}
-            onPress={() =>
-              navigation.navigate("projectProperties", {
-                project: projects[i + 1],
-              })
-            }
+            onPress={() => {
+              setProject(projects[i + 1]);
+              API.get_instance()
+                .get_role(getUser().id, getProject().id)
+                .then((role) => setRole(role))
+                .then(() =>
+                  navigation.navigate("projectProperties", {
+                    project: projects[i],
+                  })
+                );
+            }}
           />
         )}
       </SafeAreaView>
@@ -53,13 +67,13 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
     modal_visibility_setter: (b: boolean) => void
   ) => {
     API.get_instance()
-      .add_project(projectName, getUser().name)
-      .then(() => modal_visibility_setter(false))
+      .add_project(projectName, getUser().id)
       .then(() =>
         API.get_instance()
           .get_all_projects(getUser().id)
           .then((projects) => setProjects(projects))
-      );
+      )
+      .then(() => modal_visibility_setter(false));
   };
   React.useEffect(() => {
     API.get_instance()

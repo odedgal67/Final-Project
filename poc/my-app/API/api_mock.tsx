@@ -74,13 +74,13 @@ class MockAPI extends api_interface {
     });
   }
 
-  add_project(project_name: string, username: string): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
+  add_project(project_name: string, username: string): Promise<Project> {
+    return new Promise<Project>((resolve, reject) => {
       console.log("added project!");
-      this.projects.push({ id: this.last_project_id, name: project_name });
+      this.projects.push({ id: "" + this.last_project_id, name: project_name });
       console.log("current projects: " + this.projects.length);
       this.last_project_id++;
-      resolve(this.last_project_id - 1);
+      resolve({ id: "" + this.last_project_id, name: project_name });
     });
   }
 
@@ -89,8 +89,8 @@ class MockAPI extends api_interface {
     title: Title,
     stage_name: string,
     username: string
-  ): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
+  ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       this.stages.push({
         name: stage_name,
         status: Status.Open,
@@ -100,7 +100,7 @@ class MockAPI extends api_interface {
       });
       const stageId = this.last_stage_id - 1;
       this.last_stage_id++;
-      resolve(stageId);
+      resolve();
     });
   }
 
@@ -109,9 +109,10 @@ class MockAPI extends api_interface {
     stage_id: number,
     title: Title,
     mission_name: string,
-    username: string
-  ): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
+    username: string,
+    apartment_number?: number
+  ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       this.missions.push({
         name: mission_name,
         status: Status.Open,
@@ -128,7 +129,7 @@ class MockAPI extends api_interface {
       );
       const missionId = this.last_mission_id - 1;
       this.last_mission_id++;
-      resolve(missionId);
+      resolve();
     });
   }
 

@@ -5,7 +5,7 @@ import { roles } from "./Permissions";
 
 // Declaring the state object globally.
 const UserState = {
-  user: { name: "guest", id: "-1" },
+  user: { name: "Liron", id: "123456789" },
   api_answer: 0,
   role: roles.CONTRACTOR,
 };
