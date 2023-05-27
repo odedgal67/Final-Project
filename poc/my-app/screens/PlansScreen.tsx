@@ -1,5 +1,11 @@
 import * as React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Linking, } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import Background from "../components/Background";
 import CreatePlanButton from "../components/CreatePlanButton";
 import API from "../API/api_bridge";
@@ -17,15 +23,20 @@ const PlansScreen = ({ navigation, route }) => {
     link: string,
     modal_visibility_setter: (b: boolean) => void
   ) => {
-    API.get_instance().add_plan(getProject().id, planName, link, getUser().name);
-    modal_visibility_setter(false);
-    setPlans((_plans) => {
-      const updatedPlans = API.get_instance().get_all_plans(getProject().id);
-      return updatedPlans;
-    });
+    API.get_instance()
+      .add_plan(getProject().id, planName, link, getUser().id)
+      .then(() => {
+        modal_visibility_setter(false);
+        return API.get_instance().get_all_plans(getProject().id);
+      })
+      .then((plans) => setPlans(plans))
+      .catch((err) => console.log(err));
   };
   React.useEffect(() => {
-    setPlans(API.get_instance().get_all_plans(getProject().id));
+    API.get_instance()
+      .get_all_plans(getProject().id)
+      .then((plans) => setPlans(plans))
+      .catch((err) => console.log(err));
   }, []);
   navigation.setOptions({ title: route.params.header + " > " + hebrew.plans });
   return (
@@ -38,10 +49,15 @@ const PlansScreen = ({ navigation, route }) => {
           </View>
           <View>
             {plans.map((plan, index) => (
-              <TouchableOpacity key={index} onPress={() => Linking.openURL(plan.link)}>
+              <TouchableOpacity
+                key={index}
+                onPress={() => Linking.openURL(plan.link)}
+              >
                 <View style={styles.tableRow}>
                   <Text style={styles.nameText}>{plan.name}</Text>
-                  <Text style={styles.dateText}>{new Date(plan.date).toLocaleDateString()}</Text>
+                  <Text style={styles.dateText}>
+                    {new Date(plan.date).toLocaleDateString()}
+                  </Text>
                 </View>
               </TouchableOpacity>
             ))}

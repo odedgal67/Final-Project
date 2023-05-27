@@ -27,9 +27,9 @@ const ManageUserButton = (props: ManageUserButtonProps) => {
     let role: roles = roles[val as keyof typeof roles];
     API.get_instance().edit_user_role(
       getProject().id,
-      props.user,
+      props.user.id,
       role,
-      getUser().name
+      getUser().id
     );
     setRole(role_to_hebrew[role]);
   };

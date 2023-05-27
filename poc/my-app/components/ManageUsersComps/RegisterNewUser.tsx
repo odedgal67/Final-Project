@@ -52,8 +52,10 @@ const RegisterNewUser = () => {
             alert(hebrew.fill_all_fields);
             return;
           }
-          API.get_instance().register(trimmed_name, trimmed_id, password);
-          alert(hebrew.user_registered_successfully);
+          API.get_instance()
+            .register(trimmed_name, trimmed_id, password)
+            .then(() => alert(hebrew.user_registered_successfully))
+            .catch((err) => alert(err));
         }}
       />
     </View>

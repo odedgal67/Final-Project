@@ -16,20 +16,22 @@ const ManageUsersScreen = ({ navigation }: { navigation: any }) => {
   const { getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
   useEffect(() => {
-    setUsers(API.get_instance().get_all_users(getProject().id, getUser().name));
+    API.get_instance()
+      .get_all_users(getProject().id, getUser().id)
+      .then((users) => setUsers(users))
+      .catch((err) => alert(err));
   }, []);
   useLayoutEffect(() => {
     navigation.setOptions({ title: hebrew.manage_users });
   }, [navigation]);
   let removeUser = (user: User) => {
-    API.get_instance().remove_user(getProject().id, user, getUser().name);
-    setUsers((_users) => {
-      const updatedUsers = API.get_instance().get_all_users(
-        getProject().id,
-        getUser().name
-      );
-      return updatedUsers;
-    });
+    API.get_instance()
+      .remove_user(getProject().id, user, getUser().id)
+      .then(() =>
+        API.get_instance().get_all_users(getProject().id, getUser().id)
+      )
+      .then((users) => setUsers(users))
+      .catch((err) => alert(err));
   };
   let assignUser = (id: string, role: roles) => {
     let trimmed_id = id.trim();
@@ -41,37 +43,32 @@ const ManageUsersScreen = ({ navigation }: { navigation: any }) => {
       alert(hebrew.fill_all_fields);
       return;
     }
-    API.get_instance().edit_user_role(
-      getProject().id,
-      trimmed_id,
-      role,
-      getUser().name
-    );
-    setUsers((_users) => {
-      const updatedUsers = API.get_instance().get_all_users(
-        getProject().id,
-        getUser().name
-      );
-      alert(hebrew.user_assigned_successfully);
-      return updatedUsers;
-    });
+    API.get_instance()
+      .edit_user_role(getProject().id, trimmed_id, role, getUser().id)
+      .then(() =>
+        API.get_instance().get_all_users(getProject().id, getUser().id)
+      )
+      .then((users) => setUsers(users))
+      .catch((err) => alert(err))
+      .then(() => alert(hebrew.user_assigned_successfully));
   };
   return (
     <Background>
       <View style={{ flex: 1 }}>
         <ScrollView style={{ flex: 1 }}>
           <View key={1}>
-            {users.map((user_record, index) => {
-              return (
-                <ManageUserButton
-                  key={index}
-                  user={user_record.user}
-                  navigation={navigation}
-                  onRemove={removeUser}
-                  role={user_record.role}
-                />
-              );
-            })}
+            {users &&
+              users.map((user_record, index) => {
+                return (
+                  <ManageUserButton
+                    key={index}
+                    user={user_record.user}
+                    navigation={navigation}
+                    onRemove={removeUser}
+                    role={user_record.role}
+                  />
+                );
+              })}
           </View>
         </ScrollView>
         <AddUserModal onAssignUserToProject={assignUser} />

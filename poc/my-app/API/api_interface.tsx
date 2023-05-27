@@ -12,27 +12,27 @@ import {
 } from "../types";
 
 abstract class api_interface {
-  abstract login(username: string, password: string): boolean;
-  abstract add_project(project_name: string, username: string): number;
+  abstract login(username: string, password: string): Promise<boolean>;
+  abstract add_project(project_name: string, username: string): Promise<number>;
   abstract add_stage(
     project_id: number,
     title: Title,
     stage_name: string,
     username: string
-  ): number;
+  ): Promise<number>;
   abstract add_mission(
     project_id: number,
     stage_id: number,
     title: Title,
     mission_name: string,
     username: string
-  ): number;
+  ): Promise<number>;
   abstract add_plan(
     project_id: number,
     plan_name: string,
     link: string,
     username: string
-  ): number;
+  ): Promise<number>;
   abstract set_mission_status(
     project_id: number,
     title: Title,
@@ -40,42 +40,40 @@ abstract class api_interface {
     mission_id: number,
     new_status: Status,
     username: string
-  ): void;
+  ): Promise<void>;
   abstract set_stage_status(
     project_id: number,
     title: Title,
     stage_id: number,
     new_status: Status,
     username: string
-  ): void;
+  ): Promise<void>;
   abstract get_all_missions(
     project_id: number,
     title: Title,
     stage_id: number,
     username: string
-  ): Mission[];
+  ): Promise<Mission[]>;
   // abstract get_all_faults(
   //   project_id: number,
   //   title: Title,
   //   username: string
   // ): Fault[];
-  abstract get_all_faults(
-    project_id: number
-  ): Fault[];
+  abstract get_all_faults(project_id: number): Promise<Fault[]>;
   abstract add_fault(
     project_id: number,
     floor: number,
     apartment_number: number,
     fault_name: string,
     username: string
-  ): number;
+  ): Promise<number>;
   abstract get_all_stages(
     project_id: number,
     title: Title,
     username: string
-  ): Stage[];
-  abstract get_all_plans(project_id: number): Plan[];
-  abstract get_all_projects(username: string): Project[];
+  ): Promise<Stage[]>;
+  abstract get_all_plans(project_id: number): Promise<Plan[]>;
+  abstract get_all_projects(username: string): Promise<Project[]>;
   abstract edit_comment_in_mission(
     project_id: number,
     title: Title,
@@ -83,34 +81,45 @@ abstract class api_interface {
     mission_id: number,
     comment: string,
     username: string
-  ): void;
+  ): Promise<void>;
   abstract edit_fault_comment(
     project_id: number,
     fault_id: number,
     comment: string,
     username: string
-  ): void;
+  ): Promise<void>;
   abstract set_fault_status(
     project_id: number,
     fault_id: number,
     new_status: Status,
     username: string
-  ): void;
-  abstract get_role(username: string, project_id: number): roles;
+  ): Promise<void>;
+  abstract get_role(username: string, project_id: number): Promise<roles>;
   abstract edit_project_name(
     usernaem: string,
     project_id: number,
     new_name: string
-  ): void;
-  abstract get_all_users(project_id: number, username: string): UserRecord[];
-  abstract register(username: string, id: string, password: string): void;
-  abstract remove_user(project_id: number, user: User, username: string): void;
+  ): Promise<void>;
+  abstract get_all_users(
+    project_id: number,
+    username: string
+  ): Promise<UserRecord[]>;
+  abstract register(
+    username: string,
+    id: string,
+    password: string
+  ): Promise<void>;
+  abstract remove_user(
+    project_id: number,
+    user: User,
+    username: string
+  ): Promise<void>;
   abstract edit_user_role(
     project_id: number,
     id: string,
     new_role: roles,
     username: string
-  ): void;
+  ): Promise<void>;
   abstract update_mission_proof(
     project_id: number,
     title: Title,

@@ -39,7 +39,7 @@ const ImageMissionLink = (props: ImageMissionLinkProps) => {
             props.stage_id,
             props.mission.id,
             imageBlob,
-            getUser().name
+            getUser().id
           )
           .then((uri) => {
             setImage(uri);

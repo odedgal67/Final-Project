@@ -41,16 +41,20 @@ const MissionScreen = ({
   }, [navigation]);
   const [comment, setComment] = React.useState(mission.comment);
   let onSubmitEdit = () => {
-    API.get_instance().edit_comment_in_mission(
-      getProject().id,
-      route.params.stage.id,
-      route.params.title,
-      mission.id,
-      comment,
-      getUser().name
-    );
-    alert(hebrew.saved_changes_successfully);
-    setEditable(false);
+    API.get_instance()
+      .edit_comment_in_mission(
+        getProject().id,
+        route.params.stage.id,
+        route.params.title,
+        mission.id,
+        comment,
+        getUser().id
+      )
+      .then(() => {
+        alert(hebrew.saved_changes_successfully);
+        setEditable(false);
+      })
+      .catch((err) => alert(err));
   };
   console.log("mission screen rendered " + mission.id + " " + mission.name);
   return (
@@ -110,17 +114,20 @@ const MissionScreen = ({
                   ) / 2
                 }
                 onChange={function (new_status: Status): void {
-                  API.get_instance().set_mission_status(
-                    getProject().id,
-                    route.params.stage.id,
-                    route.params.title,
-                    mission.id,
-                    new_status,
-                    getUser().name
-                  );
-                  setStatus(new_status);
-                  mission.status = new_status;
-                  notify();
+                  API.get_instance()
+                    .set_mission_status(
+                      getProject().id,
+                      route.params.stage.id,
+                      route.params.title,
+                      mission.id,
+                      new_status,
+                      getUser().id
+                    )
+                    .then(() => {
+                      setStatus(new_status);
+                      mission.status = new_status;
+                      notify();
+                    });
                 }}
               />
             </View>

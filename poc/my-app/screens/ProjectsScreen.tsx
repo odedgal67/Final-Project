@@ -52,17 +52,19 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
     projectName: string,
     modal_visibility_setter: (b: boolean) => void
   ) => {
-    API.get_instance().add_project(projectName, getUser().name);
-    modal_visibility_setter(false);
-    setProjects((_projects) => {
-      const updatedProjects = API.get_instance().get_all_projects(
-        getUser().name
+    API.get_instance()
+      .add_project(projectName, getUser().name)
+      .then(() => modal_visibility_setter(false))
+      .then(() =>
+        API.get_instance()
+          .get_all_projects(getUser().id)
+          .then((projects) => setProjects(projects))
       );
-      return updatedProjects;
-    });
   };
   React.useEffect(() => {
-    setProjects(API.get_instance().get_all_projects(getUser().name));
+    API.get_instance()
+      .get_all_projects(getUser().id)
+      .then((projects) => setProjects(projects));
     navigation.setOptions({ title: "" });
   }, []);
   useFocusEffect(() => {
