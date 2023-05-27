@@ -78,4 +78,5 @@ export var role_to_hebrew = {
   [roles.WORK_MANAGER]: "מנהל עבודה",
   [roles.PROJECT_MANAGER]: "מנהל פרויקט",
   [roles.CONTRACTOR]: "קבלן",
+  [roles.UNDEFINED]: "לא מוגדר",
 };

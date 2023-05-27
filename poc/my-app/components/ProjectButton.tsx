@@ -37,12 +37,12 @@ const ProjectButton = (props: {
       return;
     }
     setModalVisible(false);
-    API.get_instance().edit_project_name(
-      getUser().name,
-      props.project.id,
-      new_project_name
-    );
-    setCurr_Project_Name(new_project_name);
+    API.get_instance()
+      .edit_project_name(getUser().id, props.project.id, new_project_name)
+      .then(() => {
+        setCurr_Project_Name(new_project_name);
+      })
+      .catch((err) => alert(err));
   };
   return (
     <TouchableNativeFeedback

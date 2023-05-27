@@ -26,7 +26,9 @@ const ProjectPropertiesScreen = ({
   const { getUser, getRole } = React.useContext(UserContext);
   React.useEffect(() => {
     setProject(route.params.project);
-    setRole(API.get_instance().get_role(getUser().name, getProject().id));
+    API.get_instance()
+      .get_role(getUser().id, getProject().id)
+      .then((role) => setRole(role));
   }, []);
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: projectName });
@@ -89,10 +91,7 @@ const ProjectPropertiesScreen = ({
         ScreenName: "LevelsScreen",
         title: Title.ApartmentStages,
       },
-      { propertyName: hebrew.plans,
-        ScreenName: "PlansScreen",
-        title: -1
-      },
+      { propertyName: hebrew.plans, ScreenName: "PlansScreen", title: -1 },
       {
         propertyName: hebrew.faults,
         ScreenName: "FaultListScreen",

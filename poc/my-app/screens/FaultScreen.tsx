@@ -33,17 +33,14 @@ const FaultScreen = ({
   const _fault_name =
     fault.name.length > 25 ? fault.name.substring(0, 15) + "..." : fault.name;
 
-    navigation.setOptions({ title: _fault_name });
-    const [comment, setComment] = React.useState(fault.comment);
+  navigation.setOptions({ title: _fault_name });
+  const [comment, setComment] = React.useState(fault.comment);
 
   let onSubmitEdit = () => {
-    API.get_instance().edit_fault_comment(
-      getProject().id,
-      fault.id,
-      comment,
-      getUser().name
-    );
-    setEditable(false);
+    API.get_instance()
+      .edit_fault_comment(getProject().id, fault.id, comment, getUser().id)
+      .then((res) => setEditable(false))
+      .catch((err) => alert(err));
   };
 
   return (
@@ -94,7 +91,9 @@ const FaultScreen = ({
               </View>
               <View>
                 <Text style={styles.smallText}>{hebrew.date_of_edit}</Text>
-                <Text style={styles.smallText}>{new Date(fault.date).toLocaleDateString()}</Text>
+                <Text style={styles.smallText}>
+                  {new Date(fault.date).toLocaleDateString()}
+                </Text>
               </View>
             </View>
             <View style={styles.statusRectangleView}>
@@ -106,15 +105,19 @@ const FaultScreen = ({
                 height={Dimensions.get("window").height * 0.25}
                 borderRad={Dimensions.get("window").height}
                 onChange={(newStatus: Status) => {
-                  API.get_instance().set_fault_status(
-                    getProject().id,
-                    fault.id,
-                    newStatus,
-                    getUser().name
-                  );
-                  setStatus(newStatus);
-                  fault.status = newStatus;
-                  notify();
+                  API.get_instance()
+                    .set_fault_status(
+                      getProject().id,
+                      fault.id,
+                      newStatus,
+                      getUser().id
+                    )
+                    .then(() => {
+                      setStatus(newStatus);
+                      fault.status = newStatus;
+                      notify();
+                    })
+                    .catch((err) => alert(err));
                 }}
               />
             </View>
