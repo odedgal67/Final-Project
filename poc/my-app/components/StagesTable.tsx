@@ -69,7 +69,7 @@ const StagesTable = (props: {
   let stagesNames: String[] = props.stages.map(
     (stage: ListedStatusItem) => stage.name
   );
-  let stageIDs: number[] = props.stages.map(
+  let stageIDs: string[] = props.stages.map(
     (stage: ListedStatusItem) => stage.id
   );
   let stagesStatuses: Status[] = props.stages.map(
