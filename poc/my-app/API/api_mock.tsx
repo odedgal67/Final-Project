@@ -68,9 +68,9 @@ class MockAPI extends api_interface {
     });
   }
 
-  login(username: string, password: string): Promise<boolean> {
-    return new Promise<boolean>((resolve, _reject) => {
-      resolve(true);
+  login(username: string, password: string): Promise<User> {
+    return new Promise<User>((resolve, _reject) => {
+      resolve({ name: "oded", id: username });
     });
   }
 
@@ -85,7 +85,7 @@ class MockAPI extends api_interface {
   }
 
   add_stage(
-    project_id: number,
+    project_id: string,
     title: Title,
     stage_name: string,
     username: string
@@ -95,7 +95,7 @@ class MockAPI extends api_interface {
         name: stage_name,
         status: Status.Open,
         completion_date: new Date(),
-        id: this.last_stage_id,
+        id: "" + this.last_stage_id,
         title: title,
       });
       const stageId = this.last_stage_id - 1;
@@ -105,8 +105,8 @@ class MockAPI extends api_interface {
   }
 
   add_mission(
-    project_id: number,
-    stage_id: number,
+    project_id: string,
+    stage_id: string,
     title: Title,
     mission_name: string,
     username: string,
@@ -120,7 +120,7 @@ class MockAPI extends api_interface {
         completion_date: new Date(),
         completing_user: "",
         comment: "",
-        id: this.last_mission_id,
+        id: "" + this.last_mission_id,
         title: title,
       });
       console.log(
@@ -134,7 +134,7 @@ class MockAPI extends api_interface {
   }
 
   add_plan(
-    project_id: number,
+    project_id: string,
     plan_name: string,
     link: string,
     username: string
@@ -146,7 +146,7 @@ class MockAPI extends api_interface {
         name: plan_name,
         link: link,
         date: new Date(),
-        project_id: project_id,
+        project_id: +project_id,
       });
       const planId = this.last_plan_id - 1;
       this.last_plan_id++;
@@ -154,20 +154,20 @@ class MockAPI extends api_interface {
     });
   }
 
-  get_all_plans(project_id: number): Promise<Plan[]> {
+  get_all_plans(project_id: string): Promise<Plan[]> {
     return new Promise<Plan[]>((resolve, reject) => {
       resolve(this.plans.filter((plan) => true));
     });
   }
 
   add_fault(
-    project_id: number,
+    project_id: string,
     floor: number,
     apartment_number: number,
     fault_name: string,
     username: string
-  ): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
+  ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       console.log("added fault!");
       this.faults.push({
         urgency: "",
@@ -185,11 +185,11 @@ class MockAPI extends api_interface {
       });
       const faultId = this.last_fault_id - 1;
       this.last_fault_id++;
-      resolve(faultId);
+      resolve();
     });
   }
 
-  get_all_faults(project_id: number): Promise<Fault[]> {
+  get_all_faults(project_id: string): Promise<Fault[]> {
     return new Promise<Fault[]>((resolve, reject) => {
       resolve(this.faults.filter((fault) => true));
     });
@@ -216,51 +216,51 @@ class MockAPI extends api_interface {
   }
 
   set_mission_status(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
-    mission_id: number,
+    stage_id: string,
+    mission_id: string,
     new_status: Status,
     username: string
   ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      if (this.missions[mission_id] === undefined) {
+      if (this.missions[+mission_id] === undefined) {
         console.warn(
           "mission id " + mission_id + " not found in project " + project_id
         );
         resolve(); // Operation completed successfully (mission not found)
         return;
       }
-      this.missions[mission_id].status = new_status;
+      this.missions[+mission_id].status = new_status;
       this.check_update_stages_statuses();
       resolve(); // Operation completed successfully
     });
   }
 
   set_stage_status(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
+    stage_id: string,
     new_status: Status,
     username: string
   ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      if (this.stages[stage_id] === undefined) {
+      if (this.stages[+stage_id] === undefined) {
         console.warn(
           "stage id " + stage_id + " not found in project " + project_id
         );
         resolve(); // Operation completed successfully (stage not found)
         return;
       }
-      this.stages[stage_id].status = new_status;
+      this.stages[+stage_id].status = new_status;
       resolve(); // Operation completed successfully
     });
   }
 
   get_all_missions(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
+    stage_id: string,
     username: string
   ): Promise<Mission[]> {
     return new Promise<Mission[]>((resolve, reject) => {
@@ -270,7 +270,7 @@ class MockAPI extends api_interface {
   }
 
   get_all_stages(
-    project_id: number,
+    project_id: string,
     title: Title,
     username: string
   ): Promise<Stage[]> {
@@ -281,10 +281,10 @@ class MockAPI extends api_interface {
   }
 
   edit_comment_in_mission(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
-    mission_id: number,
+    stage_id: string,
+    mission_id: string,
     comment: string,
     username: string
   ): Promise<void> {
@@ -301,14 +301,13 @@ class MockAPI extends api_interface {
           " project_id: " +
           project_id
       );
-      // Perform the comment editing logic here
-
+      this.missions[+mission_id].comment = comment;
       resolve();
     });
   }
 
   edit_fault_comment(
-    project_id: number,
+    project_id: string,
     fault_id: number,
     comment: string,
     username: string
@@ -330,7 +329,7 @@ class MockAPI extends api_interface {
   }
 
   set_fault_status(
-    project_id: number,
+    project_id: string,
     fault_id: number,
     new_status: Status,
     username: string
@@ -348,7 +347,7 @@ class MockAPI extends api_interface {
     });
   }
 
-  get_role(username: string, project_id: number): Promise<roles> {
+  get_role(username: string, project_id: string): Promise<roles> {
     return new Promise<roles>((resolve, reject) => {
       resolve(roles.CONTRACTOR);
     });
@@ -356,20 +355,20 @@ class MockAPI extends api_interface {
 
   edit_project_name(
     username: string,
-    project_id: number,
+    project_id: string,
     new_name: string
   ): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this.projects[project_id].name = new_name;
+      this.projects[+project_id].name = new_name;
       resolve();
     });
   }
 
-  get_all_users(project_id: number, username: string): Promise<UserRecord[]> {
+  get_all_users(project_id: string, username: string): Promise<UserRecord[]> {
     return new Promise<UserRecord[]>((resolve, reject) => {
       let output: UserRecord[] = [];
       this.users.forEach((user_record) => {
-        if (user_record.project_id === project_id) {
+        if (user_record.project_id === +project_id) {
           output.push({ user: user_record.user, role: user_record.role });
         }
       });
@@ -392,12 +391,12 @@ class MockAPI extends api_interface {
     });
   }
 
-  remove_user(project_id: number, user: User, username: string): Promise<void> {
+  remove_user(project_id: string, user: User, username: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.users = this.users.filter(
         (user_record) =>
           user_record.user.id !== user.id ||
-          user_record.project_id !== project_id
+          user_record.project_id !== +project_id
       );
 
       resolve();
@@ -405,7 +404,7 @@ class MockAPI extends api_interface {
   }
 
   edit_user_role(
-    project_id: number,
+    project_id: string,
     id: string,
     new_role: roles,
     username: string
@@ -416,7 +415,7 @@ class MockAPI extends api_interface {
         console.log("user_record.user.id: " + user_record.user.id);
         if (user_record.user.id === id) {
           user_record.role = new_role;
-          user_record.project_id = project_id;
+          user_record.project_id = +project_id;
         }
       });
       resolve();
@@ -424,10 +423,10 @@ class MockAPI extends api_interface {
   }
 
   async update_mission_proof(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
-    mission_id: number,
+    stage_id: string,
+    mission_id: string,
     imageBlob: Blob,
     username: string
   ) {
@@ -442,7 +441,7 @@ class MockAPI extends api_interface {
         "Content-Type": imageBlob.type,
       },
     });
-    this.missions[mission_id].proof_link = uri;
+    this.missions[+mission_id].proof_link = uri;
     console.log(
       "updated mission proof link: " + uri + " mission id " + mission_id
     );

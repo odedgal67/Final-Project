@@ -150,7 +150,7 @@ export class RealAPI extends api_interface {
     apartment_number: number,
     fault_name: string,
     username: string
-  ): Promise<number> {
+  ): Promise<void> {
     throw new Error("Method not implemented.");
   }
   get_all_stages(

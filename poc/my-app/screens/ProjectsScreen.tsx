@@ -13,7 +13,7 @@ import { ProjectContext } from "../utils/ProjectContext";
 function get_project_buttons(navigation: any, projects: Project[]) {
   let buttons = [];
   const { setProject, getProject, setRole } = React.useContext(ProjectContext);
-  const { getUser, getRole } = React.useContext(UserContext);
+  const { getUser } = React.useContext(UserContext);
 
   let get_project_button = (project: Project) => {
     return (
