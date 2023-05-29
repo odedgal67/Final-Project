@@ -22,8 +22,8 @@ const ProjectPropertiesScreen = ({
   route: { params: { project: Project } };
 }) => {
   let projectName = route.params.project.name;
-  const { setProject, getProject, setRole } = React.useContext(ProjectContext);
-  const { getUser, getRole } = React.useContext(UserContext);
+  const { getRole, setProject, getProject, setRole } =
+    React.useContext(ProjectContext);
   React.useEffect(() => {}, []);
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: projectName });

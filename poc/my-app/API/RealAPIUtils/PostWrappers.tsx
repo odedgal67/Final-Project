@@ -25,10 +25,14 @@ export abstract class PostWrapper<T> {
           console.log("response data:", response.data);
           const responseData = this.get_response_class(response.data);
           if (responseData.result) resolve(responseData.get_result());
-          else reject(responseData.error);
+          else {
+            console.error("error in send_request: ", responseData.error);
+            reject(responseData.error);
+          }
         })
         .catch((error) => {
           console.log("errror in send_request: ", error);
+          reject(error);
         });
     });
   }

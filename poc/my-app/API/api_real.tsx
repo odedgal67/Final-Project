@@ -50,7 +50,7 @@ export class RealAPI extends api_interface {
     });
   }
   add_stage(
-    project_id: number,
+    project_id: string,
     title: Title,
     stage_name: string,
     username: string
@@ -63,8 +63,8 @@ export class RealAPI extends api_interface {
     });
   }
   add_mission(
-    project_id: number,
-    stage_id: number,
+    project_id: string,
+    stage_id: string,
     title: Title,
     mission_name: string,
     username: string,
@@ -80,7 +80,7 @@ export class RealAPI extends api_interface {
     });
   }
   add_plan(
-    project_id: number,
+    project_id: string,
     plan_name: string,
     link: string,
     username: string
@@ -88,10 +88,10 @@ export class RealAPI extends api_interface {
     throw new Error("Method not implemented.");
   }
   set_mission_status(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
-    mission_id: number,
+    stage_id: string,
+    mission_id: string,
     new_status: Status,
     username: string
   ): Promise<void> {
@@ -108,9 +108,9 @@ export class RealAPI extends api_interface {
     );
   }
   set_stage_status(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
+    stage_id: string,
     new_status: Status,
     username: string
   ): Promise<void> {
@@ -126,9 +126,9 @@ export class RealAPI extends api_interface {
     );
   }
   get_all_missions(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
+    stage_id: string,
     username: string
   ): Promise<Mission[]> {
     return new PostWrapperMissions().send_request(
@@ -141,11 +141,11 @@ export class RealAPI extends api_interface {
       }
     );
   }
-  get_all_faults(project_id: number): Promise<Fault[]> {
+  get_all_faults(project_id: string): Promise<Fault[]> {
     throw new Error("Method not implemented.");
   }
   add_fault(
-    project_id: number,
+    project_id: string,
     floor: number,
     apartment_number: number,
     fault_name: string,
@@ -154,7 +154,7 @@ export class RealAPI extends api_interface {
     throw new Error("Method not implemented.");
   }
   get_all_stages(
-    project_id: number,
+    project_id: string,
     title: Title,
     username: string
   ): Promise<Stage[]> {
@@ -164,7 +164,7 @@ export class RealAPI extends api_interface {
       { project_id: project_id, title_id: title_id, username: username }
     );
   }
-  get_all_plans(project_id: number): Promise<Plan[]> {
+  get_all_plans(project_id: string): Promise<Plan[]> {
     throw new Error("Method not implemented.");
   }
   get_all_projects(username: string): Promise<Project[]> {
@@ -175,10 +175,10 @@ export class RealAPI extends api_interface {
     );
   }
   edit_comment_in_mission(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
-    mission_id: number,
+    stage_id: string,
+    mission_id: string,
     comment: string,
     username: string,
     apartment_number?: number
@@ -197,7 +197,7 @@ export class RealAPI extends api_interface {
     );
   }
   edit_fault_comment(
-    project_id: number,
+    project_id: string,
     fault_id: number,
     comment: string,
     username: string
@@ -205,14 +205,14 @@ export class RealAPI extends api_interface {
     throw new Error("Method not implemented.");
   }
   set_fault_status(
-    project_id: number,
+    project_id: string,
     fault_id: number,
     new_status: Status,
     username: string
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  get_role(username: string, project_id: number): Promise<roles> {
+  get_role(username: string, project_id: string): Promise<roles> {
     return new PostWrapperRole().send_request(
       this.get_url("get_my_permission"),
       { username: username, project_id: project_id }
@@ -220,7 +220,7 @@ export class RealAPI extends api_interface {
   }
   edit_project_name(
     usernaem: string,
-    project_id: number,
+    project_id: string,
     new_name: string
   ): Promise<void> {
     return new PostWrapperVoid().send_request(
@@ -228,9 +228,9 @@ export class RealAPI extends api_interface {
       { username: usernaem, project_id: project_id, new_project_name: new_name }
     );
   }
-  get_all_users(project_id: number, username: string): Promise<UserRecord[]> {
+  get_all_users(project_id: string, username: string): Promise<UserRecord[]> {
     return new PostWrapperUserRecords().send_request(
-      this.get_url("get_all_users"),
+      this.get_url("get_all_assigned_users_in_project"),
       { project_id: project_id, username: username }
     );
   }
@@ -241,13 +241,12 @@ export class RealAPI extends api_interface {
     name: string
   ): Promise<void> {
     return new PostWrapperVoid().send_request(this.get_url("register"), {
-      username: username,
-      id: id,
+      username: id,
       password: password,
-      name: name,
+      name: username,
     });
   }
-  remove_user(project_id: number, user: User, username: string): Promise<void> {
+  remove_user(project_id: string, user: User, username: string): Promise<void> {
     return new PostWrapperVoid().send_request(
       this.get_url("remove_user_from_project"),
       {
@@ -258,18 +257,26 @@ export class RealAPI extends api_interface {
     );
   }
   edit_user_role(
-    project_id: number,
+    project_id: string,
     id: string,
     new_role: roles,
     username: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    return new PostWrapperVoid().send_request(
+      this.get_url("assign_project_to_user"),
+      {
+        project_id: project_id,
+        permission_type: new_role,
+        assigning_username: username,
+        username_to_assign: id,
+      }
+    );
   }
   update_mission_proof(
-    project_id: number,
+    project_id: string,
     title: Title,
-    stage_id: number,
-    mission_id: number,
+    stage_id: string,
+    mission_id: string,
     Image: Blob,
     username: string
   ): Promise<string> {

@@ -35,7 +35,7 @@ const GeneralStagesScreen = ({
           <StagesTable
             stages={stages}
             allow_change_status={true}
-            onChangeStatus={(stage_id: number) => {
+            onChangeStatus={(stage_id: string) => {
               return (new_status: Status) => {
                 API.get_instance()
                   .set_stage_status(

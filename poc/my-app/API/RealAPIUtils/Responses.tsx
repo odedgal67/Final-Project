@@ -105,6 +105,7 @@ export class UserRecordsResponse extends Response<UserRecord[]> {
   get_result(): UserRecord[] {
     let output: UserRecord[] = [];
     Object.entries(this.result).forEach(([_key, value]) => {
+      console.log("record: ", value.user_dto);
       output.push({
         user: { id: value.user_dto.username, name: value.user_dto.name },
         role: value.permission,

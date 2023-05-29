@@ -61,7 +61,7 @@ export type Project = {
 export type ListedStatusItem = {
   name: string;
   status: Status;
-  id: number;
+  id: string;
   title?: Title;
 };
 

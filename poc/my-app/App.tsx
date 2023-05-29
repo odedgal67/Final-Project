@@ -21,8 +21,13 @@ const Stack = createNativeStackNavigator();
 const MyStack = () => {
   LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
   LogBox.ignoreAllLogs(); //Ignore all log notifications
-  const { getUser } = React.useContext(UserContext);
-  API.get_instance().login("123456789", "Password");
+  const { getUser, setUser } = React.useContext(UserContext);
+  API.get_instance()
+    .login("123456789", "Password")
+    .then((user) => {
+      // TODO: REMOVE THIS WHEN WE HAVE LOGIN SCREEN
+      setUser(user);
+    });
   return (
     <UserContextProvider>
       <NavigationContainer>

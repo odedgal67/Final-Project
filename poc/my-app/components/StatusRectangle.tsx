@@ -97,7 +97,7 @@ const StatusRectangle = (props: {
       <TouchableOpacity
         style={_styles.s}
         onPress={() => handleChange(value)}
-        testID={value}
+        // testID={hevalue}
       >
         <Text style={styles.text}>{status_to_hebrew[value]}</Text>
       </TouchableOpacity>

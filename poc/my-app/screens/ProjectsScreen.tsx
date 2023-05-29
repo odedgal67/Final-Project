@@ -14,44 +14,34 @@ function get_project_buttons(navigation: any, projects: Project[]) {
   let buttons = [];
   const { setProject, getProject, setRole } = React.useContext(ProjectContext);
   const { getUser, getRole } = React.useContext(UserContext);
+
+  let get_project_button = (project: Project) => {
+    return (
+      <ProjectButton
+        project={project}
+        projectName={project.name}
+        onPress={() => {
+          setProject(project);
+          API.get_instance()
+            .get_role(getUser().id, getProject().id)
+            .then((role) => setRole(role))
+            .then(() => setProject(project))
+            .then(() =>
+              navigation.navigate("projectProperties", { project: project })
+            );
+        }}
+      />
+    );
+  };
+
   for (let i = 0; i < projects.length; i += 2) {
     buttons.push(
       <SafeAreaView
         style={{ flexDirection: "row", justifyContent: "center" }}
         key={i}
       >
-        <ProjectButton
-          project={projects[i]}
-          projectName={projects[i].name}
-          onPress={() => {
-            setProject(projects[i]);
-            API.get_instance()
-              .get_role(getUser().id, getProject().id)
-              .then((role) => setRole(role))
-              .then(() =>
-                navigation.navigate("projectProperties", {
-                  project: projects[i],
-                })
-              );
-          }}
-        />
-        {projects[i + 1] && (
-          <ProjectButton
-            project={projects[i + 1]}
-            projectName={projects[i + 1].name}
-            onPress={() => {
-              setProject(projects[i + 1]);
-              API.get_instance()
-                .get_role(getUser().id, getProject().id)
-                .then((role) => setRole(role))
-                .then(() =>
-                  navigation.navigate("projectProperties", {
-                    project: projects[i],
-                  })
-                );
-            }}
-          />
-        )}
+        {get_project_button(projects[i])}
+        {projects[i + 1] && get_project_button(projects[i + 1])}
       </SafeAreaView>
     );
   }
