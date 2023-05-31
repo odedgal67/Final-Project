@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { Mission, Project, Stage, User, UserRecord } from "../../types";
 import {
   UserResponse,
@@ -10,6 +10,7 @@ import {
   VoidResponse,
   MissionsResponse,
   UserRecordsResponse,
+  StringResponse,
 } from "./Responses";
 import { roles } from "../../utils/Permissions";
 
@@ -17,10 +18,14 @@ import { roles } from "../../utils/Permissions";
 //data should have same parameters as API
 export abstract class PostWrapper<T> {
   constructor() {}
-  public send_request(path: string, data: any): Promise<T> {
+  public send_request(
+    path: string,
+    data: any,
+    config?: AxiosRequestConfig<any> | undefined
+  ): Promise<T> {
     return new Promise((resolve, reject) => {
       axios
-        .post(path, data)
+        .post(path, data, config)
         .then((response) => {
           console.log("response data:", response.data);
           const responseData = this.get_response_class(response.data);
@@ -87,5 +92,11 @@ export class PostWrapperMissions extends PostWrapper<Mission[]> {
 export class PostWrapperUserRecords extends PostWrapper<UserRecord[]> {
   get_response_class(data: any): Response<UserRecord[]> {
     return new UserRecordsResponse(data);
+  }
+}
+
+export class PostWrapperString extends PostWrapper<string> {
+  get_response_class(data: any): Response<string> {
+    return new StringResponse(data);
   }
 }

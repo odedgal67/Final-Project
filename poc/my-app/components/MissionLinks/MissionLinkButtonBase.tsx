@@ -1,6 +1,7 @@
 import { TouchableHighlight, Text, StyleSheet, Linking } from "react-native";
 import ConfirmDialogue from "../ConfirmDialogue";
 import { hebrew } from "../../utils/text_dictionary";
+import API from "../../API/api_bridge";
 
 type MissionLinkButtonBaseProps = {
   title: string;
@@ -13,7 +14,9 @@ const MissionLinkButtonBase = (props: MissionLinkButtonBaseProps) => {
     <TouchableHighlight
       style={props.link ? styles.button_with_link : styles.button_no_link}
       onPress={() =>
-        props.link ? Linking.openURL(props.link) : props.notFoundAction()
+        props.link
+          ? Linking.openURL(API.get_instance().get_url(props.link))
+          : props.notFoundAction()
       }
       onLongPress={() =>
         props.link

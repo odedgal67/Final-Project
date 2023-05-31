@@ -10,14 +10,14 @@ import API from "../../API/api_bridge";
 type ImageMissionLinkProps = {
   mission: Mission;
   title: Title;
-  stage_id: number;
+  stage_id: string;
   link?: string;
 };
 
 const ImageMissionLink = (props: ImageMissionLinkProps) => {
   const [image, setImage] = useState<string | undefined>(props.link);
   const { getProject } = useContext(ProjectContext);
-  const { getUser, notify } = useContext(UserContext);
+  const { getUser } = useContext(UserContext);
   let NotFoundAction = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === "granted") {
@@ -28,21 +28,22 @@ const ImageMissionLink = (props: ImageMissionLinkProps) => {
           quality: 1,
         });
       if (result.assets) {
-        console.log("length of assets: " + result.assets.length);
+        console.log("image uri: " + result.assets[0].uri);
         const imageUri = result.assets[0].uri;
-        const imageBlob: Blob = await (await fetch(imageUri)).blob();
-        console.log("image blob type: " + imageBlob.type);
         API.get_instance()
           .update_mission_proof(
             getProject().id,
             props.title,
             props.stage_id,
             props.mission.id,
-            imageBlob,
+            imageUri,
             getUser().id
           )
           .then((uri) => {
             setImage(uri);
+          })
+          .catch((error) => {
+            alert(error);
           });
       } else {
         alert(hebrew.no_image_found);
