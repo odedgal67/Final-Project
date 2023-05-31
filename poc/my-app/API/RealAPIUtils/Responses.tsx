@@ -114,3 +114,9 @@ export class UserRecordsResponse extends Response<UserRecord[]> {
     return output;
   }
 }
+
+export class StringResponse extends Response<string> {
+  get_result(): string {
+    return this.result;
+  }
+}

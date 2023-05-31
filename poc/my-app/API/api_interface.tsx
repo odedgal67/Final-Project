@@ -10,8 +10,10 @@ import {
   User,
   UserRecord,
 } from "../types";
+import { Linking } from "react-native";
 
 abstract class api_interface {
+  abstract get_url(path: string): string;
   abstract login(username: string, password: string): Promise<User>;
   abstract add_project(
     project_name: string,
@@ -130,7 +132,7 @@ abstract class api_interface {
     title: Title,
     stage_id: string,
     mission_id: string,
-    Image: Blob,
+    local_image_uri: string,
     username: string
   ): Promise<string>;
 }

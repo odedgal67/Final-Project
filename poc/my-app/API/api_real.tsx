@@ -11,12 +11,17 @@ import {
 } from "../types";
 import { roles } from "../utils/Permissions";
 import {
+  extractFileNameFromUri,
+  extractFileTypeFromUri,
+} from "../utils/stringFunctions";
+import {
   PostWRapperProjects,
   PostWrapper,
   PostWrapperMissions,
   PostWrapperProject,
   PostWrapperRole,
   PostWrapperStages,
+  PostWrapperString,
   PostWrapperUser,
   PostWrapperUserRecords,
   PostWrapperVoid,
@@ -31,7 +36,7 @@ export class RealAPI extends api_interface {
     this.server_url = server_url;
   }
 
-  private get_url(path: string): string {
+  public get_url(path: string): string {
     return this.server_url + "/" + path;
   }
 
@@ -277,9 +282,32 @@ export class RealAPI extends api_interface {
     title: Title,
     stage_id: string,
     mission_id: string,
-    Image: Blob,
+    local_image_uri: string,
     username: string
   ): Promise<string> {
-    throw new Error("Method not implemented.");
+    let file_name = extractFileNameFromUri(local_image_uri);
+    const formData = new FormData();
+    console.log(local_image_uri);
+    formData.append("file", {
+      uri: local_image_uri, // this is fine
+      name: file_name,
+      type: "image/" + extractFileTypeFromUri(local_image_uri),
+    });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("stage_id", stage_id);
+    formData.append("mission_id", mission_id);
+    formData.append("username", username);
+    formData.append("title_id", String(title));
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperString().send_request(
+      this.get_url("set_mission_proof"),
+      formData,
+      config
+    );
   }
 }
