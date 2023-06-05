@@ -11,6 +11,8 @@ import {
   MissionsResponse,
   UserRecordsResponse,
   StringResponse,
+  StageResponse,
+  MissionResponse,
 } from "./Responses";
 import { roles } from "../../utils/Permissions";
 
@@ -71,6 +73,12 @@ export class PostWrapperRole extends PostWrapper<roles> {
   }
 }
 
+export class PostWrapperStage extends PostWrapper<Stage> {
+  get_response_class(data: any): Response<Stage> {
+    return new StageResponse(data);
+  }
+}
+
 export class PostWrapperStages extends PostWrapper<Stage[]> {
   get_response_class(data: any): Response<Stage[]> {
     return new StagesResponse(data);
@@ -80,6 +88,12 @@ export class PostWrapperStages extends PostWrapper<Stage[]> {
 export class PostWrapperVoid extends PostWrapper<void> {
   get_response_class(data: any): Response<void> {
     return new VoidResponse(data);
+  }
+}
+
+export class PostWrapperMission extends PostWrapper<Mission> {
+  get_response_class(data: any): Response<Mission> {
+    return new MissionResponse(data);
   }
 }
 

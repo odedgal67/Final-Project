@@ -87,7 +87,7 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
   );
 };
 
-const handleLoadFromExcel = async (proj: number, user: string) => {
+const handleLoadFromExcel = async (proj: string, user: string) => {
   try {
     const file = await DocumentPicker.getDocumentAsync({
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -97,7 +97,9 @@ const handleLoadFromExcel = async (proj: number, user: string) => {
       const excelData = await readExcelFile(file.uri);
       
       if (excelData) {
-        await API.get_instance().load_excel_data(proj, excelData, user);
+        await API.get_instance().load_excel_data(proj, excelData, user).catch((error) => {
+          alert(error);
+        });
       }
     }
   } catch (error) {

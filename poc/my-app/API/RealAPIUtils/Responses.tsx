@@ -58,6 +58,18 @@ export class RoleResponse extends Response<roles> {
   }
 }
 
+export class StageResponse extends Response<Stage> {
+  get_result(): Stage {
+    let output: Stage = {
+      name: this.result.name,
+      id: this.result.id,
+      status: status_mapping[this.result.status],
+      completion_date: new Date(),
+    };
+    return output;
+  }
+}
+
 export class StagesResponse extends Response<Stage[]> {
   get_result(): Stage[] {
     let output: Stage[] = [];
@@ -79,6 +91,22 @@ export class StagesResponse extends Response<Stage[]> {
 export class VoidResponse extends Response<void> {
   get_result(): void {
     return;
+  }
+}
+
+export class MissionResponse extends Response<Mission> {
+  get_result(): Mission {
+    let output: Mission = {
+      id: this.result.id,
+      name: this.result.name,
+      green_building: this.result.green_building,
+      completion_date: new Date(),
+      completing_user: this.result.completing_user,
+      comment: this.result.comment,
+      status: this.result.status,
+      proof_link: this.result.proof,
+    };
+    return output;
   }
 }
 
