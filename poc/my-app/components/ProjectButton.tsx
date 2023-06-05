@@ -114,16 +114,17 @@ const ProjectButton = (props: {
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    justifyContent: "flex-start",
-    paddingVertical: "5%",
-    paddingHorizontal: "8%",
+    justifyContent: "center",
+    paddingVertical: "3%",
+    paddingHorizontal: "3%",
+    paddingBottom: "3%",
     marginHorizontal: "4%",
-    marginVertical: "7%",
-    elevation: 15,
+    marginBottom: "10%",
+    elevation: 10,
     borderRadius: 10,
     backgroundColor: "#c2c0b2",
-    maxHeight: "70%",
     maxWidth: "40%",
+    flex: 1,
   },
   text: {
     fontSize: 16,
@@ -133,6 +134,7 @@ const styles = StyleSheet.create({
     color: "white",
     flex: 1,
     paddingBottom: 4,
+    textAlign: "center",
   },
   image: {
     width: 80,

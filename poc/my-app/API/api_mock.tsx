@@ -35,7 +35,7 @@ class MockAPI extends api_interface {
   }
 
   private init_data() {
-    this.add_project("פרויקט דוגמא", "דוגמא");
+    this.add_project("פרויקט דוגמה", "דוגמה");
     this.plans.push({
       name: "ynet",
       link: "https://www.ynet.co.il",
