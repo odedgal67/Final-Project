@@ -5,8 +5,8 @@ import { roles } from "./Permissions";
 
 // Declaring the state object globally.
 const ProjectState = {
-  project: { name: "", id: 0 },
-  role: "",
+  project: { name: "", id: "-1" },
+  role: roles.UNDEFINED,
   api_answer: 0,
 };
 
@@ -25,6 +25,7 @@ const ProjectContextWrapper = (component?: React.Component) => ({
     component?.setState({ context: ProjectContextWrapper(component) });
   },
   setRole: (role: roles) => {
+    console.log("setting role to " + role);
     ProjectState.role = role;
     component?.setState({ context: ProjectContextWrapper(component) });
   },
@@ -32,8 +33,8 @@ const ProjectContextWrapper = (component?: React.Component) => ({
     return ProjectState.role;
   },
   clearProjectState: () => {
-    ProjectState.project = { name: "", id: 0 };
-    ProjectState.role = "";
+    ProjectState.project = { name: "", id: "" };
+    ProjectState.role = roles.UNDEFINED;
     ProjectState.api_answer = 0;
     component?.setState({ context: ProjectContextWrapper(component) });
   },

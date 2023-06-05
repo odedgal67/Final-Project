@@ -23,15 +23,11 @@ const ManageUserButton = (props: ManageUserButtonProps) => {
   const [pressed, setPressed] = useState(false);
   const { getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
-  let onChangeRole = (val: string) => {
-    let role: roles = roles[val as keyof typeof roles];
-    API.get_instance().edit_user_role(
-      getProject().id,
-      props.user.id,
-      role,
-      getUser().id
-    );
-    setRole(role_to_hebrew[role]);
+  let onChangeRole = (val: roles) => {
+    API.get_instance()
+      .edit_user_role(getProject().id, props.user.id, val, getUser().id)
+      .then(() => setRole(role_to_hebrew[val]))
+      .catch((err) => alert(err));
   };
   let removeUserClick = () => {
     return props.onRemove(props.user);

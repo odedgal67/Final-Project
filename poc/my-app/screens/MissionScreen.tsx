@@ -44,8 +44,8 @@ const MissionScreen = ({
     API.get_instance()
       .edit_comment_in_mission(
         getProject().id,
-        route.params.stage.id,
         route.params.title,
+        route.params.stage.id,
         mission.id,
         comment,
         getUser().id
@@ -117,8 +117,8 @@ const MissionScreen = ({
                   API.get_instance()
                     .set_mission_status(
                       getProject().id,
-                      route.params.stage.id,
                       route.params.title,
+                      route.params.stage.id,
                       mission.id,
                       new_status,
                       getUser().id
