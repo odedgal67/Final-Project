@@ -83,6 +83,7 @@ const MissionScreen = ({
                   onChangeText={(comm) =>
                     comm.length < 250 ? setComment(comm) : null
                   }
+                  multiline={true}
                   editable={isEditable}
                   onSubmitEditing={onSubmitEdit}
                 ></TextInput>

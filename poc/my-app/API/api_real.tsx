@@ -17,9 +17,11 @@ import {
 import {
   PostWRapperProjects,
   PostWrapper,
+  PostWrapperMission,
   PostWrapperMissions,
   PostWrapperProject,
   PostWrapperRole,
+  PostWrapperStage,
   PostWrapperStages,
   PostWrapperString,
   PostWrapperUser,
@@ -59,8 +61,8 @@ export class RealAPI extends api_interface {
     title: Title,
     stage_name: string,
     username: string
-  ): Promise<void> {
-    return new PostWrapperVoid().send_request(this.get_url("add_stage"), {
+  ): Promise<Stage> {
+    return new PostWrapperStage().send_request(this.get_url("add_stage"), {
       project_id: project_id,
       title_id: title,
       stage_name: stage_name,
@@ -74,8 +76,8 @@ export class RealAPI extends api_interface {
     mission_name: string,
     username: string,
     apartment_number?: number
-  ): Promise<void> {
-    return new PostWrapperVoid().send_request(this.get_url("add_mission"), {
+  ): Promise<Mission> {
+    return new PostWrapperMission().send_request(this.get_url("add_mission"), {
       project_id: project_id,
       apartment_number: apartment_number,
       stage_id: stage_id,
@@ -331,6 +333,76 @@ export class RealAPI extends api_interface {
       formData,
       config
     );
+  }
+  async load_excel_data(
+    project_id: string,
+    data: {},
+    username: string
+  ): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const handleSheet = async (sheetName: string, title: Title) => {
+        const rows = data[sheetName];
+        let index = -1;
+        let stage_id = "";
+        let mission_id = "";
+
+        for (const row of rows.slice(1)) {
+          if (row[0] && (index === -1 || Math.floor(row[0]) !== index)) {
+            console.log("adding stage");
+            index = row[0];
+            await this.add_stage(project_id, title, row[1], username)
+              .then((stage: Stage) => {
+                stage_id = stage.id;
+              })
+              .catch((error: string) => {
+                return reject(error);
+              });
+          } else {
+            await this.add_mission(
+              project_id,
+              stage_id,
+              title,
+              row[1],
+              username
+            )
+              .then((mission: Mission) => {
+                mission_id = mission.id;
+              })
+              .catch((error: string) => {
+                return reject(error);
+              });
+            if (row[2]) {
+              this.edit_comment_in_mission(
+                project_id,
+                title,
+                stage_id,
+                mission_id,
+                row[2],
+                username
+              ).catch((error: string) => {
+                reject(error);
+              });
+            }
+          }
+          console.log(row[1]);
+        }
+      };
+      console.log("loading excel data");
+      console.log(data);
+
+      handleSheet("שלב מקדים", Title.EarlyStages);
+      handleSheet("עבודות שלד", Title.SkeletalStages);
+      handleSheet("פיתוח וכללי לבניין", Title.GeneralStages);
+
+      // let rows = data["ליקויי בניה"];
+      // for (const row of rows.slice(1))
+      //   this.add_fault(project_id, row[4], row[5], row[1], username);
+
+      // rows = data["תכניות"];
+      // for (const row of rows.slice(1))
+      //   this.add_plan(project_id, row[0], row[1] ? row[1] : "", username)
+      resolve();
+    });
   }
 
   update_mission_document(

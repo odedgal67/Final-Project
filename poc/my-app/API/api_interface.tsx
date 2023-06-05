@@ -24,14 +24,14 @@ abstract class api_interface {
     title: Title,
     stage_name: string,
     username: string
-  ): Promise<void>;
+  ): Promise<Stage>;
   abstract add_mission(
     project_id: string,
     stage_id: string,
     title: Title,
     mission_name: string,
     username: string
-  ): Promise<void>;
+  ): Promise<Mission>;
   abstract add_plan(
     project_id: string,
     plan_name: string,
@@ -135,6 +135,11 @@ abstract class api_interface {
     local_image_uri: string,
     username: string
   ): Promise<string>;
+  abstract load_excel_data(
+    project_id: string,
+    data: {},
+    username: string
+  ): Promise<void>;
   abstract update_mission_document(
     project_id: string,
     title: Title,
