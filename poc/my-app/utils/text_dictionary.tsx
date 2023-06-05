@@ -59,6 +59,9 @@ export var hebrew = {
   link_was_found_would_you_like_to_change_it:
     "נמצא קישור קיים, האם ברצונך להחליף אותו?",
   add_x: "הוספת ${x}",
+  no_document_found: "לא נבחר קובץ",
+  error_occurred: "אירעה שגיאה",
+  tekken: "מסמך תקן",
 };
 
 export var title_to_hebrew = {

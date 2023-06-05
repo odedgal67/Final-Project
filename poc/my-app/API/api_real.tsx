@@ -350,7 +350,7 @@ export class RealAPI extends api_interface {
           if (row[0] && (index === -1 || Math.floor(row[0]) !== index)) {
             console.log("adding stage");
             index = row[0];
-            await this.add_stage(project_id, title, row[1], username)
+            await this.add_stage(project_id, title, row[1].trim(), username)
               .then((stage: Stage) => {
                 stage_id = stage.id;
               })
@@ -362,7 +362,7 @@ export class RealAPI extends api_interface {
               project_id,
               stage_id,
               title,
-              row[1],
+              row[1].trim(),
               username
             )
               .then((mission: Mission) => {
@@ -377,7 +377,7 @@ export class RealAPI extends api_interface {
                 title,
                 stage_id,
                 mission_id,
-                row[2],
+                row[2].trim(),
                 username
               ).catch((error: string) => {
                 reject(error);

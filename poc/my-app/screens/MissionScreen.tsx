@@ -19,6 +19,7 @@ import API from "../API/api_bridge";
 import { hebrew } from "../utils/text_dictionary";
 import ImageMissionLink from "../components/MissionLinks/ImageMissionLink";
 import PropertiesButton from "../components/PropertiesButton";
+import PdfMissionLink from "../components/MissionLinks/PdfLink";
 
 const MissionScreen = ({
   navigation,
@@ -92,7 +93,12 @@ const MissionScreen = ({
           </View>
           <View style={styles.status_and_links}>
             <View style={styles.links_view}>
-              <LinkButton title={hebrew.link_to_document}></LinkButton>
+              <PdfMissionLink
+                mission={mission}
+                title={route.params.title}
+                stage_id={route.params.stage.id}
+                link={mission.document_link}
+              />
               <LinkButton title={hebrew.link_to_plan}></LinkButton>
               <ImageMissionLink
                 mission={mission}
@@ -202,10 +208,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   description_text: {
-    textAlign: "center",
     color: "black",
     flex: 1,
     textAlignVertical: "top",
+    margin: "2%",
   },
   description_bg: {
     backgroundColor: "#d4cfcb",
