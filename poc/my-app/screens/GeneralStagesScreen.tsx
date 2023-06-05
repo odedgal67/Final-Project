@@ -25,7 +25,7 @@ const GeneralStagesScreen = ({
       .catch((err) => alert(err));
     setProject(route.params.project);
     navigation.setOptions({
-      title: getProject().name + " " + title_to_hebrew[route.params.title],
+      title: getProject().name + " > " + title_to_hebrew[route.params.title],
     });
   }, []);
   return (

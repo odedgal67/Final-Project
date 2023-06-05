@@ -3,7 +3,7 @@ import { roles } from "./Permissions";
 
 export var hebrew = {
   general_stages: "פיתוח וכללי לבניין",
-  pre_stage: "שלב מקדם",
+  pre_stage: "שלב מקדים",
   skeletal_stages: "עבודות שלד",
   apartments: "עבודות גמר בדירות",
   plans: "תכניות",
@@ -40,22 +40,22 @@ export var hebrew = {
   close: "סגור",
   remove: "הסרה",
   change_role: "שינוי תפקיד",
-  are_you_sure_you_want_to_remove: "האם אתה בטוח שברצונך להסיר את ${userName}?",
+  are_you_sure_you_want_to_remove: "האם ברצונך להסיר את ${userName}?",
   add_user: "הוספת משתמש או מתן גישה",
   register_user_explanation: "רשימת משתמש חדש למערכת",
   name: "שם",
   verify_password: "אימות סיסמה",
   passwords_dont_match: "הסיסמאות אינן תואמות",
-  fill_all_fields: "אנא מלא את כל השדות",
+  fill_all_fields: "ישנם שדות ריקים",
   user_registered_successfully: "המשתמש נרשם בהצלחה",
-  invalid_id: "תעודת זהות לא תקינה",
+  invalid_id: "תעודת הזהות לא תקינה",
   user_assigned_successfully: "המשתמש קיבל גישה בהצלחה",
   assign_existing_user_a_role_explanation: "מתן גישה למשתמש קיים",
   back: "חזרה",
   link_doesnt_exist: "הקישור אינו קיים",
   not_found: "לא נמצא",
   no_image_found: "לא נבחרה תמונה",
-  please_aprove_camera_permissions: "אנא אשר הרשאות למצלמה",
+  please_aprove_camera_permissions: "אנא אשרו הרשאות למצלמה",
   link_was_found_would_you_like_to_change_it:
     "נמצא קישור קיים, האם ברצונך להחליף אותו?",
   add_x: "הוספת ${x}",
@@ -69,7 +69,7 @@ export var title_to_hebrew = {
   [Title.SkeletalStages]: hebrew.skeletal_stages,
   [Title.ApartmentStages]: hebrew.apartments,
   [Title.GeneralStages]: hebrew.general_stages,
-  [Title.BuildingFaults]: hebrew.building_defects,
+  [Title.BuildingFaults]: hebrew.faults,
 };
 
 export var status_to_hebrew = {
