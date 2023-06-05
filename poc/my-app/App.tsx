@@ -11,6 +11,7 @@ import FaultScreen from "./screens/FaultScreen";
 import FaultListScreen from "./screens/FaultListScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
+import LoginScreen from "./screens/LoginScreen";
 import { UserContext, UserContextProvider } from "./utils/UserContext";
 import { LogBox } from "react-native";
 import Crane from "./components/Crane";
@@ -43,6 +44,7 @@ const MyStack = () => {
               }),
           }}
         >
+          <Stack.Screen name="login" component={LoginScreen} />
           <Stack.Screen name="projects" component={ProjectsScreen} />
           <Stack.Screen
             name="projectProperties"
