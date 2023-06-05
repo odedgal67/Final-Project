@@ -30,71 +30,69 @@ const GeneralStagesScreen = ({
   }, []);
   return (
     <Background>
-      <View>
-        {stages && (
-          <StagesTable
-            stages={stages}
-            allow_change_status={true}
-            onChangeStatus={(stage_id: string) => {
-              return (new_status: Status) => {
-                API.get_instance()
-                  .set_stage_status(
-                    getProject().id,
-                    route.params.title,
-                    stage_id,
-                    new_status,
-                    getUser().id
-                  )
-                  .then(() =>
-                    API.get_instance()
-                      .get_all_stages(
-                        getProject().id,
-                        route.params.title,
-                        getUser().id
-                      )
-                      .then((stages) => setStages(stages))
-                  )
-                  .catch((err) => alert(err));
-              };
-            }}
-            ButtonHandler={(stage_name: String, stage_id: number) => {
-              return () =>
-                navigation.navigate("MissionListsScreen", {
-                  stage: stages.find((stage: any) => stage.id == stage_id),
-                  stageName: stage_name,
-                  stage_id: stage_id,
-                  title: route.params.title,
-                });
-            }}
-            addStagehandler={(
-              get_name: () => string,
-              modal_visibility_setter
-            ) => {
-              return () => {
-                API.get_instance()
-                  .add_stage(
-                    getProject().id,
-                    route.params.title,
-                    get_name(),
-                    getUser().id
-                  )
-                  .then(() => {
-                    API.get_instance()
-                      .get_all_stages(
-                        getProject().id,
-                        route.params.title,
-                        getUser().id
-                      )
-                      .then((stages) => setStages(stages))
-                      .catch((err) => alert(err));
-                  })
-                  .then(() => modal_visibility_setter(false))
-                  .catch((err) => alert(err));
-              };
-            }}
-          />
-        )}
-      </View>
+      {stages && (
+        <StagesTable
+          stages={stages}
+          allow_change_status={true}
+          onChangeStatus={(stage_id: string) => {
+            return (new_status: Status) => {
+              API.get_instance()
+                .set_stage_status(
+                  getProject().id,
+                  route.params.title,
+                  stage_id,
+                  new_status,
+                  getUser().id
+                )
+                .then(() =>
+                  API.get_instance()
+                    .get_all_stages(
+                      getProject().id,
+                      route.params.title,
+                      getUser().id
+                    )
+                    .then((stages) => setStages(stages))
+                )
+                .catch((err) => alert(err));
+            };
+          }}
+          ButtonHandler={(stage_name: String, stage_id: number) => {
+            return () =>
+              navigation.navigate("MissionListsScreen", {
+                stage: stages.find((stage: any) => stage.id == stage_id),
+                stageName: stage_name,
+                stage_id: stage_id,
+                title: route.params.title,
+              });
+          }}
+          addStagehandler={(
+            get_name: () => string,
+            modal_visibility_setter
+          ) => {
+            return () => {
+              API.get_instance()
+                .add_stage(
+                  getProject().id,
+                  route.params.title,
+                  get_name(),
+                  getUser().id
+                )
+                .then(() => {
+                  API.get_instance()
+                    .get_all_stages(
+                      getProject().id,
+                      route.params.title,
+                      getUser().id
+                    )
+                    .then((stages) => setStages(stages))
+                    .catch((err) => alert(err));
+                })
+                .then(() => modal_visibility_setter(false))
+                .catch((err) => alert(err));
+            };
+          }}
+        />
+      )}
     </Background>
   );
 };

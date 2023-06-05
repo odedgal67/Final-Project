@@ -277,6 +277,33 @@ export class RealAPI extends api_interface {
       }
     );
   }
+
+  private create_formData_for_file(
+    local_image_uri: string,
+    project_id: string,
+    stage_id: string,
+    mission_id: string,
+    username: string,
+    title: Title,
+    type: string
+  ): FormData {
+    let file_name = extractFileNameFromUri(local_image_uri);
+    const formData = new FormData();
+    console.log(local_image_uri);
+    formData.append("file", {
+      uri: local_image_uri, // this is fine
+      name: file_name,
+      type: type + "/" + extractFileTypeFromUri(local_image_uri),
+    });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("stage_id", stage_id);
+    formData.append("mission_id", mission_id);
+    formData.append("username", username);
+    formData.append("title_id", String(title));
+    return formData;
+  }
+
   update_mission_proof(
     project_id: string,
     title: Title,
@@ -285,20 +312,15 @@ export class RealAPI extends api_interface {
     local_image_uri: string,
     username: string
   ): Promise<string> {
-    let file_name = extractFileNameFromUri(local_image_uri);
-    const formData = new FormData();
-    console.log(local_image_uri);
-    formData.append("file", {
-      uri: local_image_uri, // this is fine
-      name: file_name,
-      type: "image/" + extractFileTypeFromUri(local_image_uri),
-    });
-    formData.append("file_name", file_name);
-    formData.append("project_id", project_id);
-    formData.append("stage_id", stage_id);
-    formData.append("mission_id", mission_id);
-    formData.append("username", username);
-    formData.append("title_id", String(title));
+    const formData = this.create_formData_for_file(
+      local_image_uri,
+      project_id,
+      stage_id,
+      mission_id,
+      username,
+      title,
+      "image"
+    );
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -306,6 +328,35 @@ export class RealAPI extends api_interface {
     };
     return new PostWrapperString().send_request(
       this.get_url("set_mission_proof"),
+      formData,
+      config
+    );
+  }
+
+  update_mission_document(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    local_document_uri: string,
+    username: string
+  ): Promise<string> {
+    const formData = this.create_formData_for_file(
+      local_document_uri,
+      project_id,
+      stage_id,
+      mission_id,
+      username,
+      title,
+      "application"
+    );
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperString().send_request(
+      this.get_url("set_mission_tekken"),
       formData,
       config
     );

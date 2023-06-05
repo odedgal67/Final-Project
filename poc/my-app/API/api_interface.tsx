@@ -135,6 +135,14 @@ abstract class api_interface {
     local_image_uri: string,
     username: string
   ): Promise<string>;
+  abstract update_mission_document(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    local_document_uri: string,
+    username: string
+  ): Promise<string>;
 }
 
 export default api_interface;

@@ -62,7 +62,7 @@ const StagesTable = (props: {
     modal_visibility_setter: (vis: boolean) => void
   ) => () => void;
   allow_change_status: boolean;
-  onChangeStatus?: (stage_id: number) => (new_status: Status) => void;
+  onChangeStatus?: (stage_id: string) => (new_status: Status) => void;
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_stage_name, set_stage_name] = React.useState("");
@@ -76,81 +76,83 @@ const StagesTable = (props: {
     (stage: ListedStatusItem) => stage.status
   );
   return (
-    <ScrollView>
-      <View
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#c2c0b2",
-          flex: 1,
-        }}
-      >
-        {getRows(
-          stagesNames,
-          stagesStatuses,
-          stageIDs,
-          props.ButtonHandler,
-          props.allow_change_status,
-          props.onChangeStatus
-        )}
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <StageButton
-            stageName={hebrew.add_new_stage}
-            onClick={() => setModalVisible(true)}
-          />
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(false);
-              set_stage_name("");
+    <View style={{ flex: 1, backgroundColor: "#c2c0b2" }}>
+      <View style={{ flex: 8.5 }}>
+        <ScrollView>
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {getRows(
+              stagesNames,
+              stagesStatuses,
+              stageIDs,
+              props.ButtonHandler,
+              props.allow_change_status,
+              props.onChangeStatus
+            )}
+          </View>
+        </ScrollView>
+      </View>
+      <View style={{ flex: 1 }}>
+        <StageButton
+          stageName={hebrew.add_new_stage}
+          onClick={() => setModalVisible(true)}
+          backgroundColor="#649494"
+        />
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(false);
+            set_stage_name("");
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "rgba(0,0,0,0.3)",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              alignContent: "center",
             }}
           >
             <View
               style={{
-                backgroundColor: "rgba(0,0,0,0.3)",
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                alignContent: "center",
+                backgroundColor: "white",
+                borderRadius: 5,
+                opacity: 1,
+                width: "75%",
               }}
             >
-              <View
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  opacity: 1,
-                  width: "75%",
-                }}
+              <Text style={styles.rename_text}>{hebrew.add_new_stage}</Text>
+              <TextInput
+                maxLength={25}
+                numberOfLines={1}
+                style={styles.text_input}
+                placeholder="שם"
+                placeholderTextColor={"black"}
+                textAlign="center"
+                onChangeText={(stage_name: string) =>
+                  set_stage_name(stage_name)
+                }
+              />
+              <TouchableOpacity
+                style={styles.accept_name_change_button}
+                onPress={props.addStagehandler(() => {
+                  return new_stage_name;
+                }, setModalVisible)}
               >
-                <Text style={styles.rename_text}>{hebrew.add_new_stage}</Text>
-                <TextInput
-                  maxLength={25}
-                  numberOfLines={1}
-                  style={styles.text_input}
-                  placeholder="שם"
-                  placeholderTextColor={"black"}
-                  textAlign="center"
-                  onChangeText={(stage_name: string) =>
-                    set_stage_name(stage_name)
-                  }
-                />
-                <TouchableOpacity
-                  style={styles.accept_name_change_button}
-                  onPress={props.addStagehandler(() => {
-                    return new_stage_name;
-                  }, setModalVisible)}
-                >
-                  <Text style={styles.rename_text_white}>אישור</Text>
-                </TouchableOpacity>
-              </View>
+                <Text style={styles.rename_text_white}>אישור</Text>
+              </TouchableOpacity>
             </View>
-          </Modal>
-        </View>
+          </View>
+        </Modal>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

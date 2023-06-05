@@ -95,6 +95,7 @@ export class MissionsResponse extends Response<Mission[]> {
         comment: value.comment,
         status: value.status,
         proof_link: value.proof,
+        document_link: value.tekken,
       });
     });
     return output;
