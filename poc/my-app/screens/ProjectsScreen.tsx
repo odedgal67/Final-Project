@@ -1,5 +1,4 @@
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import ProjectButton from "../components/ProjectButton";
 import Background from "../components/Background";
 import { ScrollView, View } from "react-native";
@@ -36,13 +35,13 @@ function get_project_buttons(navigation: any, projects: Project[]) {
 
   for (let i = 0; i < projects.length; i += 2) {
     buttons.push(
-      <SafeAreaView
+      <View
         style={{ flexDirection: "row", justifyContent: "center" }}
         key={i}
       >
         {get_project_button(projects[i])}
         {projects[i + 1] && get_project_button(projects[i + 1])}
-      </SafeAreaView>
+      </View>
     );
   }
   return buttons;
@@ -82,6 +81,7 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
             flexDirection: "column",
             height: "80%",
             alignContent: "center",
+            marginTop: "10%"
           }}
         >
           {get_project_buttons(navigation, projects)}
