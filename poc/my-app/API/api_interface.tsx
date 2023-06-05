@@ -128,6 +128,11 @@ abstract class api_interface {
     Image: Blob,
     username: string
   ): Promise<string>;
+  abstract load_excel_data(
+    project_id: number,
+    data: {},
+    username: string
+  ): Promise<void>;
 }
 
 export default api_interface;

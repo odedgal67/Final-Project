@@ -11,6 +11,7 @@ export var hebrew = {
   add_new_stage: "הוספה",
   add_new_project_place_holder: "שם הפרויקט",
   add_new_project: "הוספת פרויקט חדש",
+  load_from_excel: "טעינה מקובץ אקסל",
   accept: "אישור",
   decline: "ביטול",
   project_name_cant_be_empty: "שם הפרויקט לא יכול להיות ריק",

@@ -141,7 +141,6 @@ class MockAPI extends api_interface {
     return new Promise<number>((resolve, reject) => {
       console.log("added plan!");
       this.plans.push({
-        id: this.last_plan_id,
         name: plan_name,
         link: link,
         date: new Date(),
@@ -159,7 +158,7 @@ class MockAPI extends api_interface {
     });
   }
 
-  add_fault(
+  add_fault( // TODO: add photo, proof and date
     project_id: number,
     floor: number,
     apartment_number: number,
@@ -447,5 +446,51 @@ class MockAPI extends api_interface {
     );
     return uri;
   }
+
+  load_excel_data(
+    project_id: number,
+    data: {},
+    username: string
+  ): Promise<void> {
+    const handleSheet = (sheetName: string, title: Title) => {
+      const rows = data[sheetName];
+      let index = -1;
+      let stage_id = -1;
+
+      for (const row of rows.slice(1)) {
+        if (row[0] && (index === -1 || Math.floor(row[0]) !== index)) {
+          index = row[0];
+          this.add_stage(project_id, title, row[1], username);
+          console.log("stage_id = " + this.stages.length);
+        } else if (row[0]) {
+          const mission_id = this.add_mission(project_id, this.stages.length - 1, title, row[1], username);
+          console.log("mission_id = " + this.missions.length);
+          if (row[2]) {
+            this.edit_comment_in_mission(project_id, title, this.stages.length - 1, this.missions.length - 1, row[2], username);
+          }
+        }
+        console.log(row[1]);
+      }
+    };
+
+    return new Promise<void>((resolve, reject) => {
+      console.log("loading excel data");
+      console.log(data);
+      
+      handleSheet("שלב מקדים", Title.EarlyStages);
+      handleSheet("עבודות שלד", Title.SkeletalStages);
+      handleSheet("פיתוח וכללי לבניין", Title.GeneralStages); 
+
+      let rows = data["ליקויי בניה"];
+      for (const row of rows.slice(1))
+        this.add_fault(project_id, row[4], row[5], row[1], username);
+      
+      rows = data["תכניות"];
+      for (const row of rows.slice(1))
+        this.add_plan(project_id, row[0], row[1] ? row[1] : "", username)
+      resolve();
+    });
+  }
 }
+
 export default MockAPI;

@@ -8,9 +8,14 @@ import {
 } from "react-native";
 import { Project } from "../types";
 import { hebrew } from "../utils/text_dictionary";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ProjectContext } from "../utils/ProjectContext";
+import { UserContext } from "../utils/UserContext";
 import Background from "./Background";
-import { useFocusEffect } from "@react-navigation/native";
+import API from "../API/api_bridge";
+import * as DocumentPicker from "expo-document-picker";
+import XLSX from "xlsx";
+import * as FileSystem from "expo-file-system";
 
 interface ProjectSettingsModalProps {
   project: Project;
@@ -19,6 +24,8 @@ interface ProjectSettingsModalProps {
 
 const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const { getProject } = useContext(ProjectContext);
+  const { getUser } = useContext(UserContext);
   return (
     <View style={{ flex: 1 }}>
       <Pressable
@@ -55,6 +62,17 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.modalButton}
+                onPress={() =>
+                  {handleLoadFromExcel(getProject().id, getUser().id);
+                  setModalVisible(false);
+                  }}
+              >
+                <Text style={styles.modalButtonText}>
+                  {hebrew.load_from_excel}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalButton}
                 onPress={() => {
                   setModalVisible(false);
                 }}
@@ -67,6 +85,52 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
       </Modal>
     </View>
   );
+};
+
+const handleLoadFromExcel = async (proj: number, user: string) => {
+  try {
+    const file = await DocumentPicker.getDocumentAsync({
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    if (file.type === "success") {
+      const excelData = await readExcelFile(file.uri);
+      
+      if (excelData) {
+        await API.get_instance().load_excel_data(proj, excelData, user);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const readExcelFile = async (fileUri: string) => {
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(fileUri);
+    if (!fileInfo.exists) {
+      throw new Error("File does not exist");
+    }
+
+    const fileContent = await FileSystem.readAsStringAsync(fileUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    const workbook = XLSX.read(fileContent, { type: "base64" });
+
+    const excelData: { [key: string]: any } = {};
+
+    workbook.SheetNames.forEach((sheetName) => {
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      excelData[sheetName] = data;
+    });
+
+    return excelData;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
 const styles = StyleSheet.create({
@@ -92,17 +156,15 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     alignItems: "stretch",
-  },
-  modalText: {
-    color: "white",
-    fontSize: 20,
-    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   modalButton: {
     backgroundColor: "#e4dfdb",
-    padding: 10,
-    marginVertical: "1%",
-    elevation: 1,
+    padding: 15,
+    marginBottom: 15,
+    borderRadius: 8,
+    alignItems: "center",
   },
   modalButtonText: {
     color: "rgb(50,50,50)",
