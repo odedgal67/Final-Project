@@ -8,6 +8,7 @@ import { hebrew } from "../utils/text_dictionary";
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: hebrew.login });
   }, [navigation]);
@@ -20,13 +21,17 @@ const LoginScreen = ({ navigation }) => {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: "projects", params: { allProjects } }],
+            routes: [{ name: "ProjectsScreen", params: { allProjects } }],
           })
         );
       })
       .catch((error) => {
         alert(error);
       });
+  };
+
+  const handleRegistration = () => {
+    navigation.navigate("RegistrationScreen");
   };
 
   return (
@@ -53,6 +58,10 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>{hebrew.login}</Text>
           </Pressable>
         </View>
+        <Text style={styles.registerText}>{hebrew.not_registered}</Text>
+        <Pressable style={styles.registerButton} onPress={handleRegistration}>
+          <Text style={styles.registerButtonText}>{hebrew.register}</Text>
+        </Pressable>
       </View>
     </Background>
   );
@@ -101,6 +110,18 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 20,
     fontWeight: "bold",
+  },
+  registerText: {
+    marginTop: 30,
+    color: "#B0B0B0B",
+    fontSize: 16,
+  },
+  registerButton: {
+    marginTop: 10,
+  },
+  registerButtonText: {
+    color: "#0090D6",
+    fontSize: 18,
   },
 });
 

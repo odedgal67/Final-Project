@@ -26,7 +26,7 @@ function get_project_buttons(navigation: any, projects: Project[]) {
             .then((role) => setRole(role))
             .then(() => setProject(project))
             .then(() =>
-              navigation.navigate("projectProperties", { project: project })
+              navigation.navigate("ProjectPropertiesScreen", { project: project })
             );
         }}
       />
