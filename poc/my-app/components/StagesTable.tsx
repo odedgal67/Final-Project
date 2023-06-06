@@ -14,12 +14,12 @@ import { ListedStatusItem, Stage, Status } from "../types";
 import { hebrew } from "../utils/text_dictionary";
 
 function getRows(
-  stageNames: String[],
+  stageNames: string[],
   stageStatuses: Status[],
-  stageIDs: number[],
-  ButtonHandler: (stage_name: String, stage_id: number) => () => void,
+  stageIDs: string[],
+  ButtonHandler: (stage_name: String, stage_id: string) => () => void,
   allow_change_status: boolean,
-  onChangeStatus?: (stage_id: number) => (new_status: Status) => void
+  onChangeStatus?: (stage_id: string) => (new_status: Status) => void
 ) {
   let rows = [];
   for (let i = 0; i < stageNames.length; i++) {
@@ -56,17 +56,17 @@ function getRows(
 
 const StagesTable = (props: {
   stages: ListedStatusItem[];
-  ButtonHandler: (stage: String, id: number) => any;
+  ButtonHandler: (stage: String, id: string) => any;
   addStagehandler: (
     getter: () => string,
     modal_visibility_setter: (vis: boolean) => void
   ) => () => void;
   allow_change_status: boolean;
-  onChangeStatus?: (stage_id: number) => (new_status: Status) => void;
+  onChangeStatus?: (stage_id: string) => (new_status: Status) => void;
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_stage_name, set_stage_name] = React.useState("");
-  let stagesNames: String[] = props.stages.map(
+  let stagesNames: string[] = props.stages.map(
     (stage: ListedStatusItem) => stage.name
   );
   let stageIDs: string[] = props.stages.map(
@@ -123,6 +123,7 @@ const StagesTable = (props: {
                   borderRadius: 5,
                   opacity: 1,
                   width: "75%",
+                  paddingVertical: "2%",
                 }}
               >
                 <Text style={styles.rename_text}>{hebrew.add_new_stage}</Text>
@@ -130,7 +131,7 @@ const StagesTable = (props: {
                   maxLength={25}
                   numberOfLines={1}
                   style={styles.text_input}
-                  placeholder="שם"
+                  placeholder={hebrew.name}
                   placeholderTextColor={"black"}
                   textAlign="center"
                   onChangeText={(stage_name: string) =>
@@ -143,7 +144,7 @@ const StagesTable = (props: {
                     return new_stage_name;
                   }, setModalVisible)}
                 >
-                  <Text style={styles.rename_text_white}>אישור</Text>
+                  <Text style={styles.rename_text_white}>{hebrew.accept}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -200,6 +201,7 @@ const styles = StyleSheet.create({
     color: "Black",
     marginHorizontal: "3%",
     marginTop: "2%",
+    textAlign: "center",
   },
   rename_text_white: {
     fontSize: 16,

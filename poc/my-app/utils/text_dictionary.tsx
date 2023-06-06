@@ -60,6 +60,8 @@ export var hebrew = {
     "נמצא קישור קיים, האם ברצונך להחליף אותו?",
   not_registered: "לא רשומים?",
   registration_successful: "ההרשמה הסתיימה בהצלחה!",
+  floor_number: "מספר קומה",
+  apartment_number: "מספר דירה",
 };
 
 export var title_to_hebrew = {

@@ -15,18 +15,20 @@ import {
   extractFileTypeFromUri,
 } from "../utils/stringFunctions";
 import {
-  PostWRapperProjects,
   PostWrapper,
-  PostWrapperMission,
-  PostWrapperMissions,
   PostWrapperProject,
-  PostWrapperRole,
+  PostWRapperProjects,
   PostWrapperStage,
   PostWrapperStages,
-  PostWrapperString,
+  PostWrapperMission,
+  PostWrapperMissions,
+  PostWrapperFault,
+  PostWrapperFaults,
   PostWrapperUser,
   PostWrapperUserRecords,
+  PostWrapperRole,
   PostWrapperVoid,
+  PostWrapperString,
 } from "./RealAPIUtils/PostWrappers";
 import api_interface from "./api_interface";
 
@@ -148,17 +150,23 @@ export class RealAPI extends api_interface {
       }
     );
   }
-  get_all_faults(project_id: string): Promise<Fault[]> {
-    throw new Error("Method not implemented.");
+  get_all_faults(project_id: string, username: string): Promise<Fault[]> {
+    return new PostWrapperFaults().send_request(
+      this.get_url("get_all_building_faults"),
+      { project_id: project_id, username: username }
+    );
   }
   add_fault(
     project_id: string,
-    floor: number,
+    floor_number: number,
     apartment_number: number,
     fault_name: string,
     username: string
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
+  ): Promise<Fault> {
+    return new PostWrapperFault().send_request(
+    this.get_url("add_building_fault"),
+      { project_id: project_id, name: fault_name, username: username, floor_number: floor_number, apartment_number: apartment_number }
+    );
   }
   get_all_stages(
     project_id: string,
@@ -205,7 +213,7 @@ export class RealAPI extends api_interface {
   }
   edit_fault_comment(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
     comment: string,
     username: string
   ): Promise<void> {
@@ -213,7 +221,7 @@ export class RealAPI extends api_interface {
   }
   set_fault_status(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
     new_status: Status,
     username: string
   ): Promise<void> {
@@ -340,15 +348,15 @@ export class RealAPI extends api_interface {
       };
       console.log("loading excel data");
       console.log(data);
-      
+
       handleSheet("שלב מקדים", Title.EarlyStages);
       handleSheet("עבודות שלד", Title.SkeletalStages);
       handleSheet("פיתוח וכללי לבניין", Title.GeneralStages); 
 
-      // let rows = data["ליקויי בניה"];
-      // for (const row of rows.slice(1))
-      //   this.add_fault(project_id, row[4], row[5], row[1], username);
-      
+      let rows = data["ליקויי בניה"];
+      for (const row of rows.slice(1))
+        this.add_fault(project_id, row[4], row[5], row[1], username);
+
       // rows = data["תכניות"];
       // for (const row of rows.slice(1))
       //   this.add_plan(project_id, row[0], row[1] ? row[1] : "", username)
@@ -356,4 +364,3 @@ export class RealAPI extends api_interface {
     });
   }
 }
-

@@ -59,19 +59,14 @@ abstract class api_interface {
     stage_id: string,
     username: string
   ): Promise<Mission[]>;
-  // abstract get_all_faults(
-  //   project_id: string,
-  //   title: Title,
-  //   username: string
-  // ): Fault[];
-  abstract get_all_faults(project_id: string): Promise<Fault[]>;
+  abstract get_all_faults(project_id: string, username: string): Promise<Fault[]>;
   abstract add_fault(
     project_id: string,
-    floor: number,
+    floor_number: number,
     apartment_number: number,
     fault_name: string,
     username: string
-  ): Promise<void>;
+  ): Promise<Fault>;
   abstract get_all_stages(
     project_id: string,
     title: Title,
@@ -90,13 +85,13 @@ abstract class api_interface {
   ): Promise<void>;
   abstract edit_fault_comment(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
     comment: string,
     username: string
   ): Promise<void>;
   abstract set_fault_status(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
     new_status: Status,
     username: string
   ): Promise<void>;

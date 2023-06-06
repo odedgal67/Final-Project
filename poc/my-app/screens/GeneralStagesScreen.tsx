@@ -57,7 +57,7 @@ const GeneralStagesScreen = ({
                   .catch((err) => alert(err));
               };
             }}
-            ButtonHandler={(stage_name: String, stage_id: number) => {
+            ButtonHandler={(stage_name: String, stage_id: string) => {
               return () =>
                 navigation.navigate("MissionListsScreen", {
                   stage: stages.find((stage: any) => stage.id == stage_id),

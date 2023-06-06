@@ -37,7 +37,7 @@ const MissionListsScreen = ({
         <StagesTable
           stages={missions}
           allow_change_status={false}
-          ButtonHandler={(_mission_name: String, mission_id: number) => {
+          ButtonHandler={(_mission_name: String, mission_id: string) => {
             return () =>
               navigation.navigate("MissionScreen", {
                 mission: missions.find(

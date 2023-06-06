@@ -1,4 +1,4 @@
-import { Project, Stage, User, Status, Mission, UserRecord } from "../../types";
+import { Project, Stage, Mission, Plan, Fault, User, Status, UserRecord } from "../../types";
 import { roles } from "../../utils/Permissions";
 
 let roles_mapping = [
@@ -30,12 +30,6 @@ export abstract class Response<T> {
   abstract get_result(): T;
 }
 
-export class UserResponse extends Response<User> {
-  get_result(): User {
-    return { id: this.result.username, name: this.result.name };
-  }
-}
-
 export class ProjectResponse extends Response<Project> {
   get_result(): Project {
     return { id: this.result.id, name: this.result.name };
@@ -49,12 +43,6 @@ export class ProjectsResponse extends Response<Project[]> {
       output.push({ id: value.id, name: value.name });
     });
     return output;
-  }
-}
-
-export class RoleResponse extends Response<roles> {
-  get_result(): roles {
-    return roles_mapping[(this.result as number) - 1];
   }
 }
 
@@ -85,12 +73,6 @@ export class StagesResponse extends Response<Stage[]> {
       console.log(stage);
     });
     return output;
-  }
-}
-
-export class VoidResponse extends Response<void> {
-  get_result(): void {
-    return;
   }
 }
 
@@ -129,6 +111,80 @@ export class MissionsResponse extends Response<Mission[]> {
   }
 }
 
+export class PlanResponse extends Response<Plan> {
+  get_result(): Plan {
+    let output: Plan = {
+      name: this.result.name,
+      link: this.result.link,
+      date: this.result.date,
+      project_id: this.result.project_id,
+    };
+    return output;
+  }
+}
+
+export class PlansResponse extends Response<Plan[]> {
+  get_result(): Plan[] {
+    let output: Plan[] = [];
+    Object.entries(this.result).forEach(([_key, value]) => {
+      output.push({
+        name: value.name,
+        link: value.link,
+        date: value.date,
+        project_id: value.project_id,
+      });
+    });
+    return output;
+  }
+}
+
+export class FaultResponse extends Response<Fault> {
+  get_result(): Fault {
+    let output: Fault = {
+      id: this.result.id,
+      name: this.result.name,
+      status: this.result.status,
+      urgency: this.result.urgency,
+      floor: this.result.floor,
+      apartment_number: this.result.apartment_number,
+      date: this.result.date,
+      photo: this.result.photo,
+      proof: this.result.proof,
+      project_id: this.result.project_id,
+      comment: this.result.comment,
+    };
+    return output;
+  }
+}
+
+export class FaultsResponse extends Response<Fault[]> {
+  get_result(): Fault[] {
+    let output: Fault[] = [];
+    Object.entries(this.result).forEach(([_key, value]) => {
+      output.push({
+        id: value.id,
+        name: value.name,
+        status: value.status,
+        urgency: value.urgency,
+        floor: value.floor,
+        apartment_number: value.apartment_number,
+        date: value.date,
+        photo: value.photo,
+        proof: value.proof,
+        project_id: value.project_id,
+        comment: value.comment,
+      });
+    });
+    return output;
+  }
+}
+
+export class UserResponse extends Response<User> {
+  get_result(): User {
+    return { id: this.result.username, name: this.result.name };
+  }
+}
+
 export class UserRecordsResponse extends Response<UserRecord[]> {
   get_result(): UserRecord[] {
     let output: UserRecord[] = [];
@@ -140,6 +196,18 @@ export class UserRecordsResponse extends Response<UserRecord[]> {
       });
     });
     return output;
+  }
+}
+
+export class RoleResponse extends Response<roles> {
+  get_result(): roles {
+    return roles_mapping[(this.result as number) - 1];
+  }
+}
+
+export class VoidResponse extends Response<void> {
+  get_result(): void {
+    return;
   }
 }
 
