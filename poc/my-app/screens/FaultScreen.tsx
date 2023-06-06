@@ -14,9 +14,9 @@ import Background from "../components/Background";
 import StatusRectangle from "../components/StatusRectangle";
 import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
-import { Fault, Status, Title } from "../types";
+import { Fault, Status, Title, Urgency } from "../types";
 import API from "../API/api_bridge";
-import { hebrew } from "../utils/text_dictionary";
+import { hebrew, urgency_to_hebrew } from "../utils/text_dictionary";
 
 const FaultScreen = ({
   navigation,
@@ -42,7 +42,7 @@ const FaultScreen = ({
       .then((res) => setEditable(false))
       .catch((err) => alert(err));
   };
-
+  console.log("fault screen rendered " + fault.floor_number + " " + fault.name);
   return (
     <Background>
       <KeyboardAvoidingView
@@ -78,16 +78,16 @@ const FaultScreen = ({
           <View style={styles.statusAndLinks}>
             <View style={styles.linksView}>
               <Text style={styles.smallText}>{hebrew.urgency}</Text>
-              <UrgencyButton title={hebrew.urgency}></UrgencyButton>
+              <UrgencyButton title={ urgency_to_hebrew[fault.urgency] }></UrgencyButton>
             </View>
             <View style={styles.linksView}>
               <View>
-                <Text style={styles.smallText}>{hebrew.apartment}</Text>
-                <Text style={styles.smallText}>{fault.apartment_number}</Text>
+                <Text style={styles.smallText}>{hebrew.floor}</Text>
+                <Text style={styles.smallText}>{fault.floor_number}</Text>
               </View>
               <View>
-                <Text style={styles.smallText}>{hebrew.floor}</Text>
-                <Text style={styles.smallText}>{fault.floor}</Text>
+                <Text style={styles.smallText}>{hebrew.apartment}</Text>
+                <Text style={styles.smallText}>{fault.apartment_number}</Text>
               </View>
               <View>
                 <Text style={styles.smallText}>{hebrew.date_of_edit}</Text>
@@ -129,10 +129,19 @@ const FaultScreen = ({
 };
 
 const UrgencyButton = (props: { title: string }) => {
+  let buttonStyle = {};
+  if (props.title === urgency_to_hebrew[1])
+    buttonStyle = styles.lowButton;
+  else if (props.title === urgency_to_hebrew[2])
+    buttonStyle = styles.mediumButton;
+  else if (props.title === urgency_to_hebrew[3])
+    buttonStyle = styles.highButton;
+
   return (
     <TouchableHighlight
-      style={styles.button}
-      onPress={() => alert(hebrew.link_doesnt_exist)}
+      style={[styles.button, buttonStyle]}
+      onPress={() => alert("בקרוב נוסיף פונקציה")}
+    // API.get_instance().set_fault_urgency(getProject().id, fault.id, newUrgency, getUser().id)
     >
       <Text style={styles.smallText}>{props.title}</Text>
     </TouchableHighlight>
@@ -158,6 +167,15 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     marginVertical: "2%",
     flex: 0.5,
+  },
+  highButton: {
+    backgroundColor: "red",
+  },
+  mediumButton: {
+    backgroundColor: "yellow",
+  },
+  lowButton: {
+    backgroundColor: "lightgreen",
   },
   smallText: {
     fontWeight: "bold",

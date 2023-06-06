@@ -1,4 +1,4 @@
-import { Status, Title } from "../types";
+import { Status, Title, Urgency } from "../types";
 import { roles } from "./Permissions";
 
 export var hebrew = {
@@ -8,7 +8,7 @@ export var hebrew = {
   apartments: "עבודות גמר בדירות",
   plans: "תכניות",
   faults: "ליקויי בנייה",
-  add_new_stage: "הוספה",
+  add_new_stage: "הוספת שלב חדש",
   add_new_project_place_holder: "שם הפרויקט",
   add_new_project: "הוספת פרויקט חדש",
   load_from_excel: "טעינה מקובץ אקסל",
@@ -60,6 +60,8 @@ export var hebrew = {
     "נמצא קישור קיים, האם ברצונך להחליף אותו?",
   not_registered: "לא רשומים?",
   registration_successful: "ההרשמה הסתיימה בהצלחה!",
+  add: "הוספה",
+  add_new_fault: "הוספת ליקוי חדש",
   floor_number: "מספר קומה",
   apartment_number: "מספר דירה",
 };
@@ -84,4 +86,10 @@ export var role_to_hebrew = {
   [roles.PROJECT_MANAGER]: "מנהל פרויקט",
   [roles.CONTRACTOR]: "קבלן",
   [roles.UNDEFINED]: "לא מוגדר",
+};
+
+export var urgency_to_hebrew = {
+  [Urgency.LOW]: "לא דחוף",
+  [Urgency.MODERATE]: "בינוני",
+  [Urgency.HIGH]: "דחוף",
 };

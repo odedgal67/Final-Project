@@ -8,6 +8,7 @@ import {
   Project,
   UserRecord,
   User,
+  Urgency,
 } from "../types";
 import { roles } from "../utils/Permissions";
 import {
@@ -227,6 +228,17 @@ export class RealAPI extends api_interface {
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
+  set_fault_urgency(
+    project_id: string,
+    fault_id: string,
+    new_urgency: Urgency,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("set_fault_urgency"),
+      { project_id: project_id, fault_id: fault_id, new_urgency: new_urgency, username: username }
+    );
+  }
   get_role(username: string, project_id: string): Promise<roles> {
     return new PostWrapperRole().send_request(
       this.get_url("get_my_permission"),
@@ -336,9 +348,9 @@ export class RealAPI extends api_interface {
           if (row[0] && (index === -1 || Math.floor(row[0]) !== index)) {
             console.log("adding stage");
             index = row[0];
-            await this.add_stage(project_id, title, row[1], username).then((stage: Stage) =>{stage_id = stage.id}).catch((error: string) =>{return reject(error);});
+            await this.add_stage(project_id, title, row[1], username).then((stage: Stage) =>{stage_id = stage.id}).catch((error: string) =>{reject(error);});
           } else {
-            await this.add_mission(project_id, stage_id, title, row[1], username).then((mission: Mission) =>{mission_id = mission.id;}).catch((error: string) =>{return reject(error);});
+            await this.add_mission(project_id, stage_id, title, row[1], username).then((mission: Mission) =>{mission_id = mission.id;}).catch((error: string) =>{reject(error);});
             if (row[2]) {
               this.edit_comment_in_mission(project_id, title, stage_id, mission_id, row[2], username).catch((error: string) =>{reject(error);});
             }
@@ -354,8 +366,14 @@ export class RealAPI extends api_interface {
       handleSheet("פיתוח וכללי לבניין", Title.GeneralStages); 
 
       let rows = data["ליקויי בניה"];
-      for (const row of rows.slice(1))
-        this.add_fault(project_id, row[4], row[5], row[1], username);
+      let fault_id = "";
+      for (const row of rows.slice(1)) {
+        this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
+        // if(row[2] == "בוצע")
+        //   this.set_fault_status(project_id, fault_id, Status.Done, username);
+        // if(row[3])
+        //   this.edit_fault_urgency(project_id, fault_id, row[3], username);
+      }
 
       // rows = data["תכניות"];
       // for (const row of rows.slice(1))

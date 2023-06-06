@@ -53,6 +53,12 @@ export enum Title /*same as backend*/ {
   BuildingFaults = 4,
 }
 
+export enum Urgency /*same as backend*/ {
+  LOW = 1,
+  MODERATE = 2,
+  HIGH = 3,
+}
+
 export type Project = {
   id: string;
   name: string;
@@ -102,8 +108,8 @@ export type Plan = {
 };
 
 export type Fault = {
-  urgency: string;
-  floor: number;
+  urgency: Urgency;
+  floor_number: number;
   apartment_number: number;
   date: Date;
   photo: number;

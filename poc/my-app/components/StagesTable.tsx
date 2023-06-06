@@ -96,7 +96,7 @@ const StagesTable = (props: {
         )}
         <View style={{ flex: 1, flexDirection: "row" }}>
           <StageButton
-            stageName={hebrew.add_new_stage}
+            stageName={hebrew.add}
             onClick={() => setModalVisible(true)}
           />
           <Modal
@@ -126,7 +126,7 @@ const StagesTable = (props: {
                   paddingVertical: "2%",
                 }}
               >
-                <Text style={styles.rename_text}>{hebrew.add_new_stage}</Text>
+                <Text style={styles.rename_text}>{hebrew.add}</Text>
                 <TextInput
                   maxLength={25}
                   numberOfLines={1}

@@ -9,6 +9,7 @@ import {
   Fault,
   User,
   UserRecord,
+  Urgency,
 } from "../types";
 import { Linking } from "react-native";
 
@@ -93,6 +94,12 @@ abstract class api_interface {
     project_id: string,
     fault_id: string,
     new_status: Status,
+    username: string
+  ): Promise<void>;
+  abstract set_fault_urgency(
+    project_id: string,
+    fault_id: string,
+    new_urgency: Urgency,
     username: string
   ): Promise<void>;
   abstract get_role(username: string, project_id: string): Promise<roles>;

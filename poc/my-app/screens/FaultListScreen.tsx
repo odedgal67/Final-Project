@@ -1,5 +1,5 @@
 import * as React from "react";
-import StagesTable from "../components/StagesTable";
+import FaultsTable from "../components/FaultsTable";
 import Background from "../components/Background";
 import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
@@ -29,8 +29,8 @@ const FaultListScreen = ({
   return (
     <Background>
       {faults && (
-        <StagesTable
-          stages={faults}
+        <FaultsTable
+          faults={faults}
           allow_change_status={true}
           ButtonHandler={(_fault_name: String, fault_id: string) => {
             return () =>
@@ -39,14 +39,14 @@ const FaultListScreen = ({
                 title: route.params.title,
               });
           }}
-          addStagehandler={(getter: () => string, modal_visibility_setter) => {
+          addFaulthandler={(getter: () => { name: string; floor: number; apartment: number }, modal_visibility_setter) => {
             return () => {
               API.get_instance()
                 .add_fault(
                   getProject().id,
-                  0,
-                  0,
-                  getter(),
+                  getter().floor,
+                  getter().apartment,
+                  getter().name,
                   getUser().id
                 )
                 .then((_fault_id) => {
