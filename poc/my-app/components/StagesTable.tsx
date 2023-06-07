@@ -8,10 +8,11 @@ import {
   Text,
   TextInput,
 } from "react-native";
-import StageButton from "./StageButton";
 import StatusRectangle from "./StatusRectangle";
 import { ListedStatusItem, Stage, Status } from "../types";
 import { hebrew } from "../utils/text_dictionary";
+import { StageButtonBase } from "./StageButton";
+import GetTextModal from "./GetTextModal";
 
 function getRows(
   stageNames: String[],
@@ -35,7 +36,7 @@ function getRows(
           borderRadius: 10,
         }}
       >
-        <StageButton
+        <StageButtonBase
           stageName={stageNames[i]}
           onClick={ButtonHandler(stageNames[i], stageIDs[i])}
         />
@@ -97,60 +98,22 @@ const StagesTable = (props: {
         </ScrollView>
       </View>
       <View style={{ flex: 1 }}>
-        <StageButton
+        <StageButtonBase
           stageName={hebrew.add_new_stage}
           onClick={() => setModalVisible(true)}
           backgroundColor="rgb(46, 107, 94)"
         />
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
+        <GetTextModal visible={modalVisible} boxTitle={hebrew.add_new_stage} onRequestClose={() => {
             setModalVisible(false);
             set_stage_name("");
           }}
-        >
-          <View
-            style={{
-              backgroundColor: "rgba(0,0,0,0.3)",
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              alignContent: "center",
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: "white",
-                borderRadius: 5,
-                opacity: 1,
-                width: "75%",
-              }}
-            >
-              <Text style={styles.rename_text}>{hebrew.add_new_stage}</Text>
-              <TextInput
-                maxLength={25}
-                numberOfLines={1}
-                style={styles.text_input}
-                placeholder="שם"
-                placeholderTextColor={"black"}
-                textAlign="center"
-                onChangeText={(stage_name: string) =>
-                  set_stage_name(stage_name)
-                }
-              />
-              <TouchableOpacity
-                style={styles.accept_name_change_button}
-                onPress={props.addStagehandler(() => {
-                  return new_stage_name;
-                }, setModalVisible)}
-              >
-                <Text style={styles.rename_text_white}>אישור</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+          onChangeText={(stage_name: string) =>
+            set_stage_name(stage_name)
+          }
+          onAccept={props.addStagehandler(() => {
+            return new_stage_name;
+          }, setModalVisible)}
+          />
       </View>
     </View>
   );

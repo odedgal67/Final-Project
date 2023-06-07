@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TouchableHighlight, StyleSheet } from "react-native";
 
-const StageButton = (props: {
+export const StageButtonBase = (props: {
   stageName: String;
   onClick: () => void;
   backgroundColor?: string;
@@ -32,4 +32,14 @@ const StageButton = (props: {
   );
 };
 
-export default StageButton;
+type StageButtonProps = {
+  stageName: String;
+  onClick: () => void;
+  backgroundColor?: string;
+  onDelete: ()=> void;
+  onEditName: (newname: string) => void;
+}
+
+export const StageButton = (props: StageButtonProps) =>{
+
+}
