@@ -23,12 +23,6 @@ const MyStack = () => {
   LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
   LogBox.ignoreAllLogs(); //Ignore all log notifications
   const { getUser, setUser } = React.useContext(UserContext);
-  API.get_instance()
-    .login("123456789", "Password")
-    .then((user) => {
-      // TODO: REMOVE THIS WHEN WE HAVE LOGIN SCREEN
-      setUser(user);
-    });
   return (
     <UserContextProvider>
       <NavigationContainer>
@@ -46,13 +40,28 @@ const MyStack = () => {
         >
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="ProjectsScreen" component={ProjectsScreen} />
-          <Stack.Screen name="ProjectPropertiesScreen" component={ProjectPropertiesScreen} />
-          <Stack.Screen name="ManageUsersScreen" component={ManageUsersScreen} />
-          <Stack.Screen name="GeneralStagesScreen" component={GeneralStagesScreen} />
+          <Stack.Screen
+            name="ProjectPropertiesScreen"
+            component={ProjectPropertiesScreen}
+          />
+          <Stack.Screen
+            name="ManageUsersScreen"
+            component={ManageUsersScreen}
+          />
+          <Stack.Screen
+            name="GeneralStagesScreen"
+            component={GeneralStagesScreen}
+          />
           <Stack.Screen name="MissionScreen" component={MissionScreen} />
-          <Stack.Screen name="MissionListsScreen" component={MissionListsScreen} />
+          <Stack.Screen
+            name="MissionListsScreen"
+            component={MissionListsScreen}
+          />
           <Stack.Screen name="LevelsScreen" component={LevelsScreen} />
-          <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
+          <Stack.Screen
+            name="RegistrationScreen"
+            component={RegistrationScreen}
+          />
           <Stack.Screen name="FaultScreen" component={FaultScreen} />
           <Stack.Screen name="FaultListScreen" component={FaultListScreen} />
           <Stack.Screen name="PlansScreen" component={PlansScreen} />

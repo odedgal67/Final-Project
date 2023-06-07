@@ -23,6 +23,7 @@ import {
   PlanPdfMissionLink,
   TekkenPdfMissionLink,
 } from "../components/MissionLinks/PdfLink";
+import { truncate_with_dots } from "../utils/stringFunctions";
 
 const MissionScreen = ({
   navigation,
@@ -36,10 +37,7 @@ const MissionScreen = ({
   const [status, setStatus] = React.useState(route.params.mission.status);
   const [isEditable, setEditable] = React.useState(false);
   let mission: Mission = route.params.mission;
-  let _mission_name =
-    mission.name.length > 25
-      ? mission.name.substring(0, 15) + "..."
-      : mission.name;
+  let _mission_name = truncate_with_dots(mission.name, 25);
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: _mission_name });
   }, [navigation]);
