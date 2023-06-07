@@ -11,22 +11,22 @@ import {
 import StatusRectangle from "./StatusRectangle";
 import { ListedStatusItem, Stage, Status } from "../types";
 import { hebrew } from "../utils/text_dictionary";
-import { StageButtonBase } from "./StageButton";
+import { StageButton, StageButtonBase } from "./StageTableUtils/StageButton";
 import GetTextModal from "./GetTextModal";
 
 function getRows(
-  stageNames: String[],
-  stageStatuses: Status[],
-  stageIDs: number[],
-  ButtonHandler: (stage_name: String, stage_id: number) => () => void,
+  stages: ListedStatusItem[],
+  ButtonHandler: (stage_name: string, stage_id: string) => () => void,
   allow_change_status: boolean,
-  onChangeStatus?: (stage_id: number) => (new_status: Status) => void
+  onDelete: (stage_id: string) => () => Promise<void>,
+  onEditName: (stage_id: string) => (newname: string) => Promise<void>,
+  onChangeStatus?: (stage_id: string) => (new_status: Status) => void
 ) {
   let rows = [];
-  for (let i = 0; i < stageNames.length; i++) {
+  for (let i = 0; i < stages.length; i++) {
     rows.push(
       <View
-        key={i}
+        key={stages[i].id}
         style={{
           flexDirection: "row",
           backgroundColor: "#121e26",
@@ -36,17 +36,19 @@ function getRows(
           borderRadius: 10,
         }}
       >
-        <StageButtonBase
-          stageName={stageNames[i]}
-          onClick={ButtonHandler(stageNames[i], stageIDs[i])}
+        <StageButton
+          stageName={stages[i].name}
+          onClick={ButtonHandler(stages[i].name, stages[i].id)}
+          onDelete={onDelete(stages[i].id)}
+          onEditName={onEditName(stages[i].id)}
         />
         <StatusRectangle
-          status={stageStatuses[i]}
+          status={stages[i].status}
           borderRad={5}
           height={undefined}
           width={undefined}
           activated={allow_change_status}
-          onChange={onChangeStatus ? onChangeStatus(stageIDs[i]) : () => {}}
+          onChange={onChangeStatus ? onChangeStatus(stages[i].id) : () => {}}
           border={false}
         />
       </View>
@@ -57,25 +59,18 @@ function getRows(
 
 const StagesTable = (props: {
   stages: ListedStatusItem[];
-  ButtonHandler: (stage: String, id: number) => any;
+  ButtonHandler: (stage: string, id: string) => any;
   addStagehandler: (
     getter: () => string,
     modal_visibility_setter: (vis: boolean) => void
   ) => () => void;
   allow_change_status: boolean;
+  onDelete: (stage_id: string) => () => Promise<void>;
+  onEditName: (stage_id: string) => (newname: string) => Promise<void>;
   onChangeStatus?: (stage_id: string) => (new_status: Status) => void;
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_stage_name, set_stage_name] = React.useState("");
-  let stagesNames: String[] = props.stages.map(
-    (stage: ListedStatusItem) => stage.name
-  );
-  let stageIDs: string[] = props.stages.map(
-    (stage: ListedStatusItem) => stage.id
-  );
-  let stagesStatuses: Status[] = props.stages.map(
-    (stage: ListedStatusItem) => stage.status
-  );
   return (
     <View style={{ flex: 1, backgroundColor: "#c2c0b2" }}>
       <View style={{ flex: 9.3 }}>
@@ -87,11 +82,11 @@ const StagesTable = (props: {
             }}
           >
             {getRows(
-              stagesNames,
-              stagesStatuses,
-              stageIDs,
+              props.stages,
               props.ButtonHandler,
               props.allow_change_status,
+              props.onDelete,
+              props.onEditName,
               props.onChangeStatus
             )}
           </View>
@@ -103,17 +98,18 @@ const StagesTable = (props: {
           onClick={() => setModalVisible(true)}
           backgroundColor="rgb(46, 107, 94)"
         />
-        <GetTextModal visible={modalVisible} boxTitle={hebrew.add_new_stage} onRequestClose={() => {
+        <GetTextModal
+          visible={modalVisible}
+          boxTitle={hebrew.add_new_stage}
+          onRequestClose={() => {
             setModalVisible(false);
             set_stage_name("");
           }}
-          onChangeText={(stage_name: string) =>
-            set_stage_name(stage_name)
-          }
+          onChangeText={(stage_name: string) => set_stage_name(stage_name)}
           onAccept={props.addStagehandler(() => {
             return new_stage_name;
           }, setModalVisible)}
-          />
+        />
       </View>
     </View>
   );
