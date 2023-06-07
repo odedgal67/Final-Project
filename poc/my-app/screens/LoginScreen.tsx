@@ -7,8 +7,8 @@ import { hebrew } from "../utils/text_dictionary";
 import { UserContext } from "../utils/UserContext";
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [username, setUsername] = React.useState("123456789");
+  const [password, setPassword] = React.useState("Password");
   const { setUser } = React.useContext(UserContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: hebrew.login });
@@ -44,6 +44,7 @@ const LoginScreen = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder={hebrew.id}
+            defaultValue="123456789"
             placeholderTextColor="#B4B4B4"
             value={username}
             onChangeText={setUsername}
@@ -51,6 +52,7 @@ const LoginScreen = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder={hebrew.password}
+            defaultValue="Password"
             secureTextEntry={true}
             placeholderTextColor="#B4B4B4"
             value={password}
