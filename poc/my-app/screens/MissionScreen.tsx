@@ -19,7 +19,10 @@ import API from "../API/api_bridge";
 import { hebrew } from "../utils/text_dictionary";
 import ImageMissionLink from "../components/MissionLinks/ImageMissionLink";
 import PropertiesButton from "../components/PropertiesButton";
-import PdfMissionLink from "../components/MissionLinks/PdfLink";
+import {
+  PlanPdfMissionLink,
+  TekkenPdfMissionLink,
+} from "../components/MissionLinks/PdfLink";
 
 const MissionScreen = ({
   navigation,
@@ -93,13 +96,18 @@ const MissionScreen = ({
           </View>
           <View style={styles.status_and_links}>
             <View style={styles.links_view}>
-              <PdfMissionLink
+              <TekkenPdfMissionLink
                 mission={mission}
                 title={route.params.title}
                 stage_id={route.params.stage.id}
                 link={mission.document_link}
               />
-              <LinkButton title={hebrew.link_to_plan}></LinkButton>
+              <PlanPdfMissionLink
+                mission={mission}
+                title={route.params.title}
+                stage_id={route.params.stage.id}
+                link={mission.plan_link}
+              />
               <ImageMissionLink
                 mission={mission}
                 title={route.params.title}

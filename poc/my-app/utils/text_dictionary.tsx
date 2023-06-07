@@ -62,6 +62,7 @@ export var hebrew = {
   no_document_found: "לא נבחר קובץ",
   error_occurred: "אירעה שגיאה",
   tekken: "מסמך תקן",
+  plan: "תכנית",
 };
 
 export var title_to_hebrew = {

@@ -14,7 +14,7 @@ type PdfMissionLinkProps = {
   link?: string;
 };
 
-const PdfMissionLink = (props: PdfMissionLinkProps) => {
+export const TekkenPdfMissionLink = (props: PdfMissionLinkProps) => {
   const [documentUri, setDocumentUri] = useState<string | undefined>(
     props.mission.document_link
   );
@@ -57,11 +57,59 @@ const PdfMissionLink = (props: PdfMissionLinkProps) => {
 
   return (
     <MissionLinkButtonBase
-      title={hebrew.tekken}
+      title={hebrew.plan}
       link={documentUri}
       notFoundAction={NotFoundAction}
     />
   );
 };
 
-export default PdfMissionLink;
+export const PlanPdfMissionLink = (props: PdfMissionLinkProps) => {
+  const [documentUri, setDocumentUri] = useState<string | undefined>(
+    props.mission.plan_link
+  );
+  const { getProject } = useContext(ProjectContext);
+  const { getUser } = useContext(UserContext);
+
+  let NotFoundAction = async () => {
+    try {
+      const result: DocumentPicker.DocumentResult =
+        await DocumentPicker.getDocumentAsync({
+          type: "application/pdf",
+        });
+      if (result.type === "success" && result.uri) {
+        console.log("document uri: " + result.uri);
+        const documentUri = result.uri;
+        API.get_instance()
+          .update_mission_plan(
+            getProject().id,
+            props.title,
+            props.stage_id,
+            props.mission.id,
+            documentUri,
+            getUser().id
+          )
+          .then((uri) => {
+            setDocumentUri(uri);
+            props.mission.plan_link = uri;
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      } else {
+        alert(hebrew.no_document_found);
+      }
+    } catch (error) {
+      console.log(error);
+      alert(hebrew.error_occurred);
+    }
+  };
+
+  return (
+    <MissionLinkButtonBase
+      title={hebrew.tekken}
+      link={documentUri}
+      notFoundAction={NotFoundAction}
+    />
+  );
+};

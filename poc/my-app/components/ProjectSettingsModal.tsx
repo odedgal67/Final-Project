@@ -72,8 +72,9 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
               {get_project_setting_button({
                 title: hebrew.load_from_excel,
                 onPress: () => {
-                  handleLoadFromExcel(getProject().id, getUser().id);
-                  setModalVisible(false);
+                  handleLoadFromExcel(getProject().id, getUser().id).then(() =>
+                    setModalVisible(false)
+                  );
                 },
               })}
               <TouchableOpacity

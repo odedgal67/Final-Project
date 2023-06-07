@@ -101,6 +101,7 @@ export class MissionResponse extends Response<Mission> {
       status: this.result.status,
       proof_link: this.result.proof,
       document_link: this.result.tekken,
+      plan_link: this.result.plan_link,
     };
     return output;
   }

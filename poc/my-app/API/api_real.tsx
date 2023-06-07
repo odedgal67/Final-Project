@@ -433,4 +433,33 @@ export class RealAPI extends api_interface {
       config
     );
   }
+
+  update_mission_plan(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    local_document_uri: string,
+    username: string
+  ): Promise<string> {
+    const formData = this.create_formData_for_file(
+      local_document_uri,
+      project_id,
+      stage_id,
+      mission_id,
+      username,
+      title,
+      "application"
+    );
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperString().send_request(
+      this.get_url("set_mission_plan_link"),
+      formData,
+      config
+    );
+  }
 }
