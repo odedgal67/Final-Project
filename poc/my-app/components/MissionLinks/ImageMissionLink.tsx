@@ -15,7 +15,9 @@ type ImageMissionLinkProps = {
 };
 
 const ImageMissionLink = (props: ImageMissionLinkProps) => {
-  const [image, setImage] = useState<string | undefined>(props.link);
+  const [image, setImage] = useState<string | undefined>(
+    props.mission.proof_link
+  );
   const { getProject } = useContext(ProjectContext);
   const { getUser } = useContext(UserContext);
   let NotFoundAction = async () => {
@@ -41,6 +43,7 @@ const ImageMissionLink = (props: ImageMissionLinkProps) => {
           )
           .then((uri) => {
             setImage(uri);
+            props.mission.proof_link = uri;
           })
           .catch((error) => {
             alert(error);

@@ -28,7 +28,9 @@ const MissionLinkButtonBase = (props: MissionLinkButtonBaseProps) => {
           : null
       }
     >
-      <Text style={styles.link_button_text}>{props.title}</Text>
+      <Text style={styles.link_button_text}>
+        {props.link ? props.title : hebrew.add_x.replace("${x}", props.title)}
+      </Text>
     </TouchableHighlight>
   );
 };

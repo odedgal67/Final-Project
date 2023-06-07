@@ -22,6 +22,19 @@ interface ProjectSettingsModalProps {
   navigation: any;
 }
 
+interface ProjectSettingButtonProps {
+  title: string;
+  onPress: () => void;
+}
+
+function get_project_setting_button(props: ProjectSettingButtonProps) {
+  return (
+    <TouchableOpacity style={styles.modalButton} onPress={props.onPress}>
+      <Text style={styles.modalButtonText}>{props.title}</Text>
+    </TouchableOpacity>
+  );
+}
+
 const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { getProject } = useContext(ProjectContext);
@@ -49,28 +62,21 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
           <View style={styles.opacityCompletion}></View>
           <Background>
             <View style={styles.modalContainer}>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => {
+              {get_project_setting_button({
+                title: hebrew.manage_users,
+                onPress: () => {
                   setModalVisible(false);
                   props.navigation.navigate("ManageUsersScreen");
-                }}
-              >
-                <Text style={styles.modalButtonText}>
-                  {hebrew.manage_users}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() =>
-                  {handleLoadFromExcel(getProject().id, getUser().id);
-                  setModalVisible(false);
-                  }}
-              >
-                <Text style={styles.modalButtonText}>
-                  {hebrew.load_from_excel}
-                </Text>
-              </TouchableOpacity>
+                },
+              })}
+              {get_project_setting_button({
+                title: hebrew.load_from_excel,
+                onPress: () => {
+                  handleLoadFromExcel(getProject().id, getUser().id).then(() =>
+                    setModalVisible(false)
+                  );
+                },
+              })}
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => {
@@ -95,11 +101,13 @@ const handleLoadFromExcel = async (proj: string, user: string) => {
 
     if (file.type === "success") {
       const excelData = await readExcelFile(file.uri);
-      
+
       if (excelData) {
-        await API.get_instance().load_excel_data(proj, excelData, user).catch((error) => {
-          alert(error);
-        });
+        await API.get_instance()
+          .load_excel_data(proj, excelData, user)
+          .catch((error) => {
+            alert(error);
+          });
       }
     }
   } catch (error) {

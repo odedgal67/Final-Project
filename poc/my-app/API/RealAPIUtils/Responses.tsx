@@ -74,15 +74,10 @@ export class StagesResponse extends Response<Stage[]> {
   get_result(): Stage[] {
     let output: Stage[] = [];
     Object.entries(this.result).forEach(([_key, value]) => {
-      let stage = {
-        name: value.name,
-        id: value.id,
-        status: status_mapping[value.status],
-        completion_date: new Date(),
-      };
-      output.push(stage);
+      let stageResponse = new StageResponse({ result: value });
+      output.push(stageResponse.get_result());
       console.log("stage: ");
-      console.log(stage);
+      console.log(stageResponse.get_result());
     });
     return output;
   }
@@ -105,6 +100,8 @@ export class MissionResponse extends Response<Mission> {
       comment: this.result.comment,
       status: this.result.status,
       proof_link: this.result.proof,
+      document_link: this.result.tekken,
+      plan_link: this.result.plan_link,
     };
     return output;
   }
@@ -114,16 +111,8 @@ export class MissionsResponse extends Response<Mission[]> {
   get_result(): Mission[] {
     let output: Mission[] = [];
     Object.entries(this.result).forEach(([_key, value]) => {
-      output.push({
-        id: value.id,
-        name: value.name,
-        green_building: value.green_building,
-        completion_date: new Date(),
-        completing_user: value.completing_user,
-        comment: value.comment,
-        status: value.status,
-        proof_link: value.proof,
-      });
+      let missionResponse = new MissionResponse({ result: value });
+      output.push(missionResponse.get_result());
     });
     return output;
   }
