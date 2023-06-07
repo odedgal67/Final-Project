@@ -5,9 +5,9 @@ import { roles } from "./Permissions";
 
 // Declaring the state object globally.
 const UserState = {
-  user: { name: "Liron", id: "123456789" }, // TODO REMOVE THIS WHEN WE HAVE LOGIN SCREEN
+  user: { name: "guest", id: "-1" },
   api_answer: 0,
-  role: roles.CONTRACTOR,
+  role: roles.UNDEFINED,
 };
 
 const UserContextWrapper = (component?: React.Component) => ({

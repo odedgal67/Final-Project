@@ -5,6 +5,10 @@ export function truncate_with_dots(str: string, len: number): string {
   return str;
 }
 
+export function truncate_page_title(str: string): string {
+  return truncate_with_dots(str, 28);
+}
+
 //thank you chatgpt for the following:
 export function generateRandomString(length: number): string {
   const characters =
