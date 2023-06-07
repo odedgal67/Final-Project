@@ -7,6 +7,7 @@ import { Stage, Project, Title, Status } from "../types";
 import API from "../API/api_bridge";
 import { UserContext } from "../utils/UserContext";
 import { title_to_hebrew } from "../utils/text_dictionary";
+import { truncate_page_title } from "../utils/stringFunctions";
 
 const GeneralStagesScreen = ({
   navigation,
@@ -25,7 +26,7 @@ const GeneralStagesScreen = ({
       .catch((err) => alert(err));
     setProject(route.params.project);
     navigation.setOptions({
-      title: getProject().name + " > " + title_to_hebrew[route.params.title],
+      title: truncate_page_title(title_to_hebrew[route.params.title]),
     });
   }, []);
   return (

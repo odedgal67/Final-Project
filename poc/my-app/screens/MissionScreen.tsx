@@ -9,6 +9,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 import Background from "../components/Background";
 import StatusRectangle from "../components/StatusRectangle";
@@ -36,6 +37,7 @@ const MissionScreen = ({
   const { getUser, notify } = React.useContext(UserContext);
   const [status, setStatus] = React.useState(route.params.mission.status);
   const [isEditable, setEditable] = React.useState(false);
+  const [TextChanged, setTextChanged] = React.useState(false);
   let mission: Mission = route.params.mission;
   let _mission_name = truncate_with_dots(mission.name, 25);
   React.useLayoutEffect(() => {
@@ -55,6 +57,8 @@ const MissionScreen = ({
       .then(() => {
         alert(hebrew.saved_changes_successfully);
         setEditable(false);
+        setTextChanged(false);
+        mission.comment = comment;
       })
       .catch((err) => alert(err));
   };
@@ -82,13 +86,22 @@ const MissionScreen = ({
                 <TextInput
                   style={styles.description_text}
                   value={comment}
-                  onChangeText={(comm) =>
-                    comm.length < 250 ? setComment(comm) : null
-                  }
+                  onChangeText={(comm) => {
+                    setComment(comm);
+                    setTextChanged(true);
+                  }}
                   multiline={true}
                   editable={isEditable}
                   onSubmitEditing={onSubmitEdit}
-                ></TextInput>
+                />
+                {TextChanged ? (
+                  <Button
+                    disabled={false}
+                    title={hebrew.save_changes}
+                    color={"#646464"}
+                    onPress={onSubmitEdit}
+                  />
+                ) : null}
               </View>
             </TouchableNativeFeedback>
           </View>
@@ -151,17 +164,6 @@ const MissionScreen = ({
   );
 };
 
-const LinkButton = (props: { title: string }) => {
-  return (
-    <TouchableHighlight
-      style={styles.button}
-      onPress={() => alert(hebrew.link_doesnt_exist)}
-    >
-      <Text style={styles.link_button_text}>{props.title}</Text>
-    </TouchableHighlight>
-  );
-};
-
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
@@ -182,12 +184,6 @@ const styles = StyleSheet.create({
     marginVertical: "2%",
     marginHorizontal: 1,
     flex: 1,
-  },
-  link_button_text: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: "white",
-    marginVertical: "10%",
   },
   title_view_style: {
     alignItems: "center",

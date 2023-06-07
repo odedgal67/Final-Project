@@ -77,7 +77,7 @@ const StagesTable = (props: {
   );
   return (
     <View style={{ flex: 1, backgroundColor: "#c2c0b2" }}>
-      <View style={{ flex: 8.5 }}>
+      <View style={{ flex: 9.3 }}>
         <ScrollView>
           <View
             style={{
@@ -100,7 +100,7 @@ const StagesTable = (props: {
         <StageButton
           stageName={hebrew.add_new_stage}
           onClick={() => setModalVisible(true)}
-          backgroundColor="#649494"
+          backgroundColor="rgb(46, 107, 94)"
         />
         <Modal
           animationType="fade"

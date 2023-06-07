@@ -65,6 +65,7 @@ export var hebrew = {
   error_occurred: "אירעה שגיאה",
   tekken: "מסמך תקן",
   plan: "תכנית",
+  save_changes: "שמירת שינויים",
 };
 
 export var title_to_hebrew = {

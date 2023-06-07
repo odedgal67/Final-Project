@@ -13,6 +13,7 @@ import API from "../API/api_bridge";
 import { UserContext } from "../utils/UserContext";
 import ProjectSettingsModal from "../components/ProjectSettingsModal";
 import { actions, hasPermission } from "../utils/Permissions";
+import { truncate_page_title } from "../utils/stringFunctions";
 
 const ProjectPropertiesScreen = ({
   navigation,
@@ -26,7 +27,7 @@ const ProjectPropertiesScreen = ({
     React.useContext(ProjectContext);
   React.useEffect(() => {}, []);
   React.useLayoutEffect(() => {
-    navigation.setOptions({ title: projectName });
+    navigation.setOptions({ title: truncate_page_title(projectName) });
   }, [navigation]);
   function getButton(ButtonProps: {
     propertyName: string;
