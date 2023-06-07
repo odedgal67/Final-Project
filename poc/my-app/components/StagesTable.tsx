@@ -25,33 +25,35 @@ function getRows(
   let rows = [];
   for (let i = 0; i < stages.length; i++) {
     rows.push(
-      <View
-        key={stages[i].id}
-        style={{
-          flexDirection: "row",
-          backgroundColor: "#121e26",
-          marginVertical: 4.5,
-          marginHorizontal: 10,
-          elevation: 5,
-          borderRadius: 10,
-        }}
-      >
-        <StageButton
-          stageName={stages[i].name}
-          onClick={ButtonHandler(stages[i].name, stages[i].id)}
-          onDelete={onDelete(stages[i].id)}
-          onEditName={onEditName(stages[i].id)}
-        />
-        <StatusRectangle
-          status={stages[i].status}
-          borderRad={5}
-          height={undefined}
-          width={undefined}
-          activated={allow_change_status}
-          onChange={onChangeStatus ? onChangeStatus(stages[i].id) : () => {}}
-          border={false}
-        />
-      </View>
+      stages[i] && (
+        <View
+          key={stages[i].id}
+          style={{
+            flexDirection: "row",
+            backgroundColor: "#121e26",
+            marginVertical: 4.5,
+            marginHorizontal: 10,
+            elevation: 5,
+            borderRadius: 10,
+          }}
+        >
+          <StageButton
+            stage={stages[i]}
+            onClick={ButtonHandler(stages[i].name, stages[i].id)}
+            onDelete={onDelete(stages[i].id)}
+            onEditName={onEditName(stages[i].id)}
+          />
+          <StatusRectangle
+            status={stages[i].status}
+            borderRad={5}
+            height={undefined}
+            width={undefined}
+            activated={allow_change_status}
+            onChange={onChangeStatus ? onChangeStatus(stages[i].id) : () => {}}
+            border={false}
+          />
+        </View>
+      )
     );
   }
   return rows;
@@ -94,7 +96,11 @@ const StagesTable = (props: {
       </View>
       <View style={{ flex: 1 }}>
         <StageButtonBase
-          stageName={hebrew.add_new_stage}
+          stage={{
+            name: hebrew.add_new_stage,
+            id: "",
+            status: Status.Undefined,
+          }}
           onClick={() => setModalVisible(true)}
           backgroundColor="rgb(46, 107, 94)"
         />

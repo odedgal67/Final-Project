@@ -11,9 +11,10 @@ import ClickableIcon from "./ClickableIcon";
 import GetTextModal from "../GetTextModal";
 import { hebrew } from "../../utils/text_dictionary";
 import ConfirmDialogue from "../ConfirmDialogue";
+import { ListedStatusItem, Stage } from "../../types";
 
 type BaseProps = {
-  stageName: string;
+  stage: ListedStatusItem;
   onClick: () => void;
   backgroundColor?: string;
 };
@@ -53,7 +54,7 @@ export const StageButtonBase = (props: StageButtonbaseProps) => {
       onPress={props.onClick}
       onLongPress={props.onLongClick}
     >
-      <Text style={styles.text}>{props.stageName}</Text>
+      <Text style={styles.text}>{props.stage.name}</Text>
     </TouchableHighlight>
   );
 };
@@ -96,7 +97,6 @@ export const StageButton = (props: StageButtonProps) => {
   const [isEditable, setIsEditable] = React.useState(false);
   const [editNameModalVisibility, setEditNameModalVisibility] =
     React.useState(false);
-  const [stageName, setStageName] = React.useState(props.stageName);
   const [newStageName, setNewStageName] = React.useState("");
   return isEditable ? (
     <>
@@ -128,7 +128,7 @@ export const StageButton = (props: StageButtonProps) => {
               title: "",
               message: hebrew.are_you_sure_you_want_to_delete_x.replace(
                 "${x}",
-                stageName
+                props.stage.name
               ),
               onConfirm: () =>
                 props
@@ -158,13 +158,13 @@ export const StageButton = (props: StageButtonProps) => {
         }}
         boxTitle={hebrew.change_name_for_projectName.replace(
           "${projectName}",
-          stageName
+          props.stage.name
         )}
       />
     </>
   ) : (
     <StageButtonBase
-      stageName={stageName}
+      stage={props.stage}
       onClick={props.onClick}
       onLongClick={() => setIsEditable(true)}
       backgroundColor={props.backgroundColor}
