@@ -11,6 +11,7 @@ import FaultScreen from "./screens/FaultScreen";
 import FaultListScreen from "./screens/FaultListScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
 import PlansScreen from "./screens/PlansScreen";
+import LoginScreen from "./screens/LoginScreen";
 import { UserContext, UserContextProvider } from "./utils/UserContext";
 import { LogBox } from "react-native";
 import Crane from "./components/Crane";
@@ -43,43 +44,17 @@ const MyStack = () => {
               }),
           }}
         >
-          <Stack.Screen name="projects" component={ProjectsScreen} />
-          <Stack.Screen
-            name="projectProperties"
-            component={ProjectPropertiesScreen}
-          />
-          <Stack.Screen
-            name="ManageUsersScreen"
-            component={ManageUsersScreen}
-          />
-          <Stack.Screen
-            name="GeneralStagesScreen"
-            component={GeneralStagesScreen}
-          />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="ProjectsScreen" component={ProjectsScreen} />
+          <Stack.Screen name="ProjectPropertiesScreen" component={ProjectPropertiesScreen} />
+          <Stack.Screen name="ManageUsersScreen" component={ManageUsersScreen} />
+          <Stack.Screen name="GeneralStagesScreen" component={GeneralStagesScreen} />
           <Stack.Screen name="MissionScreen" component={MissionScreen} />
-          <Stack.Screen
-            name="MissionListsScreen"
-            component={MissionListsScreen}
-          />
+          <Stack.Screen name="MissionListsScreen" component={MissionListsScreen} />
           <Stack.Screen name="LevelsScreen" component={LevelsScreen} />
-          <Stack.Screen
-            name="RegistrationScreen"
-            component={RegistrationScreen}
-          />
-          <Stack.Screen
-            name="FaultScreen"
-            component={FaultScreen}
-            options={{
-              title: "ליקוי",
-            }}
-          />
-          <Stack.Screen
-            name="FaultListScreen"
-            component={FaultListScreen}
-            options={{
-              title: "ליקויי בנייה",
-            }}
-          />
+          <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
+          <Stack.Screen name="FaultScreen" component={FaultScreen} />
+          <Stack.Screen name="FaultListScreen" component={FaultListScreen} />
           <Stack.Screen name="PlansScreen" component={PlansScreen} />
         </Stack.Navigator>
       </NavigationContainer>

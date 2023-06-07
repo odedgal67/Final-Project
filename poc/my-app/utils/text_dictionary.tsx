@@ -58,6 +58,8 @@ export var hebrew = {
   please_aprove_camera_permissions: "אנא אשרו הרשאות למצלמה",
   link_was_found_would_you_like_to_change_it:
     "נמצא קישור קיים, האם ברצונך להחליף אותו?",
+  not_registered: "לא רשומים?",
+  registration_successful: "ההרשמה הסתיימה בהצלחה!",
   add_x: "הוספת ${x}",
   no_document_found: "לא נבחר קובץ",
   error_occurred: "אירעה שגיאה",
