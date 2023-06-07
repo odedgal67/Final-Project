@@ -45,7 +45,6 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
         style={styles.button}
         onPress={() => {
           setModalVisible(true);
-          console.log("clicked projectsettings");
         }}
       >
         <Text style={styles.text}>{hebrew.projectSettings}</Text>

@@ -57,7 +57,7 @@ const GeneralStagesScreen = ({
                 .catch((err) => alert(err));
             };
           }}
-          ButtonHandler={(stage_name: String, stage_id: number) => {
+          ButtonHandler={(stage_name: string, stage_id: string) => {
             return () =>
               navigation.navigate("MissionListsScreen", {
                 stage: stages.find((stage: any) => stage.id == stage_id),
@@ -92,6 +92,43 @@ const GeneralStagesScreen = ({
                 .catch((err) => alert(err));
             };
           }}
+          onDelete={(stage_id: string) => () =>
+            new Promise((resolve, _reject) => {
+              API.get_instance()
+                .remove_stage(
+                  getProject().id,
+                  route.params.title,
+                  stage_id,
+                  getUser().id
+                )
+                .then((removedStage: Stage) => {
+                  setStages((currStages) =>
+                    currStages.filter((stage) => stage.id != removedStage.id)
+                  );
+                })
+                .then(() => resolve())
+                .catch((err) => alert(err));
+            })}
+          onEditName={(stage_id: string) => (newname: string) =>
+            new Promise((resolve, reject) => {
+              API.get_instance()
+                .edit_stage_name(
+                  getProject().id,
+                  route.params.title,
+                  stage_id,
+                  newname,
+                  getUser().id
+                )
+                .then(() =>
+                  setStages((currStages) =>
+                    currStages.map((stage) =>
+                      stage.id == stage_id ? { ...stage, name: newname } : stage
+                    )
+                  )
+                )
+                .catch((err) => alert(err))
+                .then(() => resolve());
+            })}
         />
       )}
     </Background>

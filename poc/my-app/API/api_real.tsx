@@ -462,4 +462,78 @@ export class RealAPI extends api_interface {
       config
     );
   }
+  remove_stage(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<Stage> {
+    return new PostWrapperStage().send_request(this.get_url("remove_stage"), {
+      project_id: project_id,
+      title_id: title,
+      stage_id: stage_id,
+      username: username,
+      apartment_number: apartment_number,
+    });
+  }
+  remove_mission(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<Mission> {
+    return new PostWrapperMission().send_request(
+      this.get_url("remove_mission"),
+      {
+        project_id: project_id,
+        title_id: title,
+        stage_id: stage_id,
+        mission_id: mission_id,
+        username: username,
+        apartment_number: apartment_number,
+      }
+    );
+  }
+  edit_stage_name(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    new_stage_name: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(this.get_url("edit_stage_name"), {
+      project_id: project_id,
+      title_id: title,
+      stage_id: stage_id,
+      new_stage_name: new_stage_name,
+      username: username,
+      apartment_number: apartment_number,
+    });
+  }
+  edit_mission_name(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    new_mission_name: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_mission_name"),
+      {
+        project_id: project_id,
+        title_id: title,
+        stage_id: stage_id,
+        mission_id: mission_id,
+        new_mission_name: new_mission_name,
+        username: username,
+        apartment_number: apartment_number,
+      }
+    );
+  }
 }

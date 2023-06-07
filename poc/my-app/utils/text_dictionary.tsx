@@ -66,6 +66,8 @@ export var hebrew = {
   tekken: "מסמך תקן",
   plan: "תכנית",
   save_changes: "שמירת שינויים",
+  are_you_sure_you_want_to_delete_x:
+    "האם אתה בטוח שברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
 };
 
 export var title_to_hebrew = {
