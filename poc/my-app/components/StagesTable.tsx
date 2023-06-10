@@ -8,47 +8,52 @@ import {
   Text,
   TextInput,
 } from "react-native";
-import StageButton from "./StageButton";
 import StatusRectangle from "./StatusRectangle";
 import { ListedStatusItem, Stage, Status } from "../types";
 import { hebrew } from "../utils/text_dictionary";
+import { StageButton, StageButtonBase } from "./StageTableUtils/StageButton";
+import GetTextModal from "./GetTextModal";
 
 function getRows(
-  stageNames: string[],
-  stageStatuses: Status[],
-  stageIDs: string[],
-  ButtonHandler: (stage_name: String, stage_id: string) => () => void,
+  stages: ListedStatusItem[],
+  ButtonHandler: (stage_name: string, stage_id: string) => () => void,
   allow_change_status: boolean,
+  onDelete: (stage_id: string) => () => Promise<void>,
+  onEditName: (stage_id: string) => (newname: string) => Promise<void>,
   onChangeStatus?: (stage_id: string) => (new_status: Status) => void
 ) {
   let rows = [];
-  for (let i = 0; i < stageNames.length; i++) {
+  for (let i = 0; i < stages.length; i++) {
     rows.push(
-      <View
-        key={i}
-        style={{
-          flexDirection: "row",
-          backgroundColor: "#121e26",
-          marginVertical: 4.5,
-          marginHorizontal: 10,
-          elevation: 5,
-          borderRadius: 10,
-        }}
-      >
-        <StageButton
-          stageName={stageNames[i]}
-          onClick={ButtonHandler(stageNames[i], stageIDs[i])}
-        />
-        <StatusRectangle
-          status={stageStatuses[i]}
-          borderRad={5}
-          height={undefined}
-          width={undefined}
-          activated={allow_change_status}
-          onChange={onChangeStatus ? onChangeStatus(stageIDs[i]) : () => {}}
-          border={false}
-        />
-      </View>
+      stages[i] && (
+        <View
+          key={stages[i].id}
+          style={{
+            flexDirection: "row",
+            backgroundColor: "#121e26",
+            marginVertical: 4.5,
+            marginHorizontal: 10,
+            elevation: 5,
+            borderRadius: 10,
+          }}
+        >
+          <StageButton
+            stage={stages[i]}
+            onClick={ButtonHandler(stages[i].name, stages[i].id)}
+            onDelete={onDelete(stages[i].id)}
+            onEditName={onEditName(stages[i].id)}
+          />
+          <StatusRectangle
+            status={stages[i].status}
+            borderRad={5}
+            height={undefined}
+            width={undefined}
+            activated={allow_change_status}
+            onChange={onChangeStatus ? onChangeStatus(stages[i].id) : () => {}}
+            border={false}
+          />
+        </View>
+      )
     );
   }
   return rows;
@@ -56,102 +61,63 @@ function getRows(
 
 const StagesTable = (props: {
   stages: ListedStatusItem[];
-  ButtonHandler: (stage: String, id: string) => any;
+  ButtonHandler: (stage: string, id: string) => any;
   addStagehandler: (
     getter: () => string,
     modal_visibility_setter: (vis: boolean) => void
   ) => () => void;
   allow_change_status: boolean;
+  onDelete: (stage_id: string) => () => Promise<void>;
+  onEditName: (stage_id: string) => (newname: string) => Promise<void>;
   onChangeStatus?: (stage_id: string) => (new_status: Status) => void;
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [new_stage_name, set_stage_name] = React.useState("");
-  let stagesNames: string[] = props.stages.map(
-    (stage: ListedStatusItem) => stage.name
-  );
-  let stageIDs: string[] = props.stages.map(
-    (stage: ListedStatusItem) => stage.id
-  );
-  let stagesStatuses: Status[] = props.stages.map(
-    (stage: ListedStatusItem) => stage.status
-  );
   return (
-    <ScrollView>
-      <View
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#c2c0b2",
-          flex: 1,
-        }}
-      >
-        {getRows(
-          stagesNames,
-          stagesStatuses,
-          stageIDs,
-          props.ButtonHandler,
-          props.allow_change_status,
-          props.onChangeStatus
-        )}
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <StageButton
-            stageName={hebrew.add}
-            onClick={() => setModalVisible(true)}
-          />
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(false);
-              set_stage_name("");
+    <View style={{ flex: 1, backgroundColor: "#c2c0b2" }}>
+      <View style={{ flex: 9.3 }}>
+        <ScrollView>
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <View
-              style={{
-                backgroundColor: "rgba(0,0,0,0.3)",
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                alignContent: "center",
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: 5,
-                  opacity: 1,
-                  width: "75%",
-                  paddingVertical: "2%",
-                }}
-              >
-                <Text style={styles.rename_text}>{hebrew.add}</Text>
-                <TextInput
-                  maxLength={25}
-                  numberOfLines={1}
-                  style={styles.text_input}
-                  placeholder={hebrew.name}
-                  placeholderTextColor={"black"}
-                  textAlign="center"
-                  onChangeText={(stage_name: string) =>
-                    set_stage_name(stage_name)
-                  }
-                />
-                <TouchableOpacity
-                  style={styles.accept_name_change_button}
-                  onPress={props.addStagehandler(() => {
-                    return new_stage_name;
-                  }, setModalVisible)}
-                >
-                  <Text style={styles.rename_text_white}>{hebrew.accept}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </View>
+            {getRows(
+              props.stages,
+              props.ButtonHandler,
+              props.allow_change_status,
+              props.onDelete,
+              props.onEditName,
+              props.onChangeStatus
+            )}
+          </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+      <View style={{ flex: 1 }}>
+        <StageButtonBase
+          stage={{
+            name: hebrew.add_new_stage,
+            id: "",
+            status: Status.Undefined,
+          }}
+          onClick={() => setModalVisible(true)}
+          backgroundColor="rgb(46, 107, 94)"
+        />
+        <GetTextModal
+          visible={modalVisible}
+          boxTitle={hebrew.add_new_stage}
+          onRequestClose={() => {
+            setModalVisible(false);
+            set_stage_name("");
+          }}
+          onChangeText={(stage_name: string) => set_stage_name(stage_name)}
+          onAccept={props.addStagehandler(() => {
+            return new_stage_name;
+          }, setModalVisible)}
+        />
+      </View>
+    </View>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import StageButton from "../StageButton";
+import StageButton from "../StageTableUtils/StageButton";
 
 describe("StageButton", () => {
   it("renders button with correct text", () => {

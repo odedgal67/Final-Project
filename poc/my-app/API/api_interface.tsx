@@ -142,6 +142,54 @@ abstract class api_interface {
     data: {},
     username: string
   ): Promise<void>;
+  abstract update_mission_document(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    local_document_uri: string,
+    username: string
+  ): Promise<string>;
+  abstract update_mission_plan(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    local_document_uri: string,
+    username: string
+  ): Promise<string>;
+  abstract remove_stage(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<Stage>;
+  abstract remove_mission(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<Mission>;
+  abstract edit_stage_name(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    new_stage_name: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<void>;
+  abstract edit_mission_name(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    new_mission_name: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<void>;
 }
 
 export default api_interface;

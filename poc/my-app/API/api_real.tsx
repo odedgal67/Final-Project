@@ -299,6 +299,33 @@ export class RealAPI extends api_interface {
       }
     );
   }
+
+  private create_formData_for_file(
+    local_image_uri: string,
+    project_id: string,
+    stage_id: string,
+    mission_id: string,
+    username: string,
+    title: Title,
+    type: string
+  ): FormData {
+    let file_name = extractFileNameFromUri(local_image_uri);
+    const formData = new FormData();
+    console.log(local_image_uri);
+    formData.append("file", {
+      uri: local_image_uri, // this is fine
+      name: file_name,
+      type: type + "/" + extractFileTypeFromUri(local_image_uri),
+    });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("stage_id", stage_id);
+    formData.append("mission_id", mission_id);
+    formData.append("username", username);
+    formData.append("title_id", String(title));
+    return formData;
+  }
+
   update_mission_proof(
     project_id: string,
     title: Title,
@@ -307,20 +334,15 @@ export class RealAPI extends api_interface {
     local_image_uri: string,
     username: string
   ): Promise<string> {
-    let file_name = extractFileNameFromUri(local_image_uri);
-    const formData = new FormData();
-    console.log(local_image_uri);
-    formData.append("file", {
-      uri: local_image_uri, // this is fine
-      name: file_name,
-      type: "image/" + extractFileTypeFromUri(local_image_uri),
-    });
-    formData.append("file_name", file_name);
-    formData.append("project_id", project_id);
-    formData.append("stage_id", stage_id);
-    formData.append("mission_id", mission_id);
-    formData.append("username", username);
-    formData.append("title_id", String(title));
+    const formData = this.create_formData_for_file(
+      local_image_uri,
+      project_id,
+      stage_id,
+      mission_id,
+      username,
+      title,
+      "image"
+    );
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -348,11 +370,38 @@ export class RealAPI extends api_interface {
           if (row[0] && (index === -1 || Math.floor(row[0]) !== index)) {
             console.log("adding stage");
             index = row[0];
-            await this.add_stage(project_id, title, row[1], username).then((stage: Stage) =>{stage_id = stage.id}).catch((error: string) =>{reject(error);});
+            await this.add_stage(project_id, title, row[1].trim(), username)
+              .then((stage: Stage) => {
+                stage_id = stage.id;
+              })
+              .catch((error: string) => {
+                return reject(error);
+              });
           } else {
-            await this.add_mission(project_id, stage_id, title, row[1], username).then((mission: Mission) =>{mission_id = mission.id;}).catch((error: string) =>{reject(error);});
+            await this.add_mission(
+              project_id,
+              stage_id,
+              title,
+              row[1].trim(),
+              username
+            )
+              .then((mission: Mission) => {
+                mission_id = mission.id;
+              })
+              .catch((error: string) => {
+                return reject(error);
+              });
             if (row[2]) {
-              this.edit_comment_in_mission(project_id, title, stage_id, mission_id, row[2], username).catch((error: string) =>{reject(error);});
+              this.edit_comment_in_mission(
+                project_id,
+                title,
+                stage_id,
+                mission_id,
+                row[2].trim(),
+                username
+              ).catch((error: string) => {
+                reject(error);
+              });
             }
           }
           console.log(row[1]);
@@ -363,7 +412,7 @@ export class RealAPI extends api_interface {
 
       handleSheet("שלב מקדים", Title.EarlyStages);
       handleSheet("עבודות שלד", Title.SkeletalStages);
-      handleSheet("פיתוח וכללי לבניין", Title.GeneralStages); 
+      handleSheet("פיתוח וכללי לבניין", Title.GeneralStages);
 
       let rows = data["ליקויי בניה"];
       let fault_id = "";
@@ -380,5 +429,137 @@ export class RealAPI extends api_interface {
       //   this.add_plan(project_id, row[0], row[1] ? row[1] : "", username)
       resolve();
     });
+  }
+
+  update_mission_document(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    local_document_uri: string,
+    username: string
+  ): Promise<string> {
+    const formData = this.create_formData_for_file(
+      local_document_uri,
+      project_id,
+      stage_id,
+      mission_id,
+      username,
+      title,
+      "application"
+    );
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperString().send_request(
+      this.get_url("set_mission_tekken"),
+      formData,
+      config
+    );
+  }
+
+  update_mission_plan(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    local_document_uri: string,
+    username: string
+  ): Promise<string> {
+    const formData = this.create_formData_for_file(
+      local_document_uri,
+      project_id,
+      stage_id,
+      mission_id,
+      username,
+      title,
+      "application"
+    );
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperString().send_request(
+      this.get_url("set_mission_plan_link"),
+      formData,
+      config
+    );
+  }
+  remove_stage(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<Stage> {
+    return new PostWrapperStage().send_request(this.get_url("remove_stage"), {
+      project_id: project_id,
+      title_id: title,
+      stage_id: stage_id,
+      username: username,
+      apartment_number: apartment_number,
+    });
+  }
+  remove_mission(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<Mission> {
+    return new PostWrapperMission().send_request(
+      this.get_url("remove_mission"),
+      {
+        project_id: project_id,
+        title_id: title,
+        stage_id: stage_id,
+        mission_id: mission_id,
+        username: username,
+        apartment_number: apartment_number,
+      }
+    );
+  }
+  edit_stage_name(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    new_stage_name: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(this.get_url("edit_stage_name"), {
+      project_id: project_id,
+      title_id: title,
+      stage_id: stage_id,
+      new_stage_name: new_stage_name,
+      username: username,
+      apartment_number: apartment_number,
+    });
+  }
+  edit_mission_name(
+    project_id: string,
+    title: Title,
+    stage_id: string,
+    mission_id: string,
+    new_mission_name: string,
+    username: string,
+    apartment_number?: number
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_mission_name"),
+      {
+        project_id: project_id,
+        title_id: title,
+        stage_id: stage_id,
+        mission_id: mission_id,
+        new_mission_name: new_mission_name,
+        username: username,
+        apartment_number: apartment_number,
+      }
+    );
   }
 }
