@@ -42,7 +42,7 @@ const FaultListScreen = ({
           onChangeStatus={(fault: Fault) => (newstatus: Status) => {
             return new Promise((resolve, reject) => {
               API.get_instance()
-                .edit_fault(getProject().id, fault.floor_number, fault.apartment_number, fault.name, fault.id, fault.comment, fault.urgency, "", "", false, getUser().id)
+                .set_fault_status(getProject().id, fault.id, newstatus, getUser().id)
                 .then(() =>
                   API.get_instance()
                     .get_all_faults(getProject().id, getUser().id)
