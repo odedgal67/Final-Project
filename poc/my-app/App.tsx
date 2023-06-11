@@ -16,13 +16,12 @@ import { UserContext, UserContextProvider } from "./utils/UserContext";
 import { LogBox } from "react-native";
 import Crane from "./components/Crane";
 import ManageUsersScreen from "./screens/ManageUsersScreen";
-import API from "./API/api_bridge";
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
   LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
   LogBox.ignoreAllLogs(); //Ignore all log notifications
-  const { getUser, setUser } = React.useContext(UserContext);
+  const { getUser } = React.useContext(UserContext);
   return (
     <UserContextProvider>
       <NavigationContainer>
