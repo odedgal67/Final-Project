@@ -60,15 +60,9 @@ const MissionListsScreen = ({
                   getter(),
                   getUser().id
                 )
-                .then((_mission_id) =>
-                  API.get_instance().get_all_missions(
-                    getProject().id,
-                    route.params.title,
-                    route.params.stage.id,
-                    getUser().id
-                  )
+                .then((new_mission: Mission) =>
+                  setMissions((currMissions) => [...currMissions, new_mission])
                 )
-                .then((missions) => setMissions(missions))
                 .catch((err) => alert(err))
                 .then(() => modal_visibility_setter(false));
             };
