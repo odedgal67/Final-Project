@@ -536,4 +536,10 @@ export class RealAPI extends api_interface {
       }
     );
   }
+
+  logout(username: string): Promise<void> {
+    return new PostWrapperVoid().send_request(this.get_url("logout"), {
+      username: username,
+    });
+  }
 }

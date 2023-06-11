@@ -98,7 +98,7 @@ export class MissionResponse extends Response<Mission> {
       completion_date: new Date(),
       completing_user: this.result.completing_user,
       comment: this.result.comment,
-      status: this.result.status,
+      status: status_mapping[this.result.status],
       proof_link: this.result.proof,
       document_link: this.result.tekken,
       plan_link: this.result.plan_link,

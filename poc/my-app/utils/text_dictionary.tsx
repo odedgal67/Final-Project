@@ -68,6 +68,7 @@ export var hebrew = {
   save_changes: "שמירת שינויים",
   are_you_sure_you_want_to_delete_x:
     "האם אתה בטוח שברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
+  are_you_sure_you_want_to_logout: "האם אתה בטוח שברצונך להתנתק?",
 };
 
 export var title_to_hebrew = {

@@ -4,6 +4,7 @@ import { User } from "../types";
 import { roles } from "./Permissions";
 
 // Declaring the state object globally.
+const temp_user = { name: "guest", id: "-1" };
 const UserState = {
   user: { name: "guest", id: "-1" },
   api_answer: 0,
@@ -21,6 +22,10 @@ const UserContextWrapper = (component?: React.Component) => ({
   },
   notify: () => {
     UserState.api_answer++;
+    component?.setState({ context: UserContextWrapper(component) });
+  },
+  clearUserState: () => {
+    UserState.user = temp_user;
     component?.setState({ context: UserContextWrapper(component) });
   },
 });
