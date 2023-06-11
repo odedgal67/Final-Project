@@ -23,12 +23,11 @@ const ImageMissionLink = (props: ImageMissionLinkProps) => {
   let NotFoundAction = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === "granted") {
-      const result: ImagePicker.ImagePickerResult =
-        await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          quality: 1,
-        });
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
       if (result.assets) {
         console.log("image uri: " + result.assets[0].uri);
         const imageUri = result.assets[0].uri;

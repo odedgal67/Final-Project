@@ -17,7 +17,7 @@ import {
 import { roles } from "../../utils/Permissions";
 import { UserContextWrapper } from "../../utils/UserContext";
 import API from "../api_bridge";
-import RNRestart from "react-native-restart";
+// import RNRestart from "react-native-restart";
 
 const refresh_token_error_code = 401;
 //This class wraps post requests to the server, needs to be implemented for each type on Response<T> Object.
@@ -55,7 +55,7 @@ export abstract class PostWrapper<T> {
                   });
                 })
                 .catch((_) => {
-                  RNRestart.restart();
+                  // RNRestart.restart();
                   reject("Login credentials changed, please login again");
                 });
             } else {
