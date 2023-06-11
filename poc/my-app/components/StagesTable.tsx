@@ -11,7 +11,7 @@ import {
 import StatusRectangle from "./StatusRectangle";
 import { ListedStatusItem, Stage, Status } from "../types";
 import { hebrew } from "../utils/text_dictionary";
-import { StageButton, StageButtonBase } from "./StageTableUtils/StageButton";
+import { StageButton, StageButtonBase } from "./TableUtils/StageButton";
 import GetTextModal from "./GetTextModal";
 
 function getRows(

@@ -10,15 +10,17 @@ import {
 import { hebrew } from "../utils/text_dictionary";
 import { truncate_with_dots } from "../utils/stringFunctions";
 
-type GetTextModalProps = {
-  visible: boolean;
-  onRequestClose: () => void;
-  onChangeText: (text: string) => void;
-  onAccept: () => void;
-  boxTitle: string;
-};
+type GetTextModalFaultProps = {
+    visible: boolean;
+    onRequestClose: () => void;
+    onChangeTextName: (text: string) => void;
+    onChangeTextFloor: (text: string) => void;
+    onChangeTextApartment: (text: string) => void;
+    onAccept: () => void;
+    boxTitle: string;
+  };
 
-const GetTextModal = (props: GetTextModalProps) => {
+const GetTextModalFault = (props: GetTextModalFaultProps) => {
   return (
     <Modal
       animationType="fade"
@@ -53,8 +55,28 @@ const GetTextModal = (props: GetTextModalProps) => {
             placeholder={hebrew.name}
             placeholderTextColor={"black"}
             textAlign="center"
-            onChangeText={props.onChangeText}
+            onChangeText={props.onChangeTextName}
           />
+          <TextInput
+            maxLength={3}
+            numberOfLines={1}
+            keyboardType="numeric"
+            style={styles.text_input}
+            placeholder={hebrew.floor_number}
+            placeholderTextColor="black"
+            textAlign="center"
+            onChangeText={props.onChangeTextFloor}
+            />
+            <TextInput
+            maxLength={3}
+            numberOfLines={1}
+            keyboardType="numeric"
+            style={styles.text_input}
+            placeholder={hebrew.apartment_number}
+            placeholderTextColor="black"
+            textAlign="center"
+            onChangeText={props.onChangeTextApartment}
+            />
           <TouchableOpacity
             style={styles.accept_name_change_button}
             onPress={props.onAccept}
@@ -104,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GetTextModal;
+export default GetTextModalFault;

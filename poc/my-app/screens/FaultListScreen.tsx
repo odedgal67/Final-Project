@@ -4,7 +4,7 @@ import Background from "../components/Background";
 import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
 import API from "../API/api_bridge";
-import { Fault, Project, Title } from "../types";
+import { Fault, Project, Status, Title } from "../types";
 import { hebrew, title_to_hebrew } from "../utils/text_dictionary";
 
 const FaultListScreen = ({
@@ -39,23 +39,66 @@ const FaultListScreen = ({
                 title: route.params.title,
               });
           }}
-          addFaulthandler={(getter: () => { name: string; floor: number; apartment: number }, modal_visibility_setter) => {
-            return () => {
+          onChangeStatus={(fault: Fault) => (newstatus: Status) => {
+            return new Promise((resolve, reject) => {
               API.get_instance()
-                .add_fault(
-                  getProject().id,
-                  getter().floor,
-                  getter().apartment,
-                  getter().name,
-                  getUser().id
-                )
-                .then((_fault_id) => {
+                .edit_fault(getProject().id, fault.floor_number, fault.apartment_number, fault.name, fault.id, fault.comment, fault.urgency, "", "", false, getUser().id)
+                .then(() =>
                   API.get_instance()
                     .get_all_faults(getProject().id, getUser().id)
-                    .then((faults) => setFaults(faults))
-                    .then(() => modal_visibility_setter(false));
-                });
-            };
+                    .then((faults) => {
+                      setFaults(faults)
+                      resolve()
+                    }).catch((err) => reject(err))
+                ).catch((err) => reject(err));
+            });
+          }}
+          onAdd={(fault_name: string, floor_number: number, apartment_number: number) => {
+            return new Promise((resolve, reject) => {
+                API.get_instance()
+                  .add_fault(
+                    getProject().id,
+                    floor_number,
+                    apartment_number,
+                    fault_name,
+                    getUser().id
+                  )
+                  .then((_fault_id) =>
+                    API.get_instance()
+                      .get_all_faults(getProject().id, getUser().id)
+                      .then((faults) => {
+                        setFaults(faults)
+                        resolve()}).catch((err) => reject(err))
+                  ).catch((err) => reject(err));
+              });
+          }}
+          onDelete={(fault_id: string) => { return () => {
+            return new Promise((resolve, reject) => {
+              API.get_instance()
+                .remove_fault(getProject().id, fault_id, getUser().id)
+                .then(() =>
+                  API.get_instance()
+                    .get_all_faults(getProject().id, getUser().id)
+                    .then((faults) => {
+                      setFaults(faults)
+                      resolve()}
+                    ).catch((err) => reject(err))
+                ).catch((err) => reject(err));
+            });
+          }}}
+          onEditName={(fault: Fault) => (newname: string) => {
+            return new Promise((resolve, reject) => {
+              API.get_instance()
+                .edit_fault(getProject().id, fault.floor_number, fault.apartment_number, newname, fault.id, fault.comment, fault.urgency, "", "", false, getUser().id)
+                .then(() =>
+                  API.get_instance()
+                  .get_all_faults(getProject().id, getUser().id)
+                  .then((faults) => {
+                    setFaults(faults)
+                    resolve()}
+                  ).catch((err) => reject(err))
+                ).catch((err) => reject(err));
+            })
           }}
         />
       )}

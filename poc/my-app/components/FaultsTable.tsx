@@ -8,47 +8,52 @@ import {
   Text,
   TextInput,
 } from "react-native";
-import StageButton from "./StageButton";
 import StatusRectangle from "./StatusRectangle";
 import { ListedStatusItem, Fault, Status } from "../types";
 import { hebrew } from "../utils/text_dictionary";
+import { FaultButton, FaultButtonBase} from "./TableUtils/FaultButton";
+import GetTextModalFault from "./GetTextModalFault";
 
 function getRows(
-  faultNames: string[],
-  faultStatuses: Status[],
-  faultIDs: string[],
+  faults: Fault[],
   ButtonHandler: (fault_name: string, fault_id: string) => () => void,
   allow_change_status: boolean,
-  onChangeStatus?: (fault_id: string) => (new_status: Status) => void
+  onDelete: (fault_id: string) => () => Promise<void>,
+  onEditName: (fault: Fault) => (new_name: string) => Promise<void>,
+  onChangeStatus?: (fault: Fault) => (new_status: Status) => void
 ) {
   let rows = [];
-  for (let i = 0; i < faultNames.length; i++) {
+  for (let i = 0; i < faults.length; i++) {
     rows.push(
-      <View
-        key={i}
-        style={{
-          flexDirection: "row",
-          backgroundColor: "#121e26",
-          marginVertical: 4.5,
-          marginHorizontal: 10,
-          elevation: 5,
-          borderRadius: 10,
-        }}
-      >
-        <StageButton
-          stageName={faultNames[i]}
-          onClick={ButtonHandler(faultNames[i], faultIDs[i])}
-        />
-        <StatusRectangle
-          status={faultStatuses[i]}
-          borderRad={5}
-          height={undefined}
-          width={undefined}
-          activated={allow_change_status}
-          onChange={onChangeStatus ? onChangeStatus(faultIDs[i]) : () => {}}
-          border={false}
-        />
-      </View>
+      faults[i] && (
+        <View
+            key={faults[i].id}
+            style={{
+            flexDirection: "row",
+            backgroundColor: "#121e26",
+            marginVertical: 4.5,
+            marginHorizontal: 10,
+            elevation: 5,
+            borderRadius: 10,
+            }}
+        >
+            <FaultButton
+                fault={faults[i]}
+                onClick={ButtonHandler(faults[i].name, faults[i].id)}
+                onDelete={onDelete(faults[i].id)}
+                onEditName={onEditName(faults[i])}
+            />
+            <StatusRectangle
+            status={faults[i].status}
+            borderRad={5}
+            height={undefined}
+            width={undefined}
+            activated={allow_change_status}
+            onChange={onChangeStatus ? onChangeStatus(faults[i]) : () => {}}
+            border={false}
+            />
+        </View>
+      )
     );
   }
   return rows;
@@ -56,118 +61,80 @@ function getRows(
 
 const FaultsTable = (props: {
   faults: Fault[];
+  onAdd: (fault_name: string, floor_number: number, apartment_number: number) => Promise<void>;
   ButtonHandler: (fault: string, id: string) => any;
-  addFaulthandler: (
-    getter: () => { name: string; floor: number; apartment: number },
-    modal_visibility_setter: (vis: boolean) => void
-  ) => () => void;
   allow_change_status: boolean;
-  onChangeStatus?: (fault_id: string) => (new_status: Status) => void;
+  onDelete: (fault_id: string) => () => Promise<void>;
+  onEditName: (fault: Fault) => (new_name: string) => Promise<void>;
+  onChangeStatus?: (fault: Fault) => (new_status: Status) => void;
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [fault_name, set_fault_name] = React.useState("");
   const [floor_number, set_floor_number] = React.useState("");
   const [apartment_number, set_apartment_number] = React.useState("");
 
-  let faultNames: string[] = props.faults.map(
-    (fault: ListedStatusItem) => fault.name
-  );
-  let faultIDs: string[] = props.faults.map(
-    (fault: ListedStatusItem) => fault.id
-  );
-  let faultStatuses: Status[] = props.faults.map(
-    (fault: ListedStatusItem) => fault.status
-  );
-
   return (
-    <ScrollView>
-      <View
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#c2c0b2",
-          flex: 1,
-        }}
-      >
-        {getRows(
-          faultNames,
-          faultStatuses,
-          faultIDs,
-          props.ButtonHandler,
-          props.allow_change_status,
-          props.onChangeStatus
-        )}
-        <View style={{ flex: 1, flexDirection: "row" }}>
-          <StageButton
-            stageName={hebrew.add_new_fault}
-            onClick={() => setModalVisible(true)}
-          />
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(false);
-              set_fault_name("");
-              set_floor_number("");
-              set_apartment_number("");
+    <View style={{ flex: 1, backgroundColor: "#c2c0b2" }}>
+      <View style={{ flex: 9.3 }}>
+        <ScrollView>
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <View
-              style={{
-                backgroundColor: "rgba(0, 0, 0, 0.3)",
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                alignContent: "center",
-              }}
-            >
-              <View style={styles.inputContainer}>
-                <Text style={styles.modalTitle}>{hebrew.add_new_fault}</Text>
-                <TextInput
-                  maxLength={25}
-                  style={styles.textInput}
-                  placeholder={hebrew.name}
-                  placeholderTextColor={"black"}
-                  textAlign="center"
-                  onChangeText={set_fault_name}
-                />
-                <TextInput
-                  maxLength={25}
-                  style={styles.textInput}
-                  placeholder={hebrew.floor_number}
-                  placeholderTextColor={"black"}
-                  textAlign="center"
-                  onChangeText={set_floor_number}
-                />
-                <TextInput
-                  maxLength={25}
-                  style={styles.textInput}
-                  placeholder={hebrew.apartment_number}
-                  placeholderTextColor={"black"}
-                  textAlign="center"
-                  onChangeText={set_apartment_number}
-                />
-                <TouchableOpacity
-                  style={styles.acceptButton}
-                  onPress={props.addFaulthandler(
-                    () => ({
-                      name: fault_name,
-                      floor: parseInt(floor_number),
-                      apartment: parseInt(apartment_number),
-                    }),
-                    setModalVisible
-                  )}
-                >
-                  <Text style={styles.acceptButtonText}>{hebrew.accept}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </View>
+            {getRows(
+            props.faults,
+            props.ButtonHandler,
+            props.allow_change_status,
+            props.onDelete,
+            props.onEditName,
+            props.onChangeStatus
+            )}
+          </View>
+        </ScrollView>
       </View>
-    </ScrollView>
+      <View style={{ flex: 1 }}>
+        <FaultButtonBase
+          fault={{
+            name: hebrew.add_new_fault,
+            id: "",
+            floor_number: 0,
+            apartment_number: 0,
+            urgency: 1,
+            date: new Date(),
+            photo: 0,
+            proof: 0,
+            project_id: 0,
+            comment: "",
+            status: Status.Undefined,
+          }}
+          onClick={() => setModalVisible(true)}
+          backgroundColor="rgb(46, 107, 94)"
+        />
+        <GetTextModalFault
+          visible={modalVisible}
+          boxTitle={hebrew.add_new_fault}
+          onRequestClose={() => {
+            setModalVisible(false);
+            set_fault_name("");
+          }}
+          onChangeTextName={set_fault_name}
+          onChangeTextFloor={set_floor_number}
+          onChangeTextApartment={set_apartment_number}
+          onAccept={() => {
+            props.onAdd(fault_name, parseInt(floor_number), parseInt(apartment_number)).then(() => {
+            setModalVisible(false);
+            set_fault_name("");
+            set_floor_number("");
+            set_apartment_number("");
+            }).catch((err) => {
+                alert(err);
+            });
+          }}
+        />
+      </View>
+    </View>
   );
 };
 

@@ -212,13 +212,23 @@ export class RealAPI extends api_interface {
       }
     );
   }
-  edit_fault_comment(
+  edit_fault(
     project_id: string,
+    floor_number: number,
+    apartment_number: number,
+    fault_name: string,
     fault_id: string,
     comment: string,
+    urgency: Urgency,
+    link: string,
+    set_link: string,
+    green_building: boolean,
     username: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    return new PostWrapperVoid().send_request(
+    this.get_url("edit_building_fault"),
+      { project_id: project_id, building_fault_name: fault_name, building_fault_id: fault_id, floor_number: floor_number, apartment_number: apartment_number, urgency: urgency, green_building: green_building, comment: comment, link: link, set_link: set_link, username: username }
+    );
   }
   set_fault_status(
     project_id: string,
@@ -239,7 +249,20 @@ export class RealAPI extends api_interface {
       { project_id: project_id, fault_id: fault_id, new_urgency: new_urgency, username: username }
     );
   }
-  get_role(username: string, project_id: string): Promise<roles> {
+  remove_fault(
+    project_id: string, 
+    fault_id: string,
+    username: string
+    ): Promise<Fault> {
+    return new PostWrapperFault().send_request(
+      this.get_url("remove_building_fault"),
+      { project_id: project_id, build_fault_id: fault_id, username: username }
+    );
+  }
+  get_role(
+    username: string,
+    project_id: string
+    ): Promise<roles> {
     return new PostWrapperRole().send_request(
       this.get_url("get_my_permission"),
       { username: username, project_id: project_id }
@@ -255,7 +278,10 @@ export class RealAPI extends api_interface {
       { username: usernaem, project_id: project_id, new_project_name: new_name }
     );
   }
-  get_all_users(project_id: string, username: string): Promise<UserRecord[]> {
+  get_all_users(
+    project_id: string,
+    username: string
+    ): Promise<UserRecord[]> {
     return new PostWrapperUserRecords().send_request(
       this.get_url("get_all_assigned_users_in_project"),
       { project_id: project_id, username: username }

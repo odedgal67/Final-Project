@@ -84,10 +84,17 @@ abstract class api_interface {
     username: string,
     apartment_number?: number
   ): Promise<void>;
-  abstract edit_fault_comment(
+  abstract edit_fault(
     project_id: string,
+    floor_number: number,
+    apartment_number: number,
+    fault_name: string,
     fault_id: string,
     comment: string,
+    urgency: Urgency,
+    link: string,
+    set_link: string,
+    green_building: boolean,
     username: string
   ): Promise<void>;
   abstract set_fault_status(
@@ -102,6 +109,11 @@ abstract class api_interface {
     new_urgency: Urgency,
     username: string
   ): Promise<void>;
+  abstract remove_fault(
+    project_id: string,
+    fault_id: string,
+    username: string
+  ): Promise<Fault>;
   abstract get_role(username: string, project_id: string): Promise<roles>;
   abstract edit_project_name(
     usernaem: string,
