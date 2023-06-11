@@ -104,6 +104,7 @@ export class PlanResponse extends Response<Plan> {
   get_result(): Plan {
     let output: Plan = {
       name: this.result.name,
+      id: this.result.id,
       link: this.result.link,
       date: this.result.date,
       project_id: this.result.project_id,
@@ -118,6 +119,7 @@ export class PlansResponse extends Response<Plan[]> {
     Object.entries(this.result).forEach(([_key, value]) => {
       output.push({
         name: value.name,
+        id: value.id,
         link: value.link,
         date: value.date,
         project_id: value.project_id,

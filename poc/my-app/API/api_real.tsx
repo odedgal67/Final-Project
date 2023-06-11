@@ -25,6 +25,8 @@ import {
   PostWrapperMissions,
   PostWrapperFault,
   PostWrapperFaults,
+  PostWrapperPlan,
+  PostWrapperPlans,
   PostWrapperUser,
   PostWrapperUserRecords,
   PostWrapperRole,
@@ -94,8 +96,54 @@ export class RealAPI extends api_interface {
     plan_name: string,
     link: string,
     username: string
-  ): Promise<number> {
-    throw new Error("Method not implemented.");
+  ): Promise<Plan> {
+    return new PostWrapperPlan().send_request(
+      this.get_url("add_plan"), {
+      project_id: project_id,
+      plan_name: plan_name,
+      link: link,
+      username: username,
+    });
+  }
+  remove_plan(
+    project_id: string,
+    plan_id: string,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("remove_plan"), {
+      project_id: project_id,
+      plan_id: plan_id,
+      username: username,
+    });
+  }
+  edit_plan_name(
+    project_id: string,
+    plan_id: string,
+    new_name: string,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_plan_name"), {
+      project_id: project_id,
+      plan_id: plan_id,
+      new_plan_name: new_name,
+      username: username,
+    });
+  }
+  edit_plan_link(
+    project_id: string,
+    plan_id: string,
+    new_link: string,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_plan_link"), {
+      project_id: project_id,
+      plan_id: plan_id,
+      new_link: new_link,
+      username: username,
+    });
   }
   set_mission_status(
     project_id: string,
@@ -180,8 +228,9 @@ export class RealAPI extends api_interface {
       { project_id: project_id, title_id: title_id, username: username }
     );
   }
-  get_all_plans(project_id: string): Promise<Plan[]> {
-    throw new Error("Method not implemented.");
+  get_all_plans(project_id: string, username: string): Promise<Plan[]> {
+    return new PostWrapperPlans().send_request(this.get_url("get_all_plans"),
+    { project_id: project_id, username: username });
   }
   get_all_projects(username: string): Promise<Project[]> {
     console.log("get all projects in real api");

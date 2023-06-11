@@ -102,6 +102,7 @@ export type User = {
 
 export type Plan = {
   name: string;
+  id: string;
   link: string;
   date: Date;
   project_id: number;

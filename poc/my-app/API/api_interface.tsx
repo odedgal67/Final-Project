@@ -38,7 +38,24 @@ abstract class api_interface {
     plan_name: string,
     link: string,
     username: string
-  ): Promise<number>;
+  ): Promise<Plan>;
+  abstract remove_plan(
+    project_id: string,
+    plan_id: string,
+    username: string
+  ): Promise<void>;
+  abstract edit_plan_name(
+    project_id: string,
+    plan_id: string,
+    new_name: string,
+    username: string
+  ): Promise<void>;
+  abstract edit_plan_link(
+    project_id: string,
+    plan_id: string,
+    new_link: string,
+    username: string
+  ): Promise<void>;
   abstract set_mission_status(
     project_id: string,
     title: Title,
@@ -73,7 +90,7 @@ abstract class api_interface {
     title: Title,
     username: string
   ): Promise<Stage[]>;
-  abstract get_all_plans(project_id: string): Promise<Plan[]>;
+  abstract get_all_plans(project_id: string, username: string): Promise<Plan[]>;
   abstract get_all_projects(username: string): Promise<Project[]>;
   abstract edit_comment_in_mission(
     project_id: string,

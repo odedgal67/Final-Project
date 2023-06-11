@@ -10,13 +10,7 @@ import {
 } from "react-native";
 import { hebrew } from "../utils/text_dictionary";
 
-const CreatePlanButton = (props: {
-  onAddClick: (
-    planName: string,
-    link: string,
-    modal_visibility_setter: (b: boolean) => void
-  ) => void;
-}) => {
+const CreatePlanButton = (props) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [plan_name, setPlan_Name] = React.useState("");
   const [link, setPlan_Link] = React.useState("");
@@ -45,6 +39,7 @@ const CreatePlanButton = (props: {
       borderRadius: 10,
       marginHorizontal: "10%",
       marginBottom: 15,
+      flex: 0.75,
     },
     add_plan_button: {
       flex: 1,
