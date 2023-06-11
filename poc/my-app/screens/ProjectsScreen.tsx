@@ -65,6 +65,7 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
           .get_all_projects(getUser().id)
           .then((projects) => setProjects(projects))
       )
+      .catch((error) => alert(error))
       .then(() => modal_visibility_setter(false));
   };
   React.useEffect(() => {

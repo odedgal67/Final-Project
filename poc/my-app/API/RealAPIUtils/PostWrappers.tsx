@@ -15,16 +15,22 @@ import {
   MissionResponse,
 } from "./Responses";
 import { roles } from "../../utils/Permissions";
+import { UserContextWrapper } from "../../utils/UserContext";
+import API from "../api_bridge";
+import RNRestart from "react-native-restart";
 
+const refresh_token_error_code = 401;
 //This class wraps post requests to the server, needs to be implemented for each type on Response<T> Object.
 //data should have same parameters as API
 export abstract class PostWrapper<T> {
   constructor() {}
+
   public send_request(
     path: string,
     data: any,
     config?: AxiosRequestConfig<any> | undefined
   ): Promise<T> {
+    const { getUser, getLatestPassword } = UserContextWrapper();
     return new Promise((resolve, reject) => {
       axios
         .post(path, data, config)
@@ -38,8 +44,24 @@ export abstract class PostWrapper<T> {
           }
         })
         .catch((error) => {
-          console.log("errror in send_request: ", error);
-          reject(error);
+          if (error.response) {
+            if (error.response.status === refresh_token_error_code) {
+              console.log("refreshing token");
+              API.get_instance()
+                .login(getUser().id, getLatestPassword())
+                .then((user: User) => {
+                  this.send_request(path, data, config).then((result: T) => {
+                    resolve(result);
+                  });
+                })
+                .catch((_) => {
+                  RNRestart.restart();
+                  reject("Login credentials changed, please login again");
+                });
+            } else {
+              reject("server is down");
+            }
+          }
         });
     });
   }
