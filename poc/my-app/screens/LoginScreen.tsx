@@ -18,7 +18,7 @@ const LoginScreen = ({ navigation }) => {
     API.get_instance()
       .login(username, password)
       .then((user) => {
-        const allProjects = API.get_instance().get_all_projects(user.name);
+        const allProjects = API.get_instance().get_all_projects(user.id);
         setUser(user);
         setLastUsedPassword(password);
         navigation.dispatch(

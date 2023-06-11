@@ -15,9 +15,9 @@ import {
   MissionResponse,
 } from "./Responses";
 import { roles } from "../../utils/Permissions";
-import { UserContext, UserContextWrapper } from "../../utils/UserContext";
-import React from "react";
+import { UserContextWrapper } from "../../utils/UserContext";
 import API from "../api_bridge";
+import RNRestart from "react-native-restart";
 
 const refresh_token_error_code = 401;
 //This class wraps post requests to the server, needs to be implemented for each type on Response<T> Object.
@@ -54,8 +54,9 @@ export abstract class PostWrapper<T> {
                     resolve(result);
                   });
                 })
-                .catch((error) => {
-                  reject("internal server error");
+                .catch((_) => {
+                  RNRestart.restart();
+                  reject("Login credentials changed, please login again");
                 });
             } else {
               reject("server is down");
