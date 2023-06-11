@@ -9,13 +9,20 @@ const UserState = {
   user: { name: "guest", id: "-1" },
   api_answer: 0,
   role: roles.UNDEFINED,
+  last_used_password: "",
 };
 
-const UserContextWrapper = (component?: React.Component) => ({
+export const UserContextWrapper = (component?: React.Component) => ({
   ...UserState,
   setUser: (user: User) => {
     UserState.user = user;
     component?.setState({ context: UserContextWrapper(component) });
+  },
+  setLastUsedPassword: (password: string) => {
+    UserState.last_used_password = password;
+  },
+  getLatestPassword: () => {
+    return UserState.last_used_password;
   },
   getUser: () => {
     return UserState.user;
@@ -26,6 +33,7 @@ const UserContextWrapper = (component?: React.Component) => ({
   },
   clearUserState: () => {
     UserState.user = temp_user;
+    UserState.last_used_password = "";
     component?.setState({ context: UserContextWrapper(component) });
   },
 });

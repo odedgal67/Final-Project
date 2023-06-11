@@ -15,16 +15,22 @@ import {
   MissionResponse,
 } from "./Responses";
 import { roles } from "../../utils/Permissions";
+import { UserContext, UserContextWrapper } from "../../utils/UserContext";
+import React from "react";
+import API from "../api_bridge";
 
+const refresh_token_error_code = 401;
 //This class wraps post requests to the server, needs to be implemented for each type on Response<T> Object.
 //data should have same parameters as API
 export abstract class PostWrapper<T> {
   constructor() {}
+
   public send_request(
     path: string,
     data: any,
     config?: AxiosRequestConfig<any> | undefined
   ): Promise<T> {
+    const { getUser, getLatestPassword } = UserContextWrapper();
     return new Promise((resolve, reject) => {
       axios
         .post(path, data, config)
@@ -38,8 +44,23 @@ export abstract class PostWrapper<T> {
           }
         })
         .catch((error) => {
-          console.log("errror in send_request: ", error);
-          reject(error);
+          if (error.response) {
+            if (error.response.status === refresh_token_error_code) {
+              console.log("refreshing token");
+              API.get_instance()
+                .login(getUser().id, getLatestPassword())
+                .then((user: User) => {
+                  this.send_request(path, data, config).then((result: T) => {
+                    resolve(result);
+                  });
+                })
+                .catch((error) => {
+                  reject("internal server error");
+                });
+            } else {
+              reject("server is down");
+            }
+          }
         });
     });
   }
