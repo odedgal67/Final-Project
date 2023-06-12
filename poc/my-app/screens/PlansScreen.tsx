@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Linking,
   TextInput,
+  ScrollView,
 } from "react-native";
 import Background from "../components/Background";
 import CreatePlanButton from "../components/CreatePlanButton";
@@ -14,6 +15,7 @@ import { UserContext } from "../utils/UserContext";
 import { ProjectContext } from "../utils/ProjectContext";
 import { Plan } from "../types";
 import { hebrew } from "../utils/text_dictionary";
+import * as DocumentPicker from "expo-document-picker";
 
 const PlansScreen = ({ navigation, route }) => {
   const { getUser } = React.useContext(UserContext);
@@ -23,13 +25,25 @@ const PlansScreen = ({ navigation, route }) => {
   const [editedPlanName, setEditedPlanName] = React.useState("");
   const [editedPlanLink, setEditedPlanLink] = React.useState("");
 
+  let handleDocumentPick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({});
+      if (result.type === "success") {
+        const documentLink = result.uri;
+        setEditedPlanLink(documentLink);
+      }
+    } catch (error) {
+      console.log("Error picking document:", error);
+    }
+  };
+
   let add_plan_click = (
     planName: string,
-    link: string,
+    planLink: string,
     modal_visibility_setter: (b: boolean) => void
   ) => {
     API.get_instance()
-      .add_plan(getProject().id, planName, link, getUser().id)
+      .add_plan(getProject().id, planName, planLink, getUser().id)
       .then(() => {
         modal_visibility_setter(false);
         return API.get_instance().get_all_plans(getProject().id, getUser().id);
@@ -37,13 +51,7 @@ const PlansScreen = ({ navigation, route }) => {
       .then((plans) => setPlans(plans))
       .catch((err) => console.log(err));
   };
-
-  const handlePlanLongPress = (plan: Plan) => {
-    setEditingPlan(plan);
-    setEditedPlanName(plan.name);
-    setEditedPlanLink(plan.link);
-  };
-
+  
   const handleSaveEditedPlan = () => {
     if (editingPlan) {
       API.get_instance()
@@ -73,7 +81,14 @@ const PlansScreen = ({ navigation, route }) => {
         .then((plans) => setPlans(plans))
         .catch((err) => console.log(err));
     }
+  };  
+
+  const handlePlanLongPress = (plan: Plan) => {
+    setEditingPlan(plan);
+    setEditedPlanName(plan.name);
+    setEditedPlanLink(plan.link);
   };
+
   const handleRemovePlan = (plan: Plan) => {
     API.get_instance()
       .remove_plan(getProject().id, plan.id, getUser().id)
@@ -86,6 +101,7 @@ const PlansScreen = ({ navigation, route }) => {
       .then((plans) => setPlans(plans))
       .catch((err) => console.log(err));
   };
+
   React.useEffect(() => {
     API.get_instance()
       .get_all_plans(getProject().id, getUser().id)
@@ -99,7 +115,7 @@ const PlansScreen = ({ navigation, route }) => {
 
   return (
     <Background>
-      <View style={{ flex: 1 }}>
+      <ScrollView style={{ height: "80%" }}>
         <View style={styles.container}>
           <View style={styles.tableHeader}>
             <Text style={styles.headerText}>{hebrew.plans}</Text>
@@ -108,10 +124,16 @@ const PlansScreen = ({ navigation, route }) => {
           <View>
             {plans.map((plan, index) => (
               <TouchableOpacity
-                key={index}
-                onPress={() => Linking.openURL(plan.link)}
-                onLongPress={() => handlePlanLongPress(plan)}
-              >
+              key={index}
+              onPress={() => {
+                try {
+                  Linking.openURL(plan.link);
+                } catch (error) {
+                  alert(hebrew.link_doesnt_exist);
+                }
+              }}
+              onLongPress={() => handlePlanLongPress(plan)}
+            >
                 <View style={styles.tableRow}>
                   {editingPlan === plan ? (
                     <View style={{ flex: 1 }}>
@@ -121,11 +143,12 @@ const PlansScreen = ({ navigation, route }) => {
                           value={editedPlanName}
                           onChangeText={setEditedPlanName}
                         />
-                        <TextInput
-                          style={styles.editInput}
-                          value={editedPlanLink}
-                          onChangeText={setEditedPlanLink}
-                        />
+                        <TouchableOpacity
+                          style={styles.EditLinkButton}
+                          onPress={handleDocumentPick}
+                        >
+                          <Text style={styles.ButtonText}>{hebrew.link_edit}</Text>
+                        </TouchableOpacity>
                       </View>
                       <TouchableOpacity
                         style={styles.Button}
@@ -153,11 +176,11 @@ const PlansScreen = ({ navigation, route }) => {
             ))}
           </View>
         </View>
-        <CreatePlanButton
-          onAddClick={add_plan_click}
-          setEditingPlan={setEditingPlan}
-        />
-      </View>
+      </ScrollView>
+      <CreatePlanButton
+        onAddClick={add_plan_click}
+        setEditingPlan={setEditingPlan}
+      />
     </Background>
   );
 };
@@ -223,6 +246,13 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     padding: 5,
     marginTop: 10,
+  },
+  EditLinkButton: {
+    backgroundColor: "#007AFF",
+    borderRadius: 5,
+    marginRight: 5,
+    marginLeft: 5,
+    padding: 5,
   },
   ButtonText: {
     color: "white",

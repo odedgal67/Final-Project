@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-native";
 import { hebrew } from "../utils/text_dictionary";
+import * as DocumentPicker from "expo-document-picker";
 
 const CreatePlanButton = (props) => {
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -63,6 +64,18 @@ const CreatePlanButton = (props) => {
     <Text style={styles.white_text}>{hebrew.add_new_plan}</Text>
   );
 
+  const handleDocumentPick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({});
+      if (result.type === "success") {
+        const documentLink = result.uri;
+        setPlan_Link(documentLink);
+      }
+    } catch (error) {
+      console.log("Error picking document:", error);
+    }
+  };
+
   return (
     <View style={styles.initial_view}>
       <TouchableOpacity
@@ -80,10 +93,7 @@ const CreatePlanButton = (props) => {
               setModalVisible(false);
             }}
           >
-            <View
-              style={{ backgroundColor: "#111111", flex: 2, opacity: 0 }}
-              testID="closeButton"
-            >
+            <View style={{ backgroundColor: "#111111", flex: 2, opacity: 0 }}>
               <Pressable
                 style={{ flex: 1 }}
                 onPress={() => setModalVisible(false)}
@@ -109,14 +119,12 @@ const CreatePlanButton = (props) => {
                   textAlign="center"
                   onChangeText={(plan_name) => setPlan_Name(plan_name)}
                 />
-                <TextInput
-                  numberOfLines={1}
-                  style={styles.text_input}
-                  placeholder={hebrew.add_new_plan_link_place_holder}
-                  placeholderTextColor={"black"}
-                  textAlign="center"
-                  onChangeText={(link) => setPlan_Link(link)}
-                />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleDocumentPick}
+                >
+                  <Text style={styles.white_text}>Pick Document</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.add_plan_button}
                   onPress={() =>

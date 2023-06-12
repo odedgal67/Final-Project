@@ -71,6 +71,7 @@ export var hebrew = {
   plan: "תוכנית",
   save_changes: "שמירת שינויים",
   delete_plan: "מחיקת התוכנית",
+  link_edit: "עריכת קישור",
   are_you_sure_you_want_to_delete_x:
     "האם ברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
 };

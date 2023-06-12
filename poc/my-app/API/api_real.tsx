@@ -97,6 +97,7 @@ export class RealAPI extends api_interface {
     link: string,
     username: string
   ): Promise<Plan> {
+    console.log(link)
     return new PostWrapperPlan().send_request(
       this.get_url("add_plan"), {
       project_id: project_id,
@@ -285,7 +286,6 @@ export class RealAPI extends api_interface {
     new_status: Status,
     username: string
   ): Promise<void> {
-    alert(fault_id)
     return new PostWrapperVoid().send_request(
       this.get_url("set_build_fault_status"),
       { project_id: project_id, build_fault_id: fault_id, new_status: new_status, username: username }
@@ -497,15 +497,15 @@ export class RealAPI extends api_interface {
       let fault_id = "";
       for (const row of rows.slice(1)) {
         this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
-        if(row[2] == "בוצע")
-          this.set_fault_status(project_id, fault_id, Status.Done, username);
+        // if(row[2] == "בוצע")
+        //   this.set_fault_status(project_id, fault_id, Status.Done, username);
         // if(row[3])
         //   this.edit_fault_urgency(project_id, fault_id, row[3], username);
       }
 
-      // rows = data["תכניות"];
-      // for (const row of rows.slice(1))
-      //   this.add_plan(project_id, row[0], row[1] ? row[1] : "", username)
+      rows = data["תכניות"];
+      for (const row of rows.slice(1))
+        this.add_plan(project_id, row[0], row[1], username)
       resolve();
     });
   }
