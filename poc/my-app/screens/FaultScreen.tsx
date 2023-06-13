@@ -17,6 +17,7 @@ import { UserContext } from "../utils/UserContext";
 import { Fault, Status, Title, Urgency } from "../types";
 import API from "../API/api_bridge";
 import { hebrew, urgency_to_hebrew } from "../utils/text_dictionary";
+import { ImageFaultProofLink, ImageFaultProofFixLink } from "../components/FaultLinks/ImageFaultLink";
 
 const FaultScreen = ({
   navigation,
@@ -75,6 +76,10 @@ const FaultScreen = ({
               </View>
             </TouchableNativeFeedback>
           </View>
+            <View style={styles.linksView}>
+              <ImageFaultProofLink fault={fault} link={fault.proof} />
+              <ImageFaultProofFixLink fault={fault} link={fault.proof_fix} />
+            </View>
           <View style={styles.statusAndLinks}>
             <View style={styles.linksView}>
               <Text style={styles.smallText}>{hebrew.urgency}</Text>
@@ -92,7 +97,7 @@ const FaultScreen = ({
               <View>
                 <Text style={styles.smallText}>{hebrew.date_of_edit}</Text>
                 <Text style={styles.smallText}>
-                  {new Date(fault.date).toLocaleDateString()}
+                  {new Date(fault.completion_date).toLocaleDateString()}
                 </Text>
               </View>
             </View>
@@ -115,6 +120,7 @@ const FaultScreen = ({
                     .then(() => {
                       setStatus(newStatus);
                       fault.status = newStatus;
+                      fault.completion_date = new Date();
                       notify();
                     })
                     .catch((err) => alert(err));
@@ -187,7 +193,7 @@ const styles = StyleSheet.create({
   titleViewStyle: {
     alignItems: "center",
     height: "55%",
-    maxHeight: "60%",
+    maxHeight: "45%",
   },
   statusRectangleView: {
     flex: 1,

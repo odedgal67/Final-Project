@@ -66,7 +66,9 @@ const CreatePlanButton = (props) => {
 
   const handleDocumentPick = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({});
+      const result: DocumentPicker.DocumentResult = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+      });
       if (result.type === "success") {
         const documentLink = result.uri;
         setPlan_Link(documentLink);
