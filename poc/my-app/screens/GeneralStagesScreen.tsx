@@ -8,6 +8,7 @@ import API from "../API/api_bridge";
 import { UserContext } from "../utils/UserContext";
 import { title_to_hebrew } from "../utils/text_dictionary";
 import { truncate_page_title } from "../utils/stringFunctions";
+import { useFocusEffect } from "@react-navigation/native";
 
 const GeneralStagesScreen = ({
   navigation,
@@ -19,16 +20,19 @@ const GeneralStagesScreen = ({
   const { setProject, getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
   const [stages, setStages] = React.useState([] as Stage[]);
-  React.useEffect(() => {
-    API.get_instance()
-      .get_all_stages(getProject().id, route.params.title, getUser().id)
-      .then((stages) => setStages(stages))
-      .catch((err) => alert(err));
-    setProject(route.params.project);
+  React.useLayoutEffect(() => {
     navigation.setOptions({
       title: truncate_page_title(title_to_hebrew[route.params.title]),
     });
-  }, []);
+  }, [navigation]);
+  useFocusEffect(
+    React.useCallback(() => {
+      API.get_instance()
+        .get_all_stages(getProject().id, route.params.title, getUser().id)
+        .then((stages) => setStages(stages))
+        .catch((err) => alert(err));
+    }, [])
+  );
   return (
     <Background>
       {stages && (
@@ -78,15 +82,8 @@ const GeneralStagesScreen = ({
                   get_name(),
                   getUser().id
                 )
-                .then(() => {
-                  API.get_instance()
-                    .get_all_stages(
-                      getProject().id,
-                      route.params.title,
-                      getUser().id
-                    )
-                    .then((stages) => setStages(stages))
-                    .catch((err) => alert(err));
+                .then((new_stage: Stage) => {
+                  setStages((currStages) => [...currStages, new_stage]);
                 })
                 .then(() => modal_visibility_setter(false))
                 .catch((err) => alert(err));
@@ -106,6 +103,7 @@ const GeneralStagesScreen = ({
                     currStages.filter((stage) => stage.id != removedStage.id)
                   );
                 })
+                .catch((err) => alert(err))
                 .then(() => resolve())
                 .catch((err) => alert(err));
             })}

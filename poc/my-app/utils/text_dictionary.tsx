@@ -67,13 +67,17 @@ export var hebrew = {
   add_x: "הוספת ${x}",
   no_document_found: "לא נבחר קובץ",
   error_occurred: "אירעה שגיאה",
-  tekken: "מסמך תקן",
+  tekken: "תקן",
   plan: "תוכנית",
   save_changes: "שמירת שינויים",
   delete_plan: "מחיקת התוכנית",
   link_edit: "עריכת קישור",
+  pick_document: "בחירת קובץ",
+  fault_photo: "תמונת ליקוי",
+  fault_fix_photo: "תמונת תיקון ליקוי",
   are_you_sure_you_want_to_delete_x:
     "האם ברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
+  are_you_sure_you_want_to_logout: "האם ברצונך להתנתק?",
 };
 
 export var title_to_hebrew = {

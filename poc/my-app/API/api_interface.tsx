@@ -219,6 +219,7 @@ abstract class api_interface {
     username: string,
     apartment_number?: number
   ): Promise<void>;
+  abstract logout(username: string): Promise<void>;
 }
 
 export default api_interface;

@@ -1,13 +1,17 @@
 import React from "react";
 import ProjectButton from "../components/ProjectButton";
 import Background from "../components/Background";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, Text } from "react-native";
 import CreateProjectButton from "../components/CreateProjectButton";
 import API from "../API/api_bridge";
 import { UserContext } from "../utils/UserContext";
 import { Project } from "../types";
 import { useFocusEffect } from "@react-navigation/native";
 import { ProjectContext } from "../utils/ProjectContext";
+import ClickableIcon from "../components/StageTableUtils/ClickableIcon";
+import ConfirmDialogue from "../components/ConfirmDialogue";
+import { hebrew } from "../utils/text_dictionary";
+import { CommonActions } from "@react-navigation/native";
 
 function get_project_buttons(navigation: any, projects: Project[]) {
   let buttons = [];
@@ -26,7 +30,9 @@ function get_project_buttons(navigation: any, projects: Project[]) {
             .then((role) => setRole(role))
             .then(() => setProject(project))
             .then(() =>
-              navigation.navigate("ProjectPropertiesScreen", { project: project })
+              navigation.navigate("ProjectPropertiesScreen", {
+                project: project,
+              })
             );
         }}
       />
@@ -35,10 +41,7 @@ function get_project_buttons(navigation: any, projects: Project[]) {
 
   for (let i = 0; i < projects.length; i += 2) {
     buttons.push(
-      <View
-        style={{ flexDirection: "row", justifyContent: "center" }}
-        key={i}
-      >
+      <View style={{ flexDirection: "row", justifyContent: "center" }} key={i}>
         {get_project_button(projects[i])}
         {projects[i + 1] && get_project_button(projects[i + 1])}
       </View>
@@ -48,7 +51,7 @@ function get_project_buttons(navigation: any, projects: Project[]) {
 }
 
 const ProjectsScreen = ({ navigation }: { navigation: any }) => {
-  const { getUser } = React.useContext(UserContext);
+  const { getUser, clearUserState } = React.useContext(UserContext);
   const [projects, setProjects] = React.useState([] as Project[]);
   const { clearProjectState } = React.useContext(ProjectContext);
   let add_project_click = (
@@ -62,6 +65,7 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
           .get_all_projects(getUser().id)
           .then((projects) => setProjects(projects))
       )
+      .catch((error) => alert(error))
       .then(() => modal_visibility_setter(false));
   };
   React.useEffect(() => {
@@ -76,17 +80,58 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
   return (
     <Background>
       <View style={{ flex: 1 }}>
-        <ScrollView
-          style={{
-            flexDirection: "column",
-            height: "80%",
-            alignContent: "center",
-            marginTop: "10%"
-          }}
-        >
-          {get_project_buttons(navigation, projects)}
-        </ScrollView>
-        <CreateProjectButton onAddClick={add_project_click} />
+        <View style={{ flex: 15 }}>
+          <ScrollView
+            style={{
+              flexDirection: "column",
+              height: "80%",
+              alignContent: "center",
+            }}
+          >
+            {get_project_buttons(navigation, projects)}
+            <View style={{ backgroundColor: "red", margin: 50 }} />
+          </ScrollView>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(44, 57, 63, 1)",
+              position: "absolute",
+              width: 70,
+              height: 70,
+              borderRadius: 35,
+              left: 30,
+              bottom: "12%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ClickableIcon
+              width={50}
+              height={50}
+              imagePath={require("../components/imgs/logout.png")}
+              onClick={() =>
+                ConfirmDialogue({
+                  title: "",
+                  message: hebrew.are_you_sure_you_want_to_logout,
+                  onConfirm: () =>
+                    API.get_instance()
+                      .logout(getUser().id)
+                      .then(() => {
+                        clearUserState();
+                        navigation.dispatch(
+                          CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: "LoginScreen", params: {} }],
+                          })
+                        );
+                      })
+                      .catch((err) => alert(err)),
+                })
+              }
+            />
+          </View>
+          <CreateProjectButton onAddClick={add_project_click} />
+        </View>
       </View>
     </Background>
   );

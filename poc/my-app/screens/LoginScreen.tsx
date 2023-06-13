@@ -7,9 +7,9 @@ import { hebrew } from "../utils/text_dictionary";
 import { UserContext } from "../utils/UserContext";
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const { setUser } = React.useContext(UserContext);
+  const [username, setUsername] = React.useState("123456789");
+  const [password, setPassword] = React.useState("Password");
+  const { setUser, setLastUsedPassword } = React.useContext(UserContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: hebrew.login });
   }, [navigation]);
@@ -18,8 +18,9 @@ const LoginScreen = ({ navigation }) => {
     API.get_instance()
       .login(username, password)
       .then((user) => {
-        const allProjects = API.get_instance().get_all_projects(user.name);
+        const allProjects = API.get_instance().get_all_projects(user.id);
         setUser(user);
+        setLastUsedPassword(password);
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
