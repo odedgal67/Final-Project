@@ -151,13 +151,27 @@ export class RealAPI extends api_interface {
     new_link: string,
     username: string
   ): Promise<void> {
-    return new PostWrapperVoid().send_request(
-      this.get_url("edit_plan_link"), {
-      project_id: project_id,
-      plan_id: plan_id,
-      new_link: new_link,
-      username: username,
+    let file_name = extractFileNameFromUri(new_link);
+    const formData = new FormData();
+    formData.append("file", {
+      uri: new_link, // this is fine
+      name: file_name,
+      type: "applicaion/" + extractFileTypeFromUri(new_link),
     });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("plan_id", plan_id);
+    formData.append("username", username);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_plan_link"),
+      formData,
+      config
+    );
   }
   set_mission_status(
     project_id: string,
@@ -509,9 +523,10 @@ export class RealAPI extends api_interface {
       let rows = data["ליקויי בניה"];
       let fault_id = "";
       for (const row of rows.slice(1)) {
-        this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
-        // if(row[2] == "בוצע")
-        //   this.set_fault_status(project_id, fault_id, Status.Done, username);
+        if(row[1] && row[1] != "")
+          this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
+        if(row[2] == "בוצע")
+          this.set_fault_status(project_id, fault_id, Status.Done, username);
         // if(row[3])
         //   this.edit_fault_urgency(project_id, fault_id, row[3], username);
       }

@@ -56,21 +56,31 @@ const PlansScreen = ({ navigation, route }) => {
 
   const handleSaveEditedPlan = () => {
     if (editingPlan) {
-      API.get_instance()
-        .edit_plan_name(
-          getProject().id,
-          editingPlan.id,
-          editedPlanName,
-          getUser().id
-        )
-        .then(() =>
-          API.get_instance().edit_plan_link(
-            getProject().id,
-            editingPlan.id,
-            editedPlanLink,
-            getUser().id
-          )
-        )
+      const promises = [];
+      if (editingPlan.name !== editedPlanName) {
+        promises.push(
+          API.get_instance()
+            .edit_plan_name(
+              getProject().id,
+              editingPlan.id,
+              editedPlanName,
+              getUser().id
+            )
+        );
+      }
+      if (editingPlan.link !== editedPlanLink) {
+        promises.push(
+          API.get_instance()
+            .edit_plan_link(
+              getProject().id,
+              editingPlan.id,
+              editedPlanLink,
+              getUser().id
+            )
+        );
+      }
+
+      Promise.all(promises)
         .then(() => {
           setEditingPlan(null);
           setEditedPlanName("");
