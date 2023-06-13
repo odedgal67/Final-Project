@@ -57,7 +57,7 @@ export const TekkenPdfMissionLink = (props: PdfMissionLinkProps) => {
 
   return (
     <MissionLinkButtonBase
-      title={hebrew.plan}
+      title={hebrew.tekken}
       link={documentUri}
       notFoundAction={NotFoundAction}
     />
@@ -107,7 +107,7 @@ export const PlanPdfMissionLink = (props: PdfMissionLinkProps) => {
 
   return (
     <MissionLinkButtonBase
-      title={hebrew.tekken}
+      title={hebrew.plan}
       link={documentUri}
       notFoundAction={NotFoundAction}
     />

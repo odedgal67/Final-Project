@@ -63,7 +63,7 @@ export var hebrew = {
   add_x: "הוספת ${x}",
   no_document_found: "לא נבחר קובץ",
   error_occurred: "אירעה שגיאה",
-  tekken: "מסמך תקן",
+  tekken: "תקן",
   plan: "תכנית",
   save_changes: "שמירת שינויים",
   are_you_sure_you_want_to_delete_x:
