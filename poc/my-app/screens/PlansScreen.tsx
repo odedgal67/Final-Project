@@ -27,8 +27,10 @@ const PlansScreen = ({ navigation, route }) => {
 
   let handleDocumentPick = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({});
-      if (result.type === "success") {
+      const result: DocumentPicker.DocumentResult = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+      });
+      if (result.type === "success" && result.uri) {
         const documentLink = result.uri;
         setEditedPlanLink(documentLink);
       }
@@ -51,7 +53,7 @@ const PlansScreen = ({ navigation, route }) => {
       .then((plans) => setPlans(plans))
       .catch((err) => console.log(err));
   };
-  
+
   const handleSaveEditedPlan = () => {
     if (editingPlan) {
       API.get_instance()
@@ -81,7 +83,7 @@ const PlansScreen = ({ navigation, route }) => {
         .then((plans) => setPlans(plans))
         .catch((err) => console.log(err));
     }
-  };  
+  };
 
   const handlePlanLongPress = (plan: Plan) => {
     setEditingPlan(plan);
@@ -125,13 +127,13 @@ const PlansScreen = ({ navigation, route }) => {
             {plans.map((plan, index) => (
               <TouchableOpacity
               key={index}
-              onPress={() => {
-                try {
-                  Linking.openURL(plan.link);
-                } catch (error) {
-                  alert(hebrew.link_doesnt_exist);
-                }
-              }}
+              onPress={() =>
+                plan.link
+                  ? Linking.openURL(API.get_instance().get_url(plan.link)).catch((error) =>
+                      alert(hebrew.error_occurred + "\n" + error)
+                    )
+                  : alert(hebrew.link_doesnt_exist)
+              }
               onLongPress={() => handlePlanLongPress(plan)}
             >
                 <View style={styles.tableRow}>

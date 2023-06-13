@@ -138,9 +138,9 @@ export class FaultResponse extends Response<Fault> {
       urgency: this.result.urgency,
       floor_number: this.result.floor_number,
       apartment_number: this.result.apartment_number,
-      date: this.result.date,
+      completion_date: this.result.completion_date,
       photo: this.result.photo,
-      proof: this.result.proof,
+      proof_photo: this.result.proof,
       project_id: this.result.project_id,
       comment: this.result.comment,
     };
@@ -159,9 +159,9 @@ export class FaultsResponse extends Response<Fault[]> {
         urgency: value.urgency,
         floor_number: value.floor_number,
         apartment_number: value.apartment_number,
-        date: value.date,
-        photo: value.photo,
+        completion_date: value.completion_date,
         proof: value.proof,
+        proof_fix: value._fix,
         project_id: value.project_id,
         comment: value.comment,
       });

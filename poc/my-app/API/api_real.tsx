@@ -97,14 +97,27 @@ export class RealAPI extends api_interface {
     link: string,
     username: string
   ): Promise<Plan> {
-    console.log(link)
-    return new PostWrapperPlan().send_request(
-      this.get_url("add_plan"), {
-      project_id: project_id,
-      plan_name: plan_name,
-      link: link,
-      username: username,
+    let file_name = extractFileNameFromUri(link);
+    const formData = new FormData();
+    formData.append("file", {
+      uri: link, // this is fine
+      name: file_name,
+      type: "applicaion/" + extractFileTypeFromUri(link),
     });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("plan_name", plan_name);
+    formData.append("username", username);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperPlan().send_request(
+      this.get_url("add_plan"),
+      formData,
+      config
+    );
   }
   remove_plan(
     project_id: string,

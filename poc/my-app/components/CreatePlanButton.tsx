@@ -123,7 +123,7 @@ const CreatePlanButton = (props) => {
                   style={styles.button}
                   onPress={handleDocumentPick}
                 >
-                  <Text style={styles.white_text}>Pick Document</Text>
+                  <Text style={styles.white_text}>{hebrew.pick_document}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.add_plan_button}

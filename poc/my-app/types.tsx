@@ -112,9 +112,9 @@ export type Fault = {
   urgency: Urgency;
   floor_number: number;
   apartment_number: number;
-  date: Date;
-  photo: number;
-  proof: number;
+  completion_date: Date;
+  proof: string;
+  proof_fix: string;
   project_id: number;
   comment: string;
 } & ListedStatusItem;
