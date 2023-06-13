@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderWidth: 1,
-    margin: "5%",
+    margin: "3%",
   },
   accept_name_change_button: {
     borderRadius: 20,

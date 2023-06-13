@@ -325,8 +325,8 @@ export class RealAPI extends api_interface {
     username: string
   ): Promise<void> {
     return new PostWrapperVoid().send_request(
-      this.get_url("set_fault_urgency"),
-      { project_id: project_id, fault_id: fault_id, new_urgency: new_urgency, username: username }
+      this.get_url("set_urgency"),
+      { project_id: project_id, building_fault_id: fault_id, new_urgency: new_urgency, username: username }
     );
   }
   remove_fault(

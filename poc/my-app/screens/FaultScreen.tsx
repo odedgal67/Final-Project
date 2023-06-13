@@ -18,6 +18,7 @@ import { Fault, Status, Title, Urgency } from "../types";
 import API from "../API/api_bridge";
 import { hebrew, urgency_to_hebrew } from "../utils/text_dictionary";
 import { ImageFaultProofLink, ImageFaultProofFixLink } from "../components/FaultLinks/ImageFaultLink";
+import UrgencyButton from "../components/UrgencyButton";
 
 const FaultScreen = ({
   navigation,
@@ -29,14 +30,25 @@ const FaultScreen = ({
   const { getProject } = React.useContext(ProjectContext);
   const { getUser, notify } = React.useContext(UserContext);
   const [status, setStatus] = React.useState(route.params.fault.status);
+  const [comment, setComment] = React.useState(route.params.fault.comment);
+  const [newUrgency, setUrgency] = React.useState(route.params.fault.urgency);
   const [isEditable, setEditable] = React.useState(false);
   const fault: Fault = route.params.fault;
   const _fault_name =
     fault.name.length > 25 ? fault.name.substring(0, 15) + "..." : fault.name;
 
   navigation.setOptions({ title: _fault_name });
-  const [comment, setComment] = React.useState(fault.comment);
-
+  const handleUrgencyChange = (newUrgency: Urgency) => {
+    API.get_instance()
+      .set_fault_urgency(getProject().id, fault.id, newUrgency, getUser().id)
+      .then(() => {
+        setUrgency(newUrgency);
+      })
+      .catch((error) => {
+        // Handle error, if needed
+        console.error(error);
+      });
+  };
   let onSubmitEdit = () => {
     API.get_instance()
       .edit_fault_comment(getProject().id, fault.id, comment, getUser().id)
@@ -76,14 +88,14 @@ const FaultScreen = ({
               </View>
             </TouchableNativeFeedback>
           </View>
-            <View style={styles.linksView}>
-              <ImageFaultProofLink fault={fault} link={fault.proof} />
-              <ImageFaultProofFixLink fault={fault} link={fault.proof_fix} />
-            </View>
+          <View style={styles.linksView}>
+            <ImageFaultProofLink fault={fault} link={fault.proof} />
+            <ImageFaultProofFixLink fault={fault} link={fault.proof_fix} />
+          </View>
           <View style={styles.statusAndLinks}>
             <View style={styles.linksView}>
-              <Text style={styles.smallText}>{hebrew.urgency}</Text>
-              <UrgencyButton title={ urgency_to_hebrew[fault.urgency] }></UrgencyButton>
+              <Text style={styles.urgencyText}>{hebrew.urgency}</Text>
+              <UrgencyButton urgency={newUrgency} onUrgencyChange={handleUrgencyChange} />
             </View>
             <View style={styles.linksView}>
               <View>
@@ -134,26 +146,6 @@ const FaultScreen = ({
   );
 };
 
-const UrgencyButton = (props: { title: string }) => {
-  let buttonStyle = {};
-  if (props.title === urgency_to_hebrew[1])
-    buttonStyle = styles.lowButton;
-  else if (props.title === urgency_to_hebrew[2])
-    buttonStyle = styles.mediumButton;
-  else if (props.title === urgency_to_hebrew[3])
-    buttonStyle = styles.highButton;
-
-  return (
-    <TouchableHighlight
-      style={[styles.button, buttonStyle]}
-      onPress={() => alert("בקרוב נוסיף פונקציה")}
-    // API.get_instance().set_fault_urgency(getProject().id, fault.id, newUrgency, getUser().id)
-    >
-      <Text style={styles.smallText}>{props.title}</Text>
-    </TouchableHighlight>
-  );
-};
-
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
@@ -189,6 +181,14 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     marginVertical: 7.5,
     textAlign: "center",
+  },
+  urgencyText: {
+    fontWeight: "bold",
+    fontSize: 16,
+    lineHeight: 21,
+    marginVertical: 7.5,
+    textAlign: "center",
+    flex: 0.75,
   },
   titleViewStyle: {
     alignItems: "center",
