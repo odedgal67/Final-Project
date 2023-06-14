@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { Project, Stage, Mission, Plan, Fault, User, UserRecord } from "../../types";
+import { Project, Stage, Mission, Plan, Fault, User, UserRecord, Apartment } from "../../types";
 import {
   Response,
   ProjectResponse,
@@ -131,6 +131,18 @@ export class PostWrapperFault extends PostWrapper<Fault> {
 
 export class PostWrapperFaults extends PostWrapper<Fault[]> {
   get_response_class(data: any): Response<Fault[]> {
+    return new FaultsResponse(data);
+  }
+}
+
+export class PostWrapperApartment extends PostWrapper<Apartment> {
+  get_response_class(data: any): Response<Apartment> {
+    return new FaultResponse(data);
+  }
+}
+
+export class PostWrapperApartments extends PostWrapper<Apartment[]> {
+  get_response_class(data: any): Response<Apartment[]> {
     return new FaultsResponse(data);
   }
 }

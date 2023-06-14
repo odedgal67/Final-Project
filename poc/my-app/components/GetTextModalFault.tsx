@@ -52,7 +52,7 @@ const GetTextModalFault = (props: GetTextModalFaultProps) => {
             maxLength={25}
             numberOfLines={1}
             style={styles.text_input}
-            placeholder={hebrew.name}
+            placeholder={hebrew.fault_name}
             placeholderTextColor={"black"}
             textAlign="center"
             onChangeText={props.onChangeTextName}

@@ -89,7 +89,7 @@ const FaultListScreen = ({
           onEditName={(fault: Fault) => (newname: string) => {
             return new Promise((resolve, reject) => {
               API.get_instance()
-                .edit_fault(getProject().id, fault.floor_number, fault.apartment_number, newname, fault.id, fault.comment, fault.urgency, "", "", false, getUser().id)
+                .edit_fault(getProject().id, fault.id, newname, fault.floor_number, fault.apartment_number, fault.green_building, fault.urgency, fault.proof_fix, "", "", fault.status, fault.proof, fault.comment, getUser().id)
                 .then(() =>
                   API.get_instance()
                   .get_all_faults(getProject().id, getUser().id)

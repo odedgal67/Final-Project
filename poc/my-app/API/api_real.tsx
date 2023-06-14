@@ -9,6 +9,7 @@ import {
   UserRecord,
   User,
   Urgency,
+  Apartment,
 } from "../types";
 import { roles } from "../utils/Permissions";
 import {
@@ -23,10 +24,12 @@ import {
   PostWrapperStages,
   PostWrapperMission,
   PostWrapperMissions,
-  PostWrapperFault,
-  PostWrapperFaults,
   PostWrapperPlan,
   PostWrapperPlans,
+  PostWrapperFault,
+  PostWrapperFaults,
+  PostWrapperApartment,
+  PostWrapperApartments,
   PostWrapperUser,
   PostWrapperUserRecords,
   PostWrapperRole,
@@ -66,13 +69,15 @@ export class RealAPI extends api_interface {
     project_id: string,
     title: Title,
     stage_name: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<Stage> {
     return new PostWrapperStage().send_request(this.get_url("add_stage"), {
       project_id: project_id,
       title_id: title,
       stage_name: stage_name,
       username: username,
+      apartment_number: apartment_number,
     });
   }
 
@@ -186,7 +191,8 @@ export class RealAPI extends api_interface {
     stage_id: string,
     mission_id: string,
     new_status: Status,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<void> {
     return new PostWrapperVoid().send_request(
       this.get_url("set_mission_status"),
@@ -197,6 +203,7 @@ export class RealAPI extends api_interface {
         mission_id: mission_id,
         new_status: new_status,
         username: username,
+        apartment_number: apartment_number,
       }
     );
   }
@@ -206,7 +213,8 @@ export class RealAPI extends api_interface {
     title: Title,
     stage_id: string,
     new_status: Status,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<void> {
     return new PostWrapperVoid().send_request(
       this.get_url("set_stage_status"),
@@ -216,6 +224,7 @@ export class RealAPI extends api_interface {
         stage_id: stage_id,
         new_status: new_status,
         username: username,
+        apartment_number: apartment_number,
       }
     );
   }
@@ -224,7 +233,8 @@ export class RealAPI extends api_interface {
     project_id: string,
     title: Title,
     stage_id: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<Mission[]> {
     return new PostWrapperMissions().send_request(
       this.get_url("get_all_missions"),
@@ -233,6 +243,7 @@ export class RealAPI extends api_interface {
         title_id: title,
         stage_id: stage_id,
         username: username,
+        apartment_number: apartment_number,
       }
     );
   }
@@ -260,12 +271,13 @@ export class RealAPI extends api_interface {
   get_all_stages(
     project_id: string,
     title: Title,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<Stage[]> {
     let title_id: number = title;
     return new PostWrapperStages().send_request(
       this.get_url("get_all_stages"),
-      { project_id: project_id, title_id: title_id, username: username }
+      { project_id: project_id, title_id: title_id, username: username, apartment_number: apartment_number }
     );
   }
 
@@ -273,6 +285,7 @@ export class RealAPI extends api_interface {
     return new PostWrapperPlans().send_request(this.get_url("get_all_plans"),
     { project_id: project_id, username: username });
   }
+
   get_all_projects(username: string): Promise<Project[]> {
     console.log("get all projects in real api");
     return new PostWRapperProjects().send_request(
@@ -550,7 +563,8 @@ export class RealAPI extends api_interface {
     stage_id: string,
     mission_id: string,
     local_image_uri: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<string> {
     const formData = this.create_formData_for_file(
       local_image_uri,
@@ -561,6 +575,7 @@ export class RealAPI extends api_interface {
       title,
       "image"
     );
+    apartment_number? formData.append("apartment_number", String(apartment_number)) : null;
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -573,91 +588,14 @@ export class RealAPI extends api_interface {
     );
   }
 
-  async load_excel_data(
-    project_id: string,
-    data: {},
-    username: string
-  ): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const handleSheet = async (sheetName: string, title: Title) => {
-        const rows = data[sheetName];
-        let index = -1;
-        let stage_id = "";
-        let mission_id = "";
-
-        for (const row of rows.slice(1)) {
-          if (row[0] && (index === -1 || Math.floor(row[0]) !== index)) {
-            console.log("adding stage");
-            index = row[0];
-            await this.add_stage(project_id, title, row[1].trim(), username)
-              .then((stage: Stage) => {
-                stage_id = stage.id;
-              })
-              .catch((error: string) => {
-                return reject(error);
-              });
-          } else {
-            await this.add_mission(
-              project_id,
-              stage_id,
-              title,
-              row[1].trim(),
-              username
-            )
-              .then((mission: Mission) => {
-                mission_id = mission.id;
-              })
-              .catch((error: string) => {
-                return reject(error);
-              });
-            if (row[2]) {
-              this.edit_comment_in_mission(
-                project_id,
-                title,
-                stage_id,
-                mission_id,
-                row[2].trim(),
-                username
-              ).catch((error: string) => {
-                reject(error);
-              });
-            }
-          }
-          console.log(row[1]);
-        }
-      };
-      console.log("loading excel data");
-      console.log(data);
-
-      handleSheet("שלב מקדים", Title.EarlyStages);
-      handleSheet("עבודות שלד", Title.SkeletalStages);
-      handleSheet("פיתוח וכללי לבניין", Title.GeneralStages);
-
-      let rows = data["ליקויי בניה"];
-      let fault_id = "";
-      for (const row of rows.slice(1)) {
-        if(row[1] && row[1] != "")
-          this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
-        if(row[2] == "בוצע")
-          this.set_fault_status(project_id, fault_id, Status.Done, username);
-        // if(row[3])
-        //   this.edit_fault_urgency(project_id, fault_id, row[3], username);
-      }
-
-      rows = data["תכניות"];
-      for (const row of rows.slice(1))
-        this.add_plan(project_id, row[0], row[1], username)
-      resolve();
-    });
-  }
-
   update_mission_document(
     project_id: string,
     title: Title,
     stage_id: string,
     mission_id: string,
     local_document_uri: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<string> {
     const formData = this.create_formData_for_file(
       local_document_uri,
@@ -668,6 +606,7 @@ export class RealAPI extends api_interface {
       title,
       "application"
     );
+    apartment_number? formData.append("apartment_number", String(apartment_number)) : null;
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -686,7 +625,8 @@ export class RealAPI extends api_interface {
     stage_id: string,
     mission_id: string,
     local_document_uri: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<string> {
     const formData = this.create_formData_for_file(
       local_document_uri,
@@ -697,6 +637,7 @@ export class RealAPI extends api_interface {
       title,
       "application"
     );
+    apartment_number? formData.append("apartment_number", String(apartment_number)) : null;
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -785,6 +726,127 @@ export class RealAPI extends api_interface {
         apartment_number: apartment_number,
       }
     );
+  }
+
+  get_all_apartments(
+    project_id: string,
+    username: string
+  ): Promise<Apartment[]> {
+    console.log("get_all_apartments");
+    return new PostWrapperApartments().send_request(this.get_url("get_all_apartments_in_project"), {
+      project_id: project_id,
+      username: username,
+    });
+  }
+
+  add_apartment(
+    project_id: string,
+    apartment_number: number,
+    username: string
+  ): Promise<Apartment> {
+    return new PostWrapperApartment().send_request(this.get_url("add_apartment"), {
+      project_id: project_id,
+      apartment_number: apartment_number,
+      username: username,
+    });
+  }
+
+  remove_apartment(
+    project_id: string,
+    apartment_number: number,
+    username: string
+  ): Promise<Apartment> {
+    return new PostWrapperApartment().send_request(this.get_url("remove_apartment"), {
+      project_id: project_id,
+      apartment_number: apartment_number,
+      username: username,
+    });
+  }
+
+  async load_excel_data(
+    project_id: string,
+    data: {},
+    username: string
+  ): Promise<void> {
+    return new Promise<void>(async (resolve, reject) => {
+      const handleSheet = async (sheetName: string, title: Title, apartment_number?: number) => {
+        const rows = data[sheetName];
+        let index = -1;
+        let stage_id = "";
+        let mission_id = "";
+
+        for (const row of rows.slice(1)) {
+          if (row[0] && (index === -1 || Math.floor(row[0]) !== index)) {
+            console.log("adding stage");
+            index = row[0];
+            await this.add_stage(project_id, title, row[1].trim(), username, apartment_number)
+              .then((stage: Stage) => {
+                stage_id = stage.id;
+              })
+              .catch((error: string) => {
+                return reject(error);
+              });
+          } else {
+            await this.add_mission(
+              project_id,
+              stage_id,
+              title,
+              row[1].trim(),
+              username,
+              apartment_number
+            )
+              .then((mission: Mission) => {
+                mission_id = mission.id;
+              })
+              .catch((error: string) => {
+                return reject(error);
+              });
+            if (row[2]) {
+              this.edit_comment_in_mission(
+                project_id,
+                title,
+                stage_id,
+                mission_id,
+                row[2].trim(),
+                username,
+                apartment_number
+              ).catch((error: string) => {
+                reject(error);
+              });
+            }
+          }
+          console.log(row[1]);
+        }
+      };
+      console.log("loading excel data");
+      console.log(data);
+
+      handleSheet("שלב מקדים", Title.EarlyStages);
+      handleSheet("עבודות שלד", Title.SkeletalStages);
+      handleSheet("פיתוח וכללי לבניין", Title.GeneralStages);
+
+      let apartments: Apartment[];
+      apartments = await this.get_all_apartments(project_id, username).then((apartments: Apartment[]) => {return apartments});
+      for (const apartment of apartments)
+        handleSheet("עבודות גמר בדירות", Title.ApartmentStages, apartment.apartment_number);
+
+      let rows = data["ליקויי בניה"];
+      let fault_id = "";
+      for (const row of rows.slice(1)) {
+        if(row[1] && row[1] != "")
+          this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
+        if(row[2] == "בוצע")
+          this.set_fault_status(project_id, fault_id, Status.Done, username);
+        // if(row[3])
+        //   this.edit_fault_urgency(project_id, fault_id, row[3], username);
+      }
+
+      rows = data["תכניות"];
+      for (const row of rows.slice(1))
+        this.add_plan(project_id, row[0], row[1], username)
+
+      resolve();
+    });
   }
 
   logout(username: string): Promise<void> {
