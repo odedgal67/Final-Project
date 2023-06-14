@@ -8,7 +8,7 @@ import { UserContext } from "../utils/UserContext";
 import { Project } from "../types";
 import { useFocusEffect } from "@react-navigation/native";
 import { ProjectContext } from "../utils/ProjectContext";
-import ClickableIcon from "../components/StageTableUtils/ClickableIcon";
+import ClickableIcon from "../components/TableUtils/ClickableIcon";
 import ConfirmDialogue from "../components/ConfirmDialogue";
 import { hebrew } from "../utils/text_dictionary";
 import { CommonActions } from "@react-navigation/native";

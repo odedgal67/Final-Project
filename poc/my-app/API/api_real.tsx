@@ -8,6 +8,7 @@ import {
   Project,
   UserRecord,
   User,
+  Urgency,
 } from "../types";
 import { roles } from "../utils/Permissions";
 import {
@@ -15,18 +16,22 @@ import {
   extractFileTypeFromUri,
 } from "../utils/stringFunctions";
 import {
-  PostWRapperProjects,
   PostWrapper,
-  PostWrapperMission,
-  PostWrapperMissions,
   PostWrapperProject,
-  PostWrapperRole,
+  PostWRapperProjects,
   PostWrapperStage,
   PostWrapperStages,
-  PostWrapperString,
+  PostWrapperMission,
+  PostWrapperMissions,
+  PostWrapperFault,
+  PostWrapperFaults,
+  PostWrapperPlan,
+  PostWrapperPlans,
   PostWrapperUser,
   PostWrapperUserRecords,
+  PostWrapperRole,
   PostWrapperVoid,
+  PostWrapperString,
 } from "./RealAPIUtils/PostWrappers";
 import api_interface from "./api_interface";
 
@@ -56,6 +61,7 @@ export class RealAPI extends api_interface {
       username: username,
     });
   }
+
   add_stage(
     project_id: string,
     title: Title,
@@ -69,6 +75,7 @@ export class RealAPI extends api_interface {
       username: username,
     });
   }
+
   add_mission(
     project_id: string,
     stage_id: string,
@@ -86,14 +93,93 @@ export class RealAPI extends api_interface {
       username: username,
     });
   }
+
   add_plan(
     project_id: string,
     plan_name: string,
     link: string,
     username: string
-  ): Promise<number> {
-    throw new Error("Method not implemented.");
+  ): Promise<Plan> {
+    let file_name = extractFileNameFromUri(link);
+    const formData = new FormData();
+    formData.append("file", {
+      uri: link, // this is fine
+      name: file_name,
+      type: "application/" + extractFileTypeFromUri(link),
+    });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("plan_name", plan_name);
+    formData.append("username", username);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperPlan().send_request(
+      this.get_url("add_plan"),
+      formData,
+      config
+    );
   }
+
+  remove_plan(
+    project_id: string,
+    plan_id: string,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("remove_plan"), {
+      project_id: project_id,
+      plan_id: plan_id,
+      username: username,
+    });
+  }
+
+  edit_plan_name(
+    project_id: string,
+    plan_id: string,
+    new_name: string,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_plan_name"), {
+      project_id: project_id,
+      plan_id: plan_id,
+      new_plan_name: new_name,
+      username: username,
+    });
+  }
+
+  edit_plan_link(
+    project_id: string,
+    plan_id: string,
+    new_link: string,
+    username: string
+  ): Promise<void> {
+    let file_name = extractFileNameFromUri(new_link);
+    const formData = new FormData();
+    formData.append("file", {
+      uri: new_link, // this is fine
+      name: file_name,
+      type: "application/" + extractFileTypeFromUri(new_link),
+    });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("plan_id", plan_id);
+    formData.append("username", username);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_plan_link"),
+      formData,
+      config
+    );
+  }
+
   set_mission_status(
     project_id: string,
     title: Title,
@@ -114,6 +200,7 @@ export class RealAPI extends api_interface {
       }
     );
   }
+
   set_stage_status(
     project_id: string,
     title: Title,
@@ -132,6 +219,7 @@ export class RealAPI extends api_interface {
       }
     );
   }
+
   get_all_missions(
     project_id: string,
     title: Title,
@@ -148,18 +236,27 @@ export class RealAPI extends api_interface {
       }
     );
   }
-  get_all_faults(project_id: string): Promise<Fault[]> {
-    throw new Error("Method not implemented.");
+
+  get_all_faults(project_id: string, username: string): Promise<Fault[]> {
+    return new PostWrapperFaults().send_request(
+      this.get_url("get_all_building_faults"),
+      { project_id: project_id, username: username }
+    );
   }
+
   add_fault(
     project_id: string,
-    floor: number,
+    floor_number: number,
     apartment_number: number,
     fault_name: string,
     username: string
-  ): Promise<void> {
-    throw new Error("Method not implemented.");
+  ): Promise<Fault> {
+    return new PostWrapperFault().send_request(
+    this.get_url("add_building_fault"),
+      { project_id: project_id, name: fault_name, username: username, floor_number: floor_number, apartment_number: apartment_number }
+    );
   }
+
   get_all_stages(
     project_id: string,
     title: Title,
@@ -171,8 +268,10 @@ export class RealAPI extends api_interface {
       { project_id: project_id, title_id: title_id, username: username }
     );
   }
-  get_all_plans(project_id: string): Promise<Plan[]> {
-    throw new Error("Method not implemented.");
+
+  get_all_plans(project_id: string, username: string): Promise<Plan[]> {
+    return new PostWrapperPlans().send_request(this.get_url("get_all_plans"),
+    { project_id: project_id, username: username });
   }
   get_all_projects(username: string): Promise<Project[]> {
     console.log("get all projects in real api");
@@ -181,6 +280,7 @@ export class RealAPI extends api_interface {
       { username: username }
     );
   }
+
   edit_comment_in_mission(
     project_id: string,
     title: Title,
@@ -203,28 +303,159 @@ export class RealAPI extends api_interface {
       }
     );
   }
-  edit_fault_comment(
+
+  edit_fault(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
+    fault_name: string,
+    floor_number: number,
+    apartment_number: number,
+    green_building: boolean,
+    urgency: Urgency,
+    proof_fix: string,
+    tekken: string,
+    plan_link: string,
+    status: Status,
+    proof: string,
     comment: string,
     username: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    return new PostWrapperVoid().send_request(
+      this.get_url("edit_building_fault"),
+      {
+        project_id: project_id,
+        building_fault_id: fault_id,
+        building_fault_name: fault_name,
+        floor_number: floor_number,
+        apartment_number: apartment_number,
+        green_building: green_building,
+        urgency: urgency,
+        proof_fix: proof_fix,
+        tekken: tekken,
+        plan_link: plan_link,
+        status: status,
+        proof: proof,
+        comment: comment,
+        username: username
+      }
+    );
   }
+
   set_fault_status(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
     new_status: Status,
     username: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    return new PostWrapperVoid().send_request(
+      this.get_url("set_build_fault_status"),
+      { project_id: project_id, build_fault_id: fault_id, new_status: new_status, username: username }
+    );
   }
-  get_role(username: string, project_id: string): Promise<roles> {
+
+  set_fault_urgency(
+    project_id: string,
+    fault_id: string,
+    new_urgency: Urgency,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("set_urgency"),
+      { project_id: project_id, building_fault_id: fault_id, new_urgency: new_urgency, username: username }
+    );
+  }
+
+  set_fault_comment(
+    project_id: string,
+    fault_id: string,
+    comment: string,
+    username: string
+  ): Promise<void> {
+    return new PostWrapperVoid().send_request(
+      this.get_url("set_building_fault_comment"),
+      { project_id: project_id, building_fault_id: fault_id, comment: comment, username: username }
+    );
+  }
+
+  set_building_fault_proof(
+    project_id: string,
+    fault_id: string,
+    proof: string,
+    username: string
+  ): Promise<string> {
+    let file_name = extractFileNameFromUri(proof);
+    const formData = new FormData();
+    formData.append("file", {
+      uri: proof, // this is fine
+      name: file_name,
+      type: "image/" + extractFileTypeFromUri(proof),
+    });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("building_fault_id", fault_id);
+    formData.append("username", username);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperString().send_request(
+      this.get_url("set_building_fault_proof"),
+      formData,
+      config
+    );
+  }
+
+  set_building_fault_proof_fix(
+    project_id: string,
+    fault_id: string,
+    proof: string,
+    username: string
+  ): Promise<string> {
+    let file_name = extractFileNameFromUri(proof);
+    const formData = new FormData();
+    formData.append("file", {
+      uri: proof, // this is fine
+      name: file_name,
+      type: "image/" + extractFileTypeFromUri(proof),
+    });
+    formData.append("file_name", file_name);
+    formData.append("project_id", project_id);
+    formData.append("building_fault_id", fault_id);
+    formData.append("username", username);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    return new PostWrapperString().send_request(
+      this.get_url("set_building_fault_proof_fix"),
+      formData,
+      config
+    );
+  }
+
+  remove_fault(
+    project_id: string, 
+    fault_id: string,
+    username: string
+    ): Promise<Fault> {
+    return new PostWrapperFault().send_request(
+      this.get_url("remove_building_fault"),
+      { project_id: project_id, build_fault_id: fault_id, username: username }
+    );
+  }
+
+  get_role(
+    username: string,
+    project_id: string
+    ): Promise<roles> {
     return new PostWrapperRole().send_request(
       this.get_url("get_my_permission"),
       { username: username, project_id: project_id }
     );
   }
+
   edit_project_name(
     usernaem: string,
     project_id: string,
@@ -235,12 +466,17 @@ export class RealAPI extends api_interface {
       { username: usernaem, project_id: project_id, new_project_name: new_name }
     );
   }
-  get_all_users(project_id: string, username: string): Promise<UserRecord[]> {
+
+  get_all_users(
+    project_id: string,
+    username: string
+    ): Promise<UserRecord[]> {
     return new PostWrapperUserRecords().send_request(
       this.get_url("get_all_assigned_users_in_project"),
       { project_id: project_id, username: username }
     );
   }
+
   register(
     username: string,
     id: string,
@@ -253,6 +489,7 @@ export class RealAPI extends api_interface {
       name: username,
     });
   }
+
   remove_user(project_id: string, user: User, username: string): Promise<void> {
     return new PostWrapperVoid().send_request(
       this.get_url("remove_user_from_project"),
@@ -263,6 +500,7 @@ export class RealAPI extends api_interface {
       }
     );
   }
+
   edit_user_role(
     project_id: string,
     id: string,
@@ -334,6 +572,7 @@ export class RealAPI extends api_interface {
       config
     );
   }
+
   async load_excel_data(
     project_id: string,
     data: {},
@@ -394,13 +633,20 @@ export class RealAPI extends api_interface {
       handleSheet("עבודות שלד", Title.SkeletalStages);
       handleSheet("פיתוח וכללי לבניין", Title.GeneralStages);
 
-      // let rows = data["ליקויי בניה"];
-      // for (const row of rows.slice(1))
-      //   this.add_fault(project_id, row[4], row[5], row[1], username);
+      let rows = data["ליקויי בניה"];
+      let fault_id = "";
+      for (const row of rows.slice(1)) {
+        if(row[1] && row[1] != "")
+          this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
+        if(row[2] == "בוצע")
+          this.set_fault_status(project_id, fault_id, Status.Done, username);
+        // if(row[3])
+        //   this.edit_fault_urgency(project_id, fault_id, row[3], username);
+      }
 
-      // rows = data["תכניות"];
-      // for (const row of rows.slice(1))
-      //   this.add_plan(project_id, row[0], row[1] ? row[1] : "", username)
+      rows = data["תכניות"];
+      for (const row of rows.slice(1))
+        this.add_plan(project_id, row[0], row[1], username)
       resolve();
     });
   }
@@ -462,6 +708,7 @@ export class RealAPI extends api_interface {
       config
     );
   }
+
   remove_stage(
     project_id: string,
     title: Title,
@@ -477,6 +724,7 @@ export class RealAPI extends api_interface {
       apartment_number: apartment_number,
     });
   }
+
   remove_mission(
     project_id: string,
     title: Title,
@@ -497,6 +745,7 @@ export class RealAPI extends api_interface {
       }
     );
   }
+
   edit_stage_name(
     project_id: string,
     title: Title,
@@ -514,6 +763,7 @@ export class RealAPI extends api_interface {
       apartment_number: apartment_number,
     });
   }
+
   edit_mission_name(
     project_id: string,
     title: Title,

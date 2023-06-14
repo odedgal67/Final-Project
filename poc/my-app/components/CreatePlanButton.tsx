@@ -9,14 +9,9 @@ import {
   TextInput,
 } from "react-native";
 import { hebrew } from "../utils/text_dictionary";
+import * as DocumentPicker from "expo-document-picker";
 
-const CreatePlanButton = (props: {
-  onAddClick: (
-    planName: string,
-    link: string,
-    modal_visibility_setter: (b: boolean) => void
-  ) => void;
-}) => {
+const CreatePlanButton = (props) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [plan_name, setPlan_Name] = React.useState("");
   const [link, setPlan_Link] = React.useState("");
@@ -45,6 +40,7 @@ const CreatePlanButton = (props: {
       borderRadius: 10,
       marginHorizontal: "10%",
       marginBottom: 15,
+      flex: 0.75,
     },
     add_plan_button: {
       flex: 1,
@@ -68,6 +64,20 @@ const CreatePlanButton = (props: {
     <Text style={styles.white_text}>{hebrew.add_new_plan}</Text>
   );
 
+  const handleDocumentPick = async () => {
+    try {
+      const result: DocumentPicker.DocumentResult = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf",
+      });
+      if (result.type === "success") {
+        const documentLink = result.uri;
+        setPlan_Link(documentLink);
+      }
+    } catch (error) {
+      console.log("Error picking document:", error);
+    }
+  };
+
   return (
     <View style={styles.initial_view}>
       <TouchableOpacity
@@ -85,10 +95,7 @@ const CreatePlanButton = (props: {
               setModalVisible(false);
             }}
           >
-            <View
-              style={{ backgroundColor: "#111111", flex: 2, opacity: 0 }}
-              testID="closeButton"
-            >
+            <View style={{ backgroundColor: "#111111", flex: 2, opacity: 0 }}>
               <Pressable
                 style={{ flex: 1 }}
                 onPress={() => setModalVisible(false)}
@@ -114,14 +121,12 @@ const CreatePlanButton = (props: {
                   textAlign="center"
                   onChangeText={(plan_name) => setPlan_Name(plan_name)}
                 />
-                <TextInput
-                  numberOfLines={1}
-                  style={styles.text_input}
-                  placeholder={hebrew.add_new_plan_link_place_holder}
-                  placeholderTextColor={"black"}
-                  textAlign="center"
-                  onChangeText={(link) => setPlan_Link(link)}
-                />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleDocumentPick}
+                >
+                  <Text style={styles.white_text}>{hebrew.pick_document}</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.add_plan_button}
                   onPress={() =>

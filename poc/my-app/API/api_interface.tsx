@@ -9,6 +9,7 @@ import {
   Fault,
   User,
   UserRecord,
+  Urgency,
 } from "../types";
 import { Linking } from "react-native";
 
@@ -37,7 +38,24 @@ abstract class api_interface {
     plan_name: string,
     link: string,
     username: string
-  ): Promise<number>;
+  ): Promise<Plan>;
+  abstract remove_plan(
+    project_id: string,
+    plan_id: string,
+    username: string
+  ): Promise<void>;
+  abstract edit_plan_name(
+    project_id: string,
+    plan_id: string,
+    new_name: string,
+    username: string
+  ): Promise<void>;
+  abstract edit_plan_link(
+    project_id: string,
+    plan_id: string,
+    new_link: string,
+    username: string
+  ): Promise<void>;
   abstract set_mission_status(
     project_id: string,
     title: Title,
@@ -59,25 +77,20 @@ abstract class api_interface {
     stage_id: string,
     username: string
   ): Promise<Mission[]>;
-  // abstract get_all_faults(
-  //   project_id: string,
-  //   title: Title,
-  //   username: string
-  // ): Fault[];
-  abstract get_all_faults(project_id: string): Promise<Fault[]>;
+  abstract get_all_faults(project_id: string, username: string): Promise<Fault[]>;
   abstract add_fault(
     project_id: string,
-    floor: number,
+    floor_number: number,
     apartment_number: number,
     fault_name: string,
     username: string
-  ): Promise<void>;
+  ): Promise<Fault>;
   abstract get_all_stages(
     project_id: string,
     title: Title,
     username: string
   ): Promise<Stage[]>;
-  abstract get_all_plans(project_id: string): Promise<Plan[]>;
+  abstract get_all_plans(project_id: string, username: string): Promise<Plan[]>;
   abstract get_all_projects(username: string): Promise<Project[]>;
   abstract edit_comment_in_mission(
     project_id: string,
@@ -88,18 +101,57 @@ abstract class api_interface {
     username: string,
     apartment_number?: number
   ): Promise<void>;
-  abstract edit_fault_comment(
+  abstract edit_fault(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
+    fault_name: string,
+    floor_number: number,
+    apartment_number: number,
+    green_building: boolean,
+    urgency: Urgency,
+    proof_fix: string,
+    tekken: string,
+    plan_link: string,
+    status: Status,
+    proof: string,
     comment: string,
     username: string
   ): Promise<void>;
   abstract set_fault_status(
     project_id: string,
-    fault_id: number,
+    fault_id: string,
     new_status: Status,
     username: string
   ): Promise<void>;
+  abstract set_fault_urgency(
+    project_id: string,
+    fault_id: string,
+    new_urgency: Urgency,
+    username: string
+  ): Promise<void>;
+  abstract set_fault_comment(
+    project_id: string,
+    fault_id: string,
+    new_comment: string,
+    username: string
+  ): Promise<void>;
+  abstract set_fault_proof(
+    project_id: string,
+    fault_id: string,
+    new_proof: string,
+    username: string
+  ): Promise<string>;
+  abstract set_fault_proof_fix(
+    project_id: string,
+    fault_id: string,
+    new_proof_fix: string,
+    username: string
+  ): Promise<string>;
+  abstract remove_fault(
+    project_id: string,
+    fault_id: string,
+    username: string
+  ): Promise<Fault>;
   abstract get_role(username: string, project_id: string): Promise<roles>;
   abstract edit_project_name(
     usernaem: string,

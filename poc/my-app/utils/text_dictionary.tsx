@@ -1,4 +1,4 @@
-import { Status, Title } from "../types";
+import { Status, Title, Urgency } from "../types";
 import { roles } from "./Permissions";
 
 export var hebrew = {
@@ -6,9 +6,9 @@ export var hebrew = {
   pre_stage: "שלב מקדים",
   skeletal_stages: "עבודות שלד",
   apartments: "עבודות גמר בדירות",
-  plans: "תכניות",
+  plans: "תוכניות",
   faults: "ליקויי בנייה",
-  add_new_stage: "הוספה",
+  add_new_stage: "הוספת שלב חדש",
   add_new_project_place_holder: "שם הפרויקט",
   add_new_project: "הוספת פרויקט חדש",
   load_from_excel: "טעינה מקובץ אקסל",
@@ -18,16 +18,16 @@ export var hebrew = {
   fault_description: "תיאור הליקוי",
   mission_description: "תיאור המשימה",
   link_to_document: "קישור לתקן",
-  link_to_plan: "קישור לתכנית",
+  link_to_plan: "קישור לתוכנית",
   link_to_documentation: "קישור לתיעוד",
   change_name_for_projectName: "שינוי שם עבור ${projectName}",
   projectSettings: "הגדרות פרויקט",
   saved_changes_successfully: "השינויים נשמרו בהצלחה",
-  add_new_plan: "הוספת תכנית חדשה",
-  add_new_plan_place_holder: "שם התכנית",
-  add_new_plan_link_place_holder: "קישור לתכנית",
-  plan_name_cant_be_empty: "שם התכנית לא יכול להיות ריק",
-  plan_link_cant_be_empty: "קישור לתכנית לא יכול להיות ריק",
+  add_new_plan: "הוספת תוכנית חדשה",
+  add_new_plan_place_holder: "שם התוכנית",
+  add_new_plan_link_place_holder: "קישור לתוכנית",
+  plan_name_cant_be_empty: "שם התוכנית לא יכול להיות ריק",
+  plan_link_cant_be_empty: "קישור לתוכנית לא יכול להיות ריק",
   date_of_edit: "תאריך עריכה",
   register: "הרשמה",
   login: "התחברות",
@@ -60,15 +60,24 @@ export var hebrew = {
     "נמצא קישור קיים, האם ברצונך להחליף אותו?",
   not_registered: "לא רשומים?",
   registration_successful: "ההרשמה הסתיימה בהצלחה!",
+  add: "הוספה",
+  add_new_fault: "הוספת ליקוי חדש",
+  floor_number: "מספר קומה",
+  apartment_number: "מספר דירה",
   add_x: "הוספת ${x}",
   no_document_found: "לא נבחר קובץ",
   error_occurred: "אירעה שגיאה",
   tekken: "תקן",
-  plan: "תכנית",
+  plan: "תוכנית",
   save_changes: "שמירת שינויים",
+  delete_plan: "מחיקת התוכנית",
+  link_edit: "עריכת קישור",
+  pick_document: "בחירת קובץ",
+  fault_photo: "תמונת ליקוי",
+  fault_fix_photo: "תמונת תיקון ליקוי",
   are_you_sure_you_want_to_delete_x:
-    "האם אתה בטוח שברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
-  are_you_sure_you_want_to_logout: "האם אתה בטוח שברצונך להתנתק?",
+    "האם ברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
+  are_you_sure_you_want_to_logout: "האם ברצונך להתנתק?",
 };
 
 export var title_to_hebrew = {
@@ -91,4 +100,10 @@ export var role_to_hebrew = {
   [roles.PROJECT_MANAGER]: "מנהל פרויקט",
   [roles.CONTRACTOR]: "קבלן",
   [roles.UNDEFINED]: "לא מוגדר",
+};
+
+export var urgency_to_hebrew = {
+  [Urgency.LOW]: "לא דחוף",
+  [Urgency.MODERATE]: "בינוני",
+  [Urgency.HIGH]: "דחוף",
 };
