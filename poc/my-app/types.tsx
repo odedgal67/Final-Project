@@ -117,6 +117,7 @@ export type Fault = {
   proof_fix: string;
   project_id: number;
   comment: string;
+  green_building: boolean;
 } & ListedStatusItem;
 
 export type UserRecord = {

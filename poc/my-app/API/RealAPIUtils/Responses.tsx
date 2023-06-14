@@ -139,10 +139,11 @@ export class FaultResponse extends Response<Fault> {
       floor_number: this.result.floor_number,
       apartment_number: this.result.apartment_number,
       completion_date: this.result.completion_date,
-      photo: this.result.photo,
-      proof_photo: this.result.proof,
+      proof: this.result.proof,
+      proof_fix: this.result.proof_fix,
       project_id: this.result.project_id,
       comment: this.result.comment,
+      green_building: this.result.green_building,
     };
     return output;
   }
@@ -161,9 +162,10 @@ export class FaultsResponse extends Response<Fault[]> {
         apartment_number: value.apartment_number,
         completion_date: value.completion_date,
         proof: value.proof,
-        proof_fix: value._fix,
+        proof_fix: value.proof_fix,
         project_id: value.project_id,
         comment: value.comment,
+        green_building: value.green_building,
       });
     });
     return output;

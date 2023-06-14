@@ -9,6 +9,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 import Background from "../components/Background";
 import StatusRectangle from "../components/StatusRectangle";
@@ -16,7 +17,7 @@ import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
 import { Fault, Status, Title, Urgency } from "../types";
 import API from "../API/api_bridge";
-import { hebrew, urgency_to_hebrew } from "../utils/text_dictionary";
+import { hebrew } from "../utils/text_dictionary";
 import { ImageFaultProofLink, ImageFaultProofFixLink } from "../components/FaultLinks/ImageFaultLink";
 import UrgencyButton from "../components/UrgencyButton";
 
@@ -30,6 +31,7 @@ const FaultScreen = ({
   const { getProject } = React.useContext(ProjectContext);
   const { getUser, notify } = React.useContext(UserContext);
   const [status, setStatus] = React.useState(route.params.fault.status);
+  const [TextChanged, setTextChanged] = React.useState(false);
   const [comment, setComment] = React.useState(route.params.fault.comment);
   const [newUrgency, setUrgency] = React.useState(route.params.fault.urgency);
   const [isEditable, setEditable] = React.useState(false);
@@ -45,14 +47,21 @@ const FaultScreen = ({
         setUrgency(newUrgency);
       })
       .catch((error) => {
-        // Handle error, if needed
-        console.error(error);
+        alert(hebrew.error_occurred + "\n" + error);
       });
   };
   let onSubmitEdit = () => {
     API.get_instance()
-      .edit_fault_comment(getProject().id, fault.id, comment, getUser().id)
-      .then((res) => setEditable(false))
+      .set_fault_comment(
+        getProject().id,
+        fault.id,
+        comment,
+        getUser().id
+      ).then((res) => {
+        setEditable(false)
+        setComment(comment)
+        setTextChanged(false)
+      })
       .catch((err) => alert(err));
   };
   console.log("fault screen rendered " + fault.floor_number + " " + fault.name);
@@ -77,14 +86,24 @@ const FaultScreen = ({
                 }
               >
                 <TextInput
-                  style={styles.descriptionText}
+                  style={styles.description_text}
                   value={comment}
-                  onChangeText={(comm) =>
-                    comment.length < 250 ? setComment(comm) : null
-                  }
+                  onChangeText={(comm) => {
+                    setComment(comm);
+                    setTextChanged(true);
+                  }}
+                  multiline={true}
                   editable={isEditable}
                   onSubmitEditing={onSubmitEdit}
-                ></TextInput>
+                />
+                {TextChanged ? (
+                  <Button
+                    disabled={false}
+                    title={hebrew.save_changes}
+                    color={"#646464"}
+                    onPress={onSubmitEdit}
+                  />
+                ) : null}
               </View>
             </TouchableNativeFeedback>
           </View>
@@ -181,6 +200,12 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     marginVertical: 7.5,
     textAlign: "center",
+  },
+  description_text: {
+    color: "black",
+    flex: 1,
+    textAlignVertical: "top",
+    margin: "2%",
   },
   urgencyText: {
     fontWeight: "bold",

@@ -31,11 +31,9 @@ export const ImageFaultProofLink = (props: ImageFaultLinkProps) => {
         console.log("image uri: " + result.assets[0].uri);
         const imageUri = result.assets[0].uri;
         API.get_instance()
-          .update_mission_proof(
+          .set_fault_proof(
             getProject().id,
-            2,
-            "props.stage_id",
-            "props.mission.id",
+            props.fault.id,
             imageUri,
             getUser().id
           )
@@ -82,11 +80,9 @@ export const ImageFaultProofFixLink = (props: ImageFaultLinkProps) => {
           console.log("image uri: " + result.assets[0].uri);
           const imageUri = result.assets[0].uri;
           API.get_instance()
-            .update_mission_proof(
+            .set_fault_proof_fix(
               getProject().id,
-              2,
-              "props.stage_id",
-              "props.mission.id",
+              props.fault.id,
               imageUri,
               getUser().id
             )

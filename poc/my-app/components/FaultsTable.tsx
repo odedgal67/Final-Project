@@ -107,6 +107,7 @@ const FaultsTable = (props: {
             proof_fix: "",
             project_id: 0,
             comment: "",
+            green_building: false,
             status: Status.Undefined,
           }}
           onClick={() => setModalVisible(true)}
@@ -137,50 +138,5 @@ const FaultsTable = (props: {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    opacity: 1,
-    width: "75%",
-    paddingVertical: "2%",
-  },
-  modalTitle: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "black",
-    marginTop: "2%",
-    marginBottom: "5%",
-    textAlign: "center",
-  },
-  textInput: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 10,
-    borderWidth: 1,
-    margin: "3%",
-  },
-  acceptButton: {
-    borderRadius: 20,
-    backgroundColor: "#4c595f",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "5%",
-    marginHorizontal: "5%",
-    marginVertical: "2%",
-  },
-  acceptButtonText: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "white",
-    marginHorizontal: "3%",
-    marginTop: "2%",
-  },
-});
 
 export default FaultsTable;

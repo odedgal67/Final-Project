@@ -103,15 +103,18 @@ abstract class api_interface {
   ): Promise<void>;
   abstract edit_fault(
     project_id: string,
+    fault_id: string,
+    fault_name: string,
     floor_number: number,
     apartment_number: number,
-    fault_name: string,
-    fault_id: string,
-    comment: string,
-    urgency: Urgency,
-    link: string,
-    set_link: string,
     green_building: boolean,
+    urgency: Urgency,
+    proof_fix: string,
+    tekken: string,
+    plan_link: string,
+    status: Status,
+    proof: string,
+    comment: string,
     username: string
   ): Promise<void>;
   abstract set_fault_status(
@@ -126,6 +129,24 @@ abstract class api_interface {
     new_urgency: Urgency,
     username: string
   ): Promise<void>;
+  abstract set_fault_comment(
+    project_id: string,
+    fault_id: string,
+    new_comment: string,
+    username: string
+  ): Promise<void>;
+  abstract set_fault_proof(
+    project_id: string,
+    fault_id: string,
+    new_proof: string,
+    username: string
+  ): Promise<string>;
+  abstract set_fault_proof_fix(
+    project_id: string,
+    fault_id: string,
+    new_proof_fix: string,
+    username: string
+  ): Promise<string>;
   abstract remove_fault(
     project_id: string,
     fault_id: string,
