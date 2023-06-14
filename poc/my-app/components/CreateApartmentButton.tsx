@@ -9,24 +9,21 @@ import {
   TextInput,
 } from "react-native";
 import { hebrew } from "../utils/text_dictionary";
-import * as DocumentPicker from "expo-document-picker";
 
-const CreatePlanButton = (props) => {
+const CreateApartmentButton = (props) => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [plan_name, setPlan_Name] = React.useState("");
-  const [link, setPlan_Link] = React.useState("");
+  const [apartment_number, setApartment_number] = React.useState("");
   let borderRadius = 20;
 
   const styles = StyleSheet.create({
     button: {
       flex: 1,
+      borderTopLeftRadius: borderRadius,
+      borderTopRightRadius: borderRadius,
       justifyContent: "center",
       alignContent: "center",
       alignItems: "center",
       flexDirection: "row",
-      borderRadius: 10,
-      marginHorizontal: "25%",
-      backgroundColor: "#607070",
     },
     initial_view: {
       flex: 1,
@@ -43,7 +40,7 @@ const CreatePlanButton = (props) => {
       marginBottom: 15,
       flex: 0.75,
     },
-    add_plan_button: {
+    add_apartment_button: {
       flex: 1,
       borderRadius: 20,
       backgroundColor: "#4c595f",
@@ -61,23 +58,9 @@ const CreatePlanButton = (props) => {
     },
   });
 
-  const add_new_plan_text = (
-    <Text style={styles.white_text}>{hebrew.add_new_plan}</Text>
+  const add_apartment_text = (
+    <Text style={styles.white_text}>{hebrew.add_apartment}</Text>
   );
-
-  const handleDocumentPick = async () => {
-    try {
-      const result: DocumentPicker.DocumentResult = await DocumentPicker.getDocumentAsync({
-        type: "application/pdf",
-      });
-      if (result.type === "success") {
-        const documentLink = result.uri;
-        setPlan_Link(documentLink);
-      }
-    } catch (error) {
-      console.log("Error picking document:", error);
-    }
-  };
 
   return (
     <View style={styles.initial_view}>
@@ -87,7 +70,7 @@ const CreatePlanButton = (props) => {
         testID="addButton"
       >
         <View>
-          {add_new_plan_text}
+          {add_apartment_text}
           <Modal
             animationType="slide"
             transparent={true}
@@ -110,28 +93,23 @@ const CreatePlanButton = (props) => {
                   alignItems: "center",
                 }}
               >
-                {add_new_plan_text}
+                {add_apartment_text}
               </View>
               <View style={{ flex: 3, backgroundColor: "#2c393f" }}>
                 <TextInput
-                  maxLength={25}
+                  maxLength={3}
                   numberOfLines={1}
+                  keyboardType="numeric"
                   style={styles.text_input}
-                  placeholder={hebrew.add_new_plan_place_holder}
+                  placeholder={hebrew.apartment_number}
                   placeholderTextColor={"black"}
                   textAlign="center"
-                  onChangeText={(plan_name) => setPlan_Name(plan_name)}
+                  onChangeText={(apartment_number) => setApartment_number(apartment_number)}
                 />
                 <TouchableOpacity
-                  style={styles.button}
-                  onPress={handleDocumentPick}
-                >
-                  <Text style={styles.white_text}>{hebrew.pick_document}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.add_plan_button}
+                  style={styles.add_apartment_button}
                   onPress={() =>
-                    props.onAddClick(plan_name, link, setModalVisible)
+                    props.onAddClick(apartment_number, setModalVisible)
                   }
                 >
                   <Text style={styles.white_text}>{hebrew.accept}</Text>
@@ -145,4 +123,4 @@ const CreatePlanButton = (props) => {
   );
 };
 
-export default CreatePlanButton;
+export default CreateApartmentButton;

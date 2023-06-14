@@ -31,7 +31,7 @@ const MissionScreen = ({
   route,
 }: {
   navigation: any;
-  route: { params: { mission: Mission; title: Title; stage: Stage } };
+  route: { params: { mission: Mission; title: Title; stage: Stage, apartment_number?: number } };
 }) => {
   const { getProject } = React.useContext(ProjectContext);
   const { getUser, notify } = React.useContext(UserContext);
@@ -52,7 +52,8 @@ const MissionScreen = ({
         route.params.stage.id,
         mission.id,
         comment,
-        getUser().id
+        getUser().id,
+        route.params.apartment_number
       )
       .then(() => {
         alert(hebrew.saved_changes_successfully);
@@ -147,7 +148,8 @@ const MissionScreen = ({
                       route.params.stage.id,
                       mission.id,
                       new_status,
-                      getUser().id
+                      getUser().id,
+                      route.params.apartment_number
                     )
                     .then(() => {
                       setStatus(new_status);

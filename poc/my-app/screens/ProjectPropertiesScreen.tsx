@@ -84,7 +84,7 @@ const ProjectPropertiesScreen = ({
       },
       {
         propertyName: hebrew.apartments,
-        ScreenName: "LevelsScreen",
+        ScreenName: "ApartmentListScreen",
         title: Title.ApartmentStages,
       },
       { propertyName: hebrew.plans, ScreenName: "PlansScreen", title: -1 },

@@ -6,7 +6,7 @@ import { ProjectContext } from "../utils/ProjectContext";
 import { Stage, Project, Title, Status } from "../types";
 import API from "../API/api_bridge";
 import { UserContext } from "../utils/UserContext";
-import { title_to_hebrew } from "../utils/text_dictionary";
+import { hebrew, title_to_hebrew } from "../utils/text_dictionary";
 import { truncate_page_title } from "../utils/stringFunctions";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -15,20 +15,21 @@ const GeneralStagesScreen = ({
   route,
 }: {
   navigation: any;
-  route: { params: { title: Title; project: Project } };
+  route: { params: { title: Title; project: Project, apartment_number ?: number } };
 }) => {
   const { setProject, getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
   const [stages, setStages] = React.useState([] as Stage[]);
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: truncate_page_title(title_to_hebrew[route.params.title]),
+      title: route.params.apartment_number ? hebrew.apartment_stages.replace("${apartment}", route.params.apartment_number.toString()) :
+      truncate_page_title(title_to_hebrew[route.params.title]),
     });
   }, [navigation]);
   useFocusEffect(
     React.useCallback(() => {
       API.get_instance()
-        .get_all_stages(getProject().id, route.params.title, getUser().id)
+        .get_all_stages(getProject().id, route.params.title, getUser().id, route.params.apartment_number)
         .then((stages) => setStages(stages))
         .catch((err) => alert(err));
     }, [])
@@ -48,13 +49,15 @@ const GeneralStagesScreen = ({
                   stage_id,
                   new_status,
                   getUser().id
+                  // , route.params.apartment_number // TODO: add apartment number after adding it to the backend
                 )
                 .then(() =>
                   API.get_instance()
                     .get_all_stages(
                       getProject().id,
                       route.params.title,
-                      getUser().id
+                      getUser().id,
+                      route.params.apartment_number
                     )
                     .then((stages) => setStages(stages))
                 )
@@ -63,11 +66,12 @@ const GeneralStagesScreen = ({
           }}
           ButtonHandler={(stage_name: string, stage_id: string) => {
             return () =>
-              navigation.navigate("MissionListsScreen", {
+              navigation.navigate("MissionListScreen", {
                 stage: stages.find((stage: any) => stage.id == stage_id),
                 stageName: stage_name,
                 stage_id: stage_id,
                 title: route.params.title,
+                apartment_number: route.params.apartment_number,
               });
           }}
           addStagehandler={(
@@ -80,7 +84,8 @@ const GeneralStagesScreen = ({
                   getProject().id,
                   route.params.title,
                   get_name(),
-                  getUser().id
+                  getUser().id,
+                  route.params.apartment_number
                 )
                 .then((new_stage: Stage) => {
                   setStages((currStages) => [...currStages, new_stage]);
@@ -96,7 +101,8 @@ const GeneralStagesScreen = ({
                   getProject().id,
                   route.params.title,
                   stage_id,
-                  getUser().id
+                  getUser().id,
+                  route.params.apartment_number
                 )
                 .then((removedStage: Stage) => {
                   setStages((currStages) =>
@@ -115,7 +121,8 @@ const GeneralStagesScreen = ({
                   route.params.title,
                   stage_id,
                   newname,
-                  getUser().id
+                  getUser().id,
+                  route.params.apartment_number
                 )
                 .then(() =>
                   setStages((currStages) =>
