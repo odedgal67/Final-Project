@@ -53,6 +53,12 @@ export enum Title /*same as backend*/ {
   BuildingFaults = 4,
 }
 
+export enum Urgency /*same as backend*/ {
+  LOW = 1,
+  MODERATE = 2,
+  HIGH = 3,
+}
+
 export type Project = {
   id: string;
   name: string;
@@ -96,20 +102,22 @@ export type User = {
 
 export type Plan = {
   name: string;
+  id: string;
   link: string;
   date: Date;
   project_id: number;
 };
 
 export type Fault = {
-  urgency: string;
-  floor: number;
+  urgency: Urgency;
+  floor_number: number;
   apartment_number: number;
-  date: Date;
-  photo: number;
-  proof: number;
+  completion_date: Date;
+  proof: string;
+  proof_fix: string;
   project_id: number;
   comment: string;
+  green_building: boolean;
 } & ListedStatusItem;
 
 export type UserRecord = {

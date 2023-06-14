@@ -9,14 +9,17 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 import Background from "../components/Background";
 import StatusRectangle from "../components/StatusRectangle";
 import { ProjectContext } from "../utils/ProjectContext";
 import { UserContext } from "../utils/UserContext";
-import { Fault, Status, Title } from "../types";
+import { Fault, Status, Title, Urgency } from "../types";
 import API from "../API/api_bridge";
 import { hebrew } from "../utils/text_dictionary";
+import { ImageFaultProofLink, ImageFaultProofFixLink } from "../components/FaultLinks/ImageFaultLink";
+import UrgencyButton from "../components/UrgencyButton";
 
 const FaultScreen = ({
   navigation,
@@ -28,21 +31,40 @@ const FaultScreen = ({
   const { getProject } = React.useContext(ProjectContext);
   const { getUser, notify } = React.useContext(UserContext);
   const [status, setStatus] = React.useState(route.params.fault.status);
+  const [TextChanged, setTextChanged] = React.useState(false);
+  const [comment, setComment] = React.useState(route.params.fault.comment);
+  const [newUrgency, setUrgency] = React.useState(route.params.fault.urgency);
   const [isEditable, setEditable] = React.useState(false);
   const fault: Fault = route.params.fault;
   const _fault_name =
     fault.name.length > 25 ? fault.name.substring(0, 15) + "..." : fault.name;
 
   navigation.setOptions({ title: _fault_name });
-  const [comment, setComment] = React.useState(fault.comment);
-
+  const handleUrgencyChange = (newUrgency: Urgency) => {
+    API.get_instance()
+      .set_fault_urgency(getProject().id, fault.id, newUrgency, getUser().id)
+      .then(() => {
+        setUrgency(newUrgency);
+      })
+      .catch((error) => {
+        alert(hebrew.error_occurred + "\n" + error);
+      });
+  };
   let onSubmitEdit = () => {
     API.get_instance()
-      .edit_fault_comment(getProject().id, fault.id, comment, getUser().id)
-      .then((res) => setEditable(false))
+      .set_fault_comment(
+        getProject().id,
+        fault.id,
+        comment,
+        getUser().id
+      ).then((res) => {
+        setEditable(false)
+        setComment(comment)
+        setTextChanged(false)
+      })
       .catch((err) => alert(err));
   };
-
+  console.log("fault screen rendered " + fault.floor_number + " " + fault.name);
   return (
     <Background>
       <KeyboardAvoidingView
@@ -64,35 +86,49 @@ const FaultScreen = ({
                 }
               >
                 <TextInput
-                  style={styles.descriptionText}
+                  style={styles.description_text}
                   value={comment}
-                  onChangeText={(comm) =>
-                    comment.length < 250 ? setComment(comm) : null
-                  }
+                  onChangeText={(comm) => {
+                    setComment(comm);
+                    setTextChanged(true);
+                  }}
+                  multiline={true}
                   editable={isEditable}
                   onSubmitEditing={onSubmitEdit}
-                ></TextInput>
+                />
+                {TextChanged ? (
+                  <Button
+                    disabled={false}
+                    title={hebrew.save_changes}
+                    color={"#646464"}
+                    onPress={onSubmitEdit}
+                  />
+                ) : null}
               </View>
             </TouchableNativeFeedback>
           </View>
+          <View style={styles.linksView}>
+            <ImageFaultProofLink fault={fault} link={fault.proof} />
+            <ImageFaultProofFixLink fault={fault} link={fault.proof_fix} />
+          </View>
           <View style={styles.statusAndLinks}>
             <View style={styles.linksView}>
-              <Text style={styles.smallText}>{hebrew.urgency}</Text>
-              <UrgencyButton title={hebrew.urgency}></UrgencyButton>
+              <Text style={styles.urgencyText}>{hebrew.urgency}</Text>
+              <UrgencyButton urgency={newUrgency} onUrgencyChange={handleUrgencyChange} />
             </View>
             <View style={styles.linksView}>
+              <View>
+                <Text style={styles.smallText}>{hebrew.floor}</Text>
+                <Text style={styles.smallText}>{fault.floor_number}</Text>
+              </View>
               <View>
                 <Text style={styles.smallText}>{hebrew.apartment}</Text>
                 <Text style={styles.smallText}>{fault.apartment_number}</Text>
               </View>
               <View>
-                <Text style={styles.smallText}>{hebrew.floor}</Text>
-                <Text style={styles.smallText}>{fault.floor}</Text>
-              </View>
-              <View>
                 <Text style={styles.smallText}>{hebrew.date_of_edit}</Text>
                 <Text style={styles.smallText}>
-                  {new Date(fault.date).toLocaleDateString()}
+                  {new Date(fault.completion_date).toLocaleDateString()}
                 </Text>
               </View>
             </View>
@@ -115,6 +151,7 @@ const FaultScreen = ({
                     .then(() => {
                       setStatus(newStatus);
                       fault.status = newStatus;
+                      fault.completion_date = new Date();
                       notify();
                     })
                     .catch((err) => alert(err));
@@ -125,17 +162,6 @@ const FaultScreen = ({
         </View>
       </KeyboardAvoidingView>
     </Background>
-  );
-};
-
-const UrgencyButton = (props: { title: string }) => {
-  return (
-    <TouchableHighlight
-      style={styles.button}
-      onPress={() => alert(hebrew.link_doesnt_exist)}
-    >
-      <Text style={styles.smallText}>{props.title}</Text>
-    </TouchableHighlight>
   );
 };
 
@@ -159,6 +185,15 @@ const styles = StyleSheet.create({
     marginVertical: "2%",
     flex: 0.5,
   },
+  highButton: {
+    backgroundColor: "red",
+  },
+  mediumButton: {
+    backgroundColor: "yellow",
+  },
+  lowButton: {
+    backgroundColor: "lightgreen",
+  },
   smallText: {
     fontWeight: "bold",
     fontSize: 14,
@@ -166,10 +201,24 @@ const styles = StyleSheet.create({
     marginVertical: 7.5,
     textAlign: "center",
   },
+  description_text: {
+    color: "black",
+    flex: 1,
+    textAlignVertical: "top",
+    margin: "2%",
+  },
+  urgencyText: {
+    fontWeight: "bold",
+    fontSize: 16,
+    lineHeight: 21,
+    marginVertical: 7.5,
+    textAlign: "center",
+    flex: 0.75,
+  },
   titleViewStyle: {
     alignItems: "center",
     height: "55%",
-    maxHeight: "60%",
+    maxHeight: "45%",
   },
   statusRectangleView: {
     flex: 1,

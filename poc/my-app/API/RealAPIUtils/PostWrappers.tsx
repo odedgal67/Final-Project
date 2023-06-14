@@ -1,18 +1,22 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { Mission, Project, Stage, User, UserRecord } from "../../types";
+import { Project, Stage, Mission, Plan, Fault, User, UserRecord } from "../../types";
 import {
-  UserResponse,
   Response,
   ProjectResponse,
   ProjectsResponse,
-  RoleResponse,
-  StagesResponse,
-  VoidResponse,
-  MissionsResponse,
-  UserRecordsResponse,
-  StringResponse,
   StageResponse,
+  StagesResponse,
   MissionResponse,
+  MissionsResponse,
+  PlanResponse,
+  PlansResponse,
+  FaultResponse,
+  FaultsResponse,
+  UserResponse,
+  UserRecordsResponse,
+  RoleResponse,
+  VoidResponse,
+  StringResponse,
 } from "./Responses";
 import { roles } from "../../utils/Permissions";
 import { UserContextWrapper } from "../../utils/UserContext";
@@ -70,12 +74,6 @@ export abstract class PostWrapper<T> {
 }
 
 // the following classes are duct-tape solutions to the problem of type script not being able to intantiate a class by it's type.
-export class PostWrapperUser extends PostWrapper<User> {
-  get_response_class(data: any): Response<User> {
-    return new UserResponse(data);
-  }
-}
-
 export class PostWrapperProject extends PostWrapper<Project> {
   get_response_class(data: any): Response<Project> {
     return new ProjectResponse(data);
@@ -86,12 +84,6 @@ export class PostWRapperProjects extends PostWrapper<Project[]> {
   get_response_class(data: any): Response<Project[]> {
     console.log("data in PostWrapperProjects: ", data);
     return new ProjectsResponse(data);
-  }
-}
-
-export class PostWrapperRole extends PostWrapper<roles> {
-  get_response_class(data: any): Response<roles> {
-    return new RoleResponse(data);
   }
 }
 
@@ -107,12 +99,6 @@ export class PostWrapperStages extends PostWrapper<Stage[]> {
   }
 }
 
-export class PostWrapperVoid extends PostWrapper<void> {
-  get_response_class(data: any): Response<void> {
-    return new VoidResponse(data);
-  }
-}
-
 export class PostWrapperMission extends PostWrapper<Mission> {
   get_response_class(data: any): Response<Mission> {
     return new MissionResponse(data);
@@ -125,9 +111,51 @@ export class PostWrapperMissions extends PostWrapper<Mission[]> {
   }
 }
 
+export class PostWrapperPlan extends PostWrapper<Plan> {
+  get_response_class(data: any): Response<Plan> {
+    return new PlanResponse(data);
+  }
+}
+
+export class PostWrapperPlans extends PostWrapper<Plan[]> {
+  get_response_class(data: any): Response<Plan[]> {
+    return new PlansResponse(data);
+  }
+}
+
+export class PostWrapperFault extends PostWrapper<Fault> {
+  get_response_class(data: any): Response<Fault> {
+    return new FaultResponse(data);
+  }
+}
+
+export class PostWrapperFaults extends PostWrapper<Fault[]> {
+  get_response_class(data: any): Response<Fault[]> {
+    return new FaultsResponse(data);
+  }
+}
+
+export class PostWrapperUser extends PostWrapper<User> {
+  get_response_class(data: any): Response<User> {
+    return new UserResponse(data);
+  }
+}
+
 export class PostWrapperUserRecords extends PostWrapper<UserRecord[]> {
   get_response_class(data: any): Response<UserRecord[]> {
     return new UserRecordsResponse(data);
+  }
+}
+
+export class PostWrapperRole extends PostWrapper<roles> {
+  get_response_class(data: any): Response<roles> {
+    return new RoleResponse(data);
+  }
+}
+
+export class PostWrapperVoid extends PostWrapper<void> {
+  get_response_class(data: any): Response<void> {
+    return new VoidResponse(data);
   }
 }
 
