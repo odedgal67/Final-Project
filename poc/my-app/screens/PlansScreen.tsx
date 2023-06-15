@@ -179,7 +179,7 @@ const PlansScreen = ({ navigation, route }) => {
                     <>
                       <Text style={styles.nameText}>{plan.name}</Text>
                       <Text style={styles.dateText}>
-                        {new Date(plan.date).toLocaleDateString()}
+                        {plan.date}
                       </Text>
                     </>
                   )}

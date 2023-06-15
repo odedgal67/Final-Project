@@ -8,7 +8,7 @@ export var hebrew = {
   apartments: "עבודות גמר בדירות",
   plans: "תוכניות",
   faults: "ליקויי בנייה",
-  add_new_stage: "הוספת שלב חדש",
+  add_new_stage: "הוספה",
   add_new_project_place_holder: "שם הפרויקט",
   add_new_project: "הוספת פרויקט חדש",
   load_from_excel: "טעינה מקובץ אקסל",
@@ -82,6 +82,7 @@ export var hebrew = {
   are_you_sure_you_want_to_delete_x:
     "האם ברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
   are_you_sure_you_want_to_logout: "האם ברצונך להתנתק?",
+  choose_role: "בחירת תפקיד",
 };
 
 export var title_to_hebrew = {

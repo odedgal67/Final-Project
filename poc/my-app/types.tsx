@@ -104,7 +104,7 @@ export type Plan = {
   name: string;
   id: string;
   link: string;
-  date: Date;
+  date: string;
   project_id: number;
 };
 
@@ -112,7 +112,7 @@ export type Fault = {
   urgency: Urgency;
   floor_number: number;
   apartment_number: number;
-  completion_date: Date;
+  completion_date: string;
   proof: string;
   proof_fix: string;
   project_id: number;

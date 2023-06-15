@@ -390,7 +390,7 @@ export class RealAPI extends api_interface {
     );
   }
 
-  set_building_fault_proof(
+  set_fault_proof(
     project_id: string,
     fault_id: string,
     proof: string,
@@ -419,7 +419,7 @@ export class RealAPI extends api_interface {
     );
   }
 
-  set_building_fault_proof_fix(
+  set_fault_proof_fix(
     project_id: string,
     fault_id: string,
     proof: string,
