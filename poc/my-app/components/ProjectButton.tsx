@@ -25,7 +25,7 @@ const ProjectButton = (props: {
   const [curr_project_name, setCurr_Project_Name] = React.useState(
     props.project.name
   );
-  let image_location = "./imgs/folder.png";
+  let image_location = "./imgs/folder.jpg";
   let projectName = props.project.name;
   let choose_new_project_text = hebrew.change_name_for_projectName.replace(
     "${projectName}",
