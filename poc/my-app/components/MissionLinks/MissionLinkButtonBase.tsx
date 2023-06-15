@@ -2,6 +2,7 @@ import { TouchableHighlight, Text, StyleSheet, Linking } from "react-native";
 import ConfirmDialogue from "../ConfirmDialogue";
 import { hebrew } from "../../utils/text_dictionary";
 import API from "../../API/api_bridge";
+import React from "react";
 
 type MissionLinkButtonBaseProps = {
   title: string;

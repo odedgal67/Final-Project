@@ -26,7 +26,7 @@ const AssignUserToProject = (props: AssignUserToProjectProps) => {
         }}
       />
       <View style={styles.row}>
-        <RoleSelection onPress={(val: roles) => setRole(val)} title={""} />
+        <RoleSelection onPress={(val: roles) => setRole(val)} title={hebrew.choose_role} />
       </View>
       <AcceptButton
         onPress={() => {

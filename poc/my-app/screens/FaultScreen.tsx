@@ -127,8 +127,8 @@ const FaultScreen = ({
               </View>
               <View>
                 <Text style={styles.smallText}>{hebrew.date_of_edit}</Text>
-                <Text style={styles.smallText}>
-                  {new Date(fault.completion_date).toLocaleDateString()}
+                <Text style={fault.completion_date? styles.smallText: styles.smallTextNoDate}>
+                  {fault.completion_date? fault.completion_date: "-"}
                 </Text>
               </View>
             </View>
@@ -151,8 +151,6 @@ const FaultScreen = ({
                     .then(() => {
                       setStatus(newStatus);
                       fault.status = newStatus;
-                      fault.completion_date = new Date();
-                      notify();
                     })
                     .catch((err) => alert(err));
                 }}
@@ -200,6 +198,14 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     marginVertical: 7.5,
     textAlign: "center",
+  },
+  smallTextNoDate: {
+    fontWeight: "bold",
+    fontSize: 14,
+    lineHeight: 21,
+    marginVertical: 7.5,
+    textAlign: "center",
+    color: "rgba(0,0,0,0.3)",
   },
   description_text: {
     color: "black",

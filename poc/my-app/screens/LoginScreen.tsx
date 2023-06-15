@@ -16,7 +16,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     API.get_instance()
-      .login(username, password)
+      .login(username.trim(), password)
       .then((user) => {
         const allProjects = API.get_instance().get_all_projects(user.id);
         setUser(user);

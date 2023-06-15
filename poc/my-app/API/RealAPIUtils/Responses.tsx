@@ -77,7 +77,7 @@ export class MissionResponse extends Response<Mission> {
       id: this.result.id,
       name: this.result.name,
       green_building: this.result.green_building,
-      completion_date: new Date(),
+      completion_date: this.result.completion_date,
       completing_user: this.result.completing_user,
       comment: this.result.comment,
       status: status_mapping[this.result.status],

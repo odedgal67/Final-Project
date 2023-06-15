@@ -16,6 +16,7 @@ import { UserContext, UserContextProvider } from "./utils/UserContext";
 import { LogBox } from "react-native";
 import Crane from "./components/Crane";
 import ManageUsersScreen from "./screens/ManageUsersScreen";
+import { registerRootComponent } from "expo";
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
@@ -56,3 +57,4 @@ const MyStack = () => {
 };
 
 export default MyStack;
+registerRootComponent(MyStack);

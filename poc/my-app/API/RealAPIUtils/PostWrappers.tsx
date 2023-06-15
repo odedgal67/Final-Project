@@ -82,7 +82,6 @@ export class PostWrapperProject extends PostWrapper<Project> {
 
 export class PostWRapperProjects extends PostWrapper<Project[]> {
   get_response_class(data: any): Response<Project[]> {
-    console.log("data in PostWrapperProjects: ", data);
     return new ProjectsResponse(data);
   }
 }
