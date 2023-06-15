@@ -1,4 +1,4 @@
-import { Project, Stage, Mission, Plan, Fault, User, Status, UserRecord } from "../../types";
+import { Project, Stage, Mission, Plan, Fault, User, Status, UserRecord, Apartment } from "../../types";
 import { roles } from "../../utils/Permissions";
 
 let roles_mapping = [
@@ -166,6 +166,27 @@ export class FaultsResponse extends Response<Fault[]> {
         project_id: value.project_id,
         comment: value.comment,
         green_building: value.green_building,
+      });
+    });
+    return output;
+  }
+}
+
+export class ApartmentResponse extends Response<Apartment> {
+  get_result(): Apartment {
+    let output: Apartment = {
+      apartment_number: this.result.apartment_number,
+    };
+    return output;
+  }
+}
+
+export class ApartmentsResponse extends Response<Apartment[]> {
+  get_result(): Apartment[] {
+    let output: Apartment[] = [];
+    Object.entries(this.result).forEach(([_key, value]) => {
+      output.push({
+        apartment_number: value.apartment_number,
       });
     });
     return output;

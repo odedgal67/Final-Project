@@ -5,8 +5,8 @@ import ProjectsScreen from "./screens/ProjectsScreen";
 import ProjectPropertiesScreen from "./screens/ProjectPropertiesScreen";
 import GeneralStagesScreen from "./screens/GeneralStagesScreen";
 import MissionScreen from "./screens/MissionScreen";
-import MissionListsScreen from "./screens/MissionListScreen";
-import LevelsScreen from "./screens/LevelsScreen";
+import MissionListScreen from "./screens/MissionListScreen";
+import ApartmentListScreen from "./screens/ApartmentListScreen";
 import FaultScreen from "./screens/FaultScreen";
 import FaultListScreen from "./screens/FaultListScreen";
 import RegistrationScreen from "./screens/RegistrationScreen";
@@ -44,8 +44,8 @@ const MyStack = () => {
           <Stack.Screen name="ManageUsersScreen" component={ManageUsersScreen} />
           <Stack.Screen name="GeneralStagesScreen" component={GeneralStagesScreen} />
           <Stack.Screen name="MissionScreen" component={MissionScreen} />
-          <Stack.Screen name="MissionListsScreen" component={MissionListsScreen} />
-          <Stack.Screen name="LevelsScreen" component={LevelsScreen} />
+          <Stack.Screen name="MissionListScreen" component={MissionListScreen} />
+          <Stack.Screen name="ApartmentListScreen" component={ApartmentListScreen} />
           <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
           <Stack.Screen name="FaultScreen" component={FaultScreen} />
           <Stack.Screen name="FaultListScreen" component={FaultListScreen} />

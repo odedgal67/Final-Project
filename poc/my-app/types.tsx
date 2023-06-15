@@ -124,3 +124,7 @@ export type UserRecord = {
   user: User;
   role: roles;
 };
+
+export type Apartment = {
+  apartment_number: number;
+};

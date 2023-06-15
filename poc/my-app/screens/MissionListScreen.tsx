@@ -7,12 +7,12 @@ import API from "../API/api_bridge";
 import { Mission, Stage, Title } from "../types";
 import { truncate_page_title } from "../utils/stringFunctions";
 
-const MissionListsScreen = ({
+const MissionListScreen = ({
   navigation,
   route,
 }: {
   navigation: any;
-  route: { params: { stage: Stage; title: Title } };
+  route: { params: { stage: Stage, title: Title, apartment_number?: number } };
 }) => {
   const { getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
@@ -28,7 +28,8 @@ const MissionListsScreen = ({
         getProject().id,
         route.params.title,
         route.params.stage.id,
-        getUser().id
+        getUser().id,
+        route.params.apartment_number
       )
       .then((missions) => setMissions(missions))
       .catch((err) => alert(err))
@@ -48,6 +49,7 @@ const MissionListsScreen = ({
                 ),
                 title: route.params.title,
                 stage: route.params.stage,
+                apartment_number: route.params.apartment_number,
               });
           }}
           addStagehandler={(getter: () => string, modal_visibility_setter) => {
@@ -58,7 +60,8 @@ const MissionListsScreen = ({
                   route.params.stage.id,
                   route.params.title,
                   getter(),
-                  getUser().id
+                  getUser().id,
+                  route.params.apartment_number
                 )
                 .then((new_mission: Mission) =>
                   setMissions((currMissions) => [...currMissions, new_mission])
@@ -75,7 +78,8 @@ const MissionListsScreen = ({
                   route.params.title,
                   route.params.stage.id,
                   mission_id,
-                  getUser().id
+                  getUser().id,
+                  route.params.apartment_number
                 )
                 .then((removed_mission: Mission) =>
                   setMissions((currMissions) =>
@@ -96,7 +100,8 @@ const MissionListsScreen = ({
                   route.params.stage.id,
                   mission_id,
                   newname,
-                  getUser().id
+                  getUser().id,
+                  route.params.apartment_number
                 )
                 .then(() =>
                   setMissions((currMissions) =>
@@ -116,4 +121,4 @@ const MissionListsScreen = ({
   );
 };
 
-export default MissionListsScreen;
+export default MissionListScreen;

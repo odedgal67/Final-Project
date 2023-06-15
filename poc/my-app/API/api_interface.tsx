@@ -24,14 +24,16 @@ abstract class api_interface {
     project_id: string,
     title: Title,
     stage_name: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<Stage>;
   abstract add_mission(
     project_id: string,
     stage_id: string,
     title: Title,
     mission_name: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<Mission>;
   abstract add_plan(
     project_id: string,
@@ -62,20 +64,23 @@ abstract class api_interface {
     stage_id: string,
     mission_id: string,
     new_status: Status,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<void>;
   abstract set_stage_status(
     project_id: string,
     title: Title,
     stage_id: string,
     new_status: Status,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<void>;
   abstract get_all_missions(
     project_id: string,
     title: Title,
     stage_id: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<Mission[]>;
   abstract get_all_faults(project_id: string, username: string): Promise<Fault[]>;
   abstract add_fault(
@@ -88,7 +93,8 @@ abstract class api_interface {
   abstract get_all_stages(
     project_id: string,
     title: Title,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<Stage[]>;
   abstract get_all_plans(project_id: string, username: string): Promise<Plan[]>;
   abstract get_all_projects(username: string): Promise<Project[]>;
@@ -240,6 +246,20 @@ abstract class api_interface {
     username: string,
     apartment_number?: number
   ): Promise<void>;
+  abstract get_all_apartments(
+    project_id: string,
+    username: string
+  ): Promise<Apartment[]>;
+  abstract add_apartment(
+    project_id: string,
+    apartment_number: number,
+    username: string
+  ): Promise<Apartment>;
+  abstract remove_apartment(
+    project_id: string,
+    apartment_number: number,
+    username: string
+  ): Promise<Apartment>;
   abstract logout(username: string): Promise<void>;
 }
 
