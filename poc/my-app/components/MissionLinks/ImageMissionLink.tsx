@@ -12,6 +12,7 @@ type ImageMissionLinkProps = {
   title: Title;
   stage_id: string;
   link?: string;
+  apartment_number?: number;
 };
 
 const ImageMissionLink = (props: ImageMissionLinkProps) => {
@@ -38,7 +39,8 @@ const ImageMissionLink = (props: ImageMissionLinkProps) => {
             props.stage_id,
             props.mission.id,
             imageUri,
-            getUser().id
+            getUser().id,
+            props.apartment_number
           )
           .then((uri) => {
             setImage(uri);

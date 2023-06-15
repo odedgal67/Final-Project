@@ -12,6 +12,7 @@ type PdfMissionLinkProps = {
   title: Title;
   stage_id: string;
   link?: string;
+  apartment_number?: number;
 };
 
 export const TekkenPdfMissionLink = (props: PdfMissionLinkProps) => {
@@ -37,7 +38,8 @@ export const TekkenPdfMissionLink = (props: PdfMissionLinkProps) => {
             props.stage_id,
             props.mission.id,
             documentUri,
-            getUser().id
+            getUser().id,
+            props.apartment_number
           )
           .then((uri) => {
             setDocumentUri(uri);
@@ -87,7 +89,8 @@ export const PlanPdfMissionLink = (props: PdfMissionLinkProps) => {
             props.stage_id,
             props.mission.id,
             documentUri,
-            getUser().id
+            getUser().id,
+            props.apartment_number
           )
           .then((uri) => {
             setDocumentUri(uri);

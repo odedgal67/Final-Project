@@ -10,6 +10,7 @@ import {
   User,
   UserRecord,
   Urgency,
+  Apartment,
 } from "../types";
 import { Linking } from "react-native";
 
@@ -191,20 +192,17 @@ abstract class api_interface {
     stage_id: string,
     mission_id: string,
     local_image_uri: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<string>;
-  abstract load_excel_data(
-    project_id: string,
-    data: {},
-    username: string
-  ): Promise<void>;
   abstract update_mission_document(
     project_id: string,
     title: Title,
     stage_id: string,
     mission_id: string,
     local_document_uri: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<string>;
   abstract update_mission_plan(
     project_id: string,
@@ -212,7 +210,8 @@ abstract class api_interface {
     stage_id: string,
     mission_id: string,
     local_document_uri: string,
-    username: string
+    username: string,
+    apartment_number?: number
   ): Promise<string>;
   abstract remove_stage(
     project_id: string,
@@ -260,6 +259,11 @@ abstract class api_interface {
     apartment_number: number,
     username: string
   ): Promise<Apartment>;
+  abstract load_excel_data(
+    project_id: string,
+    data: {},
+    username: string
+  ): Promise<void>;
   abstract logout(username: string): Promise<void>;
 }
 

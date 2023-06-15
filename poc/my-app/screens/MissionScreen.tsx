@@ -113,18 +113,21 @@ const MissionScreen = ({
                 title={route.params.title}
                 stage_id={route.params.stage.id}
                 link={mission.document_link}
+                apartment_number={route.params.apartment_number}
               />
               <PlanPdfMissionLink
                 mission={mission}
                 title={route.params.title}
                 stage_id={route.params.stage.id}
                 link={mission.plan_link}
+                apartment_number={route.params.apartment_number}
               />
               <ImageMissionLink
                 mission={mission}
                 title={route.params.title}
                 stage_id={route.params.stage.id}
                 link={mission.proof_link}
+                apartment_number={route.params.apartment_number}
               />
             </View>
             <View style={styles.status_rectangle_view}>
