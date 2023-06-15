@@ -576,6 +576,7 @@ export class RealAPI extends api_interface {
       "image"
     );
     apartment_number? formData.append("apartment_number", String(apartment_number)) : null;
+    console.log(formData)
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",

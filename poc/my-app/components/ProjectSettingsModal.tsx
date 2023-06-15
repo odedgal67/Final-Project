@@ -16,6 +16,7 @@ import API from "../API/api_bridge";
 import * as DocumentPicker from "expo-document-picker";
 import XLSX from "xlsx";
 import * as FileSystem from "expo-file-system";
+import { cacheDirectory, copyAsync, getInfoAsync, makeDirectoryAsync, uploadAsync } from 'expo-file-system'
 
 interface ProjectSettingsModalProps {
   project: Project;
@@ -92,14 +93,24 @@ const ProjectSettingsModal = (props: ProjectSettingsModalProps) => {
   );
 };
 
+const createCacheFile = async ({ name, uri }: {name: string, uri: string}) => {
+  if (!(await getInfoAsync(cacheDirectory + "uploads/")).exists) {
+      await makeDirectoryAsync(cacheDirectory + "uploads/");
+  }
+  const cacheFilePath = cacheDirectory + "uploads/" + name;
+  await copyAsync({ from: uri, to: cacheFilePath });
+  return cacheFilePath;
+}
+
 const handleLoadFromExcel = async (proj: string, user: string) => {
   try {
     const file = await DocumentPicker.getDocumentAsync({
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      copyToCacheDirectory: false,
     });
 
     if (file.type === "success") {
-      const excelData = await readExcelFile(file.uri);
+      const excelData = await readExcelFile(await createCacheFile({name: file.name, uri: file.uri}));
 
       if (excelData) {
         await API.get_instance()
