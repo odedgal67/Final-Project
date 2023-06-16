@@ -2,5 +2,5 @@
 ### Useful links
 * [Server repository](https://github.com/odedgal67/BuilderBackend)
 * [User Manual](https://docs.google.com/document/d/1iMq0Jy2-XfPeAfiGvEePo7HMbKj6dXTiw-MQWh0Mpu8/edit?usp=sharing)
-* [Maintanace Manual](https://docs.google.com/docnt/d/1OeCkRY1K5cOtCAf0gap8i6dUNEq7Ie0EZcChbe2_QBg/edit?usp=sharing)
+* [Maintanace Manual](https://docs.google.com/document/d/1OeCkRY1K5cOtCAf0gap8i6dUNEq7Ie0EZcChbe2_QBg/edit?usp=sharing)
 
