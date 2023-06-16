@@ -13,7 +13,7 @@ import ConfirmDialogue from "../components/ConfirmDialogue";
 import { hebrew } from "../utils/text_dictionary";
 import { CommonActions } from "@react-navigation/native";
 
-function get_project_buttons(navigation: any, projects: Project[]) {
+function get_project_buttons(navigation: any, projects: Project[], renameProject: (projectId: string, newName: string) => void) {
   let buttons = [];
   const { setProject, getProject, setRole } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
@@ -35,6 +35,7 @@ function get_project_buttons(navigation: any, projects: Project[]) {
               })
             );
         }}
+        renameProject={renameProject}
       />
     );
   };
@@ -53,11 +54,28 @@ function get_project_buttons(navigation: any, projects: Project[]) {
 const ProjectsScreen = ({ navigation }: { navigation: any }) => {
   const { getUser, clearUserState } = React.useContext(UserContext);
   const [projects, setProjects] = React.useState([] as Project[]);
-  const { clearProjectState } = React.useContext(ProjectContext);
+
+  const renameProject = (projectId: string, newName: string) => {
+    API.get_instance()
+      .edit_project_name(getUser().id, projectId, newName)
+      .then(() => {
+        setProjects((prevProjects) =>
+          prevProjects.map((project) =>
+            project.id === projectId ? { ...project, name: newName } : project
+          )
+        );
+      })
+      .catch((err) => alert(err));
+  };
+
   let add_project_click = (
     projectName: string,
     modal_visibility_setter: (b: boolean) => void
   ) => {
+    if (projectName.length == 0) {
+      alert(hebrew.project_name_cant_be_empty);
+      return;
+    }
     API.get_instance()
       .add_project(projectName, getUser().id)
       .then(() =>
@@ -72,66 +90,65 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
     API.get_instance()
       .get_all_projects(getUser().id)
       .then((projects) => setProjects(projects));
-    navigation.setOptions({ title: "" });
+    navigation.setOptions({ title: "Builder" });
   }, []);
-  useFocusEffect(() => {
-    clearProjectState();
-  });
+  useFocusEffect(
+    React.useCallback(() => {
+      API.get_instance()
+        .get_all_projects(getUser().id)
+        .then((projects) => setProjects(projects));
+    }, [])
+  );
+
   return (
     <Background>
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 15 }}>
-          <ScrollView
-            style={{
-              flexDirection: "column",
-              height: "80%",
-              alignContent: "center",
-            }}
-          >
-            {get_project_buttons(navigation, projects)}
-            <View style={{ backgroundColor: "red", margin: 50 }} />
-          </ScrollView>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "rgba(44, 57, 63, 1)",
-              position: "absolute",
-              width: 70,
-              height: 70,
-              borderRadius: 35,
-              left: 30,
-              bottom: "12%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ClickableIcon
-              width={50}
-              height={50}
-              imagePath={require("../components/imgs/logout.png")}
-              onClick={() =>
-                ConfirmDialogue({
-                  title: "",
-                  message: hebrew.are_you_sure_you_want_to_logout,
-                  onConfirm: () =>
-                    API.get_instance()
-                      .logout(getUser().id)
-                      .then(() => {
-                        clearUserState();
-                        navigation.dispatch(
-                          CommonActions.reset({
-                            index: 0,
-                            routes: [{ name: "LoginScreen", params: {} }],
-                          })
-                        );
-                      })
-                      .catch((err) => alert(err)),
-                })
-              }
-            />
-          </View>
-          <CreateProjectButton onAddClick={add_project_click} />
+        <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 10, }}>
+          {hebrew.x_projects + " " + getUser().name}
+        </Text>
+        <ScrollView style={{ flexDirection: "column", height: "75%", alignContent: "center", }} >
+          {get_project_buttons(navigation, projects, renameProject)}
+        </ScrollView>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(44, 57, 63, 1)",
+            position: "absolute",
+            width: 70,
+            height: 70,
+            borderRadius: 35,
+            left: 30,
+            bottom: "12%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <ClickableIcon
+            width={50}
+            height={50}
+            imagePath={require("../components/imgs/logout.png")}
+            onClick={() =>
+              ConfirmDialogue({
+                title: "",
+                message: hebrew.are_you_sure_you_want_to_logout,
+                onConfirm: () =>
+                  API.get_instance()
+                    .logout(getUser().id)
+                    .then(() => {
+                      clearUserState();
+                      navigation.dispatch(
+                        CommonActions.reset({
+                          index: 0,
+                          routes: [{ name: "LoginScreen", params: {} }],
+                        })
+                      );
+                    })
+                    .catch((err) => alert(err)),
+              })
+            }
+          />
         </View>
+        <CreateProjectButton onAddClick={add_project_click} />
       </View>
     </Background>
   );

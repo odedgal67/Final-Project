@@ -47,7 +47,6 @@ export var hebrew = {
   verify_password: "אימות סיסמה",
   passwords_dont_match: "הסיסמאות אינן תואמות",
   fill_all_fields: "ישנם שדות ריקים",
-  user_registered_successfully: "המשתמש נרשם בהצלחה",
   invalid_id: "תעודת הזהות לא תקינה",
   user_assigned_successfully: "המשתמש קיבל גישה בהצלחה",
   assign_existing_user_a_role_explanation: "מתן גישה למשתמש קיים",
@@ -83,6 +82,7 @@ export var hebrew = {
     "האם ברצונך למחוק את ${x}?\n לא ניתן לשחזר את הפעולה",
   are_you_sure_you_want_to_logout: "האם ברצונך להתנתק?",
   choose_role: "בחירת תפקיד",
+  x_projects: "הפרויקטים של",
 };
 
 export var title_to_hebrew = {

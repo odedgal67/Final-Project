@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
+import { View, Text, TextInput, StyleSheet, Pressable, Image } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import API from "../API/api_bridge";
 import Background from "../components/Background";
@@ -39,6 +39,20 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <Background>
+      <View>
+        <Image
+          source={require("../components/imgs/crane.gif")}
+          style={{
+            width: 150,
+            height: 150,
+            alignSelf: "center",
+            marginTop: 20,
+          }}
+        />
+        <Text style={{ fontSize: 50, fontWeight: "bold", textAlign: "center" }}>
+          Builder
+        </Text>
+      </View>
       <View style={styles.container}>
         <View style={styles.form}>
           <Text style={styles.heading}>{hebrew.login}</Text>
@@ -72,7 +86,7 @@ const LoginScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0.9,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -81,14 +95,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     width: "80%",
-    maxWidth: 400,
+    maxWidth: 330,
+    height: 330,
     alignItems: "center",
     justifyContent: "center",
   },
   heading: {
     fontSize: 28,
     fontWeight: "bold",
-    marginVertical: 20,
+    marginBottom: 10,
     color: "#3C3C3C",
   },
   input: {

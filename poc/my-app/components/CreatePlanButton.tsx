@@ -25,8 +25,6 @@ const CreatePlanButton = (props) => {
       alignItems: "center",
       flexDirection: "row",
       borderRadius: 10,
-      marginHorizontal: "25%",
-      backgroundColor: "#607070",
     },
     initial_view: {
       flex: 1,
@@ -58,6 +56,16 @@ const CreatePlanButton = (props) => {
       fontWeight: "bold",
       letterSpacing: 0.25,
       color: "white",
+    },
+    pickerButton: {
+      flex: 1,
+      justifyContent: "center",
+      alignContent: "center",
+      alignItems: "center",
+      flexDirection: "row",
+      borderRadius: 10,
+      marginHorizontal: "25%",
+      backgroundColor: "#607070",
     },
   });
 
@@ -123,7 +131,7 @@ const CreatePlanButton = (props) => {
                   onChangeText={(plan_name) => setPlan_Name(plan_name)}
                 />
                 <TouchableOpacity
-                  style={styles.button}
+                  style={styles.pickerButton}
                   onPress={handleDocumentPick}
                 >
                   <Text style={styles.white_text}>{hebrew.pick_document}</Text>

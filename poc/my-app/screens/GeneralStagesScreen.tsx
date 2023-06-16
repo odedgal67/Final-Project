@@ -23,7 +23,7 @@ const GeneralStagesScreen = ({
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title: route.params.apartment_number ? hebrew.apartment_stages.replace("${apartment}", route.params.apartment_number.toString()) :
-      truncate_page_title(title_to_hebrew[route.params.title]),
+      route.params.project.name + " > " + truncate_page_title(title_to_hebrew[route.params.title]),
     });
   }, [navigation]);
   useFocusEffect(

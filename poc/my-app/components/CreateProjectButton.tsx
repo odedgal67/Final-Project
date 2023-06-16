@@ -70,7 +70,10 @@ const CreateProjectButton = (props: {
     <View style={styles.initial_view}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => setModalVisible(true)}
+        onPress={() => {
+          setProject_Name("");
+          setModalVisible(true)
+        }}
       >
         <View>
           {add_new_project_text}

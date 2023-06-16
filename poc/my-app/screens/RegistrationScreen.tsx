@@ -4,32 +4,53 @@ import { CommonActions } from "@react-navigation/native";
 import API from "../API/api_bridge";
 import Background from "../components/Background";
 import { hebrew } from "../utils/text_dictionary";
+import { validate_id } from "../utils/ValidateInputs";
 
 const RegistrationScreen = ({ navigation }) => {
   const [username, setUsername] = React.useState("");
   const [id, setId] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [verify_password, setVerifyPassword] = React.useState("");
 
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: hebrew.register });
   }, [navigation]);
 
   const handleRegistration = () => {
+    let trimmed_id = id.trim();
+    let trimmed_name = username.trim();
+    if (!validate_id(trimmed_id)) {
+      alert(hebrew.invalid_id);
+      return;
+    }
+    if (password != verify_password) {
+      alert(hebrew.passwords_dont_match);
+      return;
+    }
+    if (
+      id == "" ||
+      username == "" ||
+      password == "" ||
+      verify_password == ""
+    ) {
+      alert(hebrew.fill_all_fields);
+      return;
+    }
     API.get_instance()
-      .register(username, id, password, "")
-      .then((user) => {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "LoginScreen" }],
-          }),
-          alert(hebrew.registration_successful),
-        );
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
+    .register(username, id, password)
+    .then(() => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "LoginScreen" }],
+        }),
+        alert(hebrew.registration_successful),
+      );
+    })
+    .catch((error) => {
+      alert(error);
+    });
+};
 
   return (
     <Background>
@@ -55,6 +76,14 @@ const RegistrationScreen = ({ navigation }) => {
             placeholderTextColor="#B4B4B4"
             value={password}
             onChangeText={setPassword}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder={hebrew.verify_password}
+            secureTextEntry={true}
+            placeholderTextColor="#B4B4B4"
+            value={verify_password}
+            onChangeText={setVerifyPassword}
           />
           <Pressable style={styles.button} onPress={handleRegistration}>
             <Text style={styles.buttonText}>{hebrew.register}</Text>
