@@ -494,7 +494,6 @@ export class RealAPI extends api_interface {
     username: string,
     id: string,
     password: string,
-    name: string
   ): Promise<void> {
     return new PostWrapperVoid().send_request(this.get_url("register"), {
       username: id,

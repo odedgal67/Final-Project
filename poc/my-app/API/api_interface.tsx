@@ -172,8 +172,7 @@ abstract class api_interface {
   abstract register(
     username: string,
     id: string,
-    password: string,
-    name: string
+    password: string
   ): Promise<void>;
   abstract remove_user(
     project_id: string,
