@@ -23,9 +23,9 @@ const ImageMissionLink = (props: ImageMissionLinkProps) => {
   const { getProject } = useContext(ProjectContext);
   const { getUser } = useContext(UserContext);
   let NotFoundAction = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status === "granted") {
-      const result = await ImagePicker.launchImageLibraryAsync({
+      const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,

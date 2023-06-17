@@ -108,6 +108,7 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
         </Text>
         <ScrollView style={{ flexDirection: "column", height: "75%", alignContent: "center", }} >
           {get_project_buttons(navigation, projects, renameProject)}
+          <View style={{padding: "15%"}}/>
         </ScrollView>
         <View
           style={{
