@@ -17,6 +17,7 @@ import * as DocumentPicker from "expo-document-picker";
 import XLSX from "xlsx";
 import * as FileSystem from "expo-file-system";
 import { cacheDirectory, copyAsync, getInfoAsync, makeDirectoryAsync, uploadAsync } from 'expo-file-system'
+import React from "react";
 
 interface ProjectSettingsModalProps {
   project: Project;

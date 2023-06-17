@@ -45,6 +45,7 @@ const FaultScreen = ({
       .set_fault_urgency(getProject().id, fault.id, newUrgency, getUser().id)
       .then(() => {
         setUrgency(newUrgency);
+        fault.urgency = newUrgency;
       })
       .catch((error) => {
         alert(hebrew.error_occurred + "\n" + error);

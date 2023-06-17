@@ -6,6 +6,7 @@ import { ProjectContext } from "../../utils/ProjectContext";
 import { UserContext } from "../../utils/UserContext";
 import * as ImagePicker from "expo-image-picker";
 import API from "../../API/api_bridge";
+import React from "react";
 
 type ImageFaultLinkProps = {
   fault: Fault;
@@ -19,10 +20,10 @@ export const ImageFaultProofLink = (props: ImageFaultLinkProps) => {
   const { getProject } = useContext(ProjectContext);
   const { getUser } = useContext(UserContext);
   let NotFoundAction = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status === "granted") {
       const result: ImagePicker.ImagePickerResult =
-        await ImagePicker.launchImageLibraryAsync({
+        await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: true,
           quality: 1,
@@ -68,10 +69,10 @@ export const ImageFaultProofFixLink = (props: ImageFaultLinkProps) => {
     const { getProject } = useContext(ProjectContext);
     const { getUser } = useContext(UserContext);
     let NotFoundAction = async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status === "granted") {
         const result: ImagePicker.ImagePickerResult =
-          await ImagePicker.launchImageLibraryAsync({
+          await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             quality: 1,
