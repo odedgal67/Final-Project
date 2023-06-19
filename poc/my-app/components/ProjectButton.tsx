@@ -47,6 +47,7 @@ const ProjectButton = (props: {
         setModalVisible(true);
         setProject_Name("");
       }}
+      testID="projectButton"
     >
       <View style={styles.button}>
         <Modal
@@ -57,6 +58,7 @@ const ProjectButton = (props: {
             setModalVisible(false);
             setProject_Name("");
           }}
+          testID="modal"
         >
           <View
             style={{
@@ -85,10 +87,12 @@ const ProjectButton = (props: {
                 placeholderTextColor={"black"}
                 textAlign="center"
                 onChangeText={(proj_name) => setProject_Name(proj_name)}
+                testID="projectNameInput"
               />
               <TouchableOpacity
                 style={styles.accept_name_change_button}
                 onPress={rename_project_click}
+                testID="acceptButton"
               >
                 <Text style={styles.rename_text_white}>{hebrew.accept}</Text>
               </TouchableOpacity>
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "Black",
+    color: "rgba(0,0,0,1)",
     marginHorizontal: "3%",
     marginTop: "2%",
   },

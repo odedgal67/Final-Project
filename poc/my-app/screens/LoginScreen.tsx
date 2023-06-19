@@ -41,17 +41,12 @@ const LoginScreen = ({ navigation }) => {
     <Background>
       <View>
         <Image
-          source={require("../components/imgs/crane.gif")}
+          source={require("../components/imgs/builder_logo.png")}
           style={{
-            width: 150,
-            height: 150,
             alignSelf: "center",
-            marginTop: 20,
+            marginTop: 40,
           }}
         />
-        <Text style={{ fontSize: 50, fontWeight: "bold", textAlign: "center" }}>
-          Builder
-        </Text>
       </View>
       <View style={styles.container}>
         <View style={styles.form}>

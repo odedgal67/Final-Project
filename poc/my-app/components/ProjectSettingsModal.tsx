@@ -181,14 +181,14 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   modalButton: {
-    backgroundColor: "#e4dfdb",
+    backgroundColor: "#0090D6",
     padding: 15,
     marginBottom: 15,
     borderRadius: 8,
     alignItems: "center",
   },
   modalButtonText: {
-    color: "rgb(50,50,50)",
+    color: "#ffffff",
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",

@@ -54,10 +54,12 @@ const GetTextModal = (props: GetTextModalProps) => {
             placeholderTextColor={"black"}
             textAlign="center"
             onChangeText={props.onChangeText}
+            testID="Input"
           />
           <TouchableOpacity
             style={styles.accept_name_change_button}
             onPress={props.onAccept}
+            testID="acceptButton"
           >
             <Text style={styles.rename_text_white}>{hebrew.accept}</Text>
           </TouchableOpacity>
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "Black",
+    color: "black",
     marginHorizontal: "3%",
     marginTop: "2%",
   },

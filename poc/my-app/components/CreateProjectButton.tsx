@@ -43,12 +43,13 @@ const CreateProjectButton = (props: {
       borderRadius: 10,
       marginHorizontal: "10%",
       marginBottom: 5,
+      height: "25%"
     },
     add_project_button: {
       flex: 1,
       borderRadius: 20,
       backgroundColor: "#4c595f",
-      margin: "10%",
+      margin: "5%",
       marginHorizontal: "30%",
       alignItems: "center",
       justifyContent: "center",
