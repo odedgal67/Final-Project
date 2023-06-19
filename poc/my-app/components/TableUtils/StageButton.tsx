@@ -62,6 +62,7 @@ export const StageButtonBase = (props: StageButtonbaseProps) => {
 type editButtonProps = {
   onClick: () => void;
   Image: ImageSourcePropType;
+  testID: string;
 };
 
 const EditButton = (props: editButtonProps) => {
@@ -79,6 +80,7 @@ const EditButton = (props: editButtonProps) => {
       }}
     >
       <ClickableIcon
+        testID={props.testID}
         imagePath={props.Image}
         width={len}
         height={len}
@@ -110,18 +112,21 @@ export const StageButton = (props: StageButtonProps) => {
         }}
       >
         <EditButton
+          testID="Back"
           Image={require("../imgs/back.png")}
           onClick={() => {
             setIsEditable(false);
           }}
         />
         <EditButton
+          testID="Edit"
           Image={require("../imgs/edit.png")}
           onClick={() => {
             setEditNameModalVisibility(true);
           }}
         />
         <EditButton
+          testID="Delete"
           Image={require("../imgs/trash.png")}
           onClick={() =>
             ConfirmDialogue({

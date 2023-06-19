@@ -7,10 +7,11 @@ type ClickableIconProps = {
   imagePath: ImageSourcePropType;
   width: string | number | undefined;
   height: string | number | undefined;
+  testID: string;
 };
 
 const ClickableIcon = (props: ClickableIconProps) => (
-  <TouchableOpacity onPress={props.onClick}>
+  <TouchableOpacity onPress={props.onClick} testID={props.testID}>
     <Image
       source={props.imagePath}
       style={{
