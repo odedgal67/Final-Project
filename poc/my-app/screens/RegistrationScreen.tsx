@@ -29,7 +29,7 @@ const RegistrationScreen = ({ navigation }) => {
     }
     if (
       id == "" ||
-      username == "" ||
+      trimmed_name == "" ||
       password == "" ||
       verify_password == ""
     ) {
@@ -47,8 +47,8 @@ const RegistrationScreen = ({ navigation }) => {
         alert(hebrew.registration_successful),
       );
     })
-    .catch((error) => {
-      alert(error);
+    .catch(() => {
+      alert(hebrew.password_instructions);
     });
 };
 

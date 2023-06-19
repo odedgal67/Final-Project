@@ -263,6 +263,14 @@ abstract class api_interface {
     data: {},
     username: string
   ): Promise<void>;
+  abstract change_user_name(
+    new_name: string,
+    username: string
+  ): Promise<void>;
+  abstract change_user_password(
+    new_password: string,
+    username: string
+  ): Promise<void>;
   abstract logout(username: string): Promise<void>;
 }
 

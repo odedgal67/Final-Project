@@ -8,10 +8,10 @@ import { UserContext } from "../utils/UserContext";
 import { Project } from "../types";
 import { useFocusEffect } from "@react-navigation/native";
 import { ProjectContext } from "../utils/ProjectContext";
-import ClickableIcon from "../components/TableUtils/ClickableIcon";
 import ConfirmDialogue from "../components/ConfirmDialogue";
 import { hebrew } from "../utils/text_dictionary";
 import { CommonActions } from "@react-navigation/native";
+import UserSettingsModal from "../components/UserSettingsModal";
 
 function get_project_buttons(navigation: any, projects: Project[], renameProject: (projectId: string, newName: string) => void) {
   let buttons = [];
@@ -54,6 +54,7 @@ function get_project_buttons(navigation: any, projects: Project[], renameProject
 const ProjectsScreen = ({ navigation }: { navigation: any }) => {
   const { getUser, clearUserState } = React.useContext(UserContext);
   const [projects, setProjects] = React.useState([] as Project[]);
+  const [username, setUsername] = React.useState(getUser().name);
 
   const renameProject = (projectId: string, newName: string) => {
     API.get_instance()
@@ -86,12 +87,14 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
       .catch((error) => alert(error))
       .then(() => modal_visibility_setter(false));
   };
+
   React.useEffect(() => {
     API.get_instance()
       .get_all_projects(getUser().id)
       .then((projects) => setProjects(projects));
     navigation.setOptions({ title: "Builder" });
   }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       API.get_instance()
@@ -100,15 +103,19 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
     }, [])
   );
 
+  const updateUsername = (newUsername: string) => {
+    setUsername(newUsername);
+  };
+
   return (
     <Background>
       <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 10, }}>
-          {hebrew.x_projects + " " + getUser().name}
+        <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center", marginTop: 10 }}>
+          {hebrew.x_projects + " " + username}
         </Text>
-        <ScrollView style={{ flexDirection: "column", height: "75%", alignContent: "center", }} >
+        <ScrollView style={{ flexDirection: "column", height: "75%", alignContent: "center" }}>
           {get_project_buttons(navigation, projects, renameProject)}
-          <View style={{padding: "15%"}}/>
+          <View style={{ padding: "15%" }} />
         </ScrollView>
         <View
           style={{
@@ -124,26 +131,7 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
             justifyContent: "center",
           }}
         >
-          <ClickableIcon
-            width={50}
-            height={50}
-            imagePath={require("../components/imgs/logout.png")}
-            onClick={() => ConfirmDialogue({
-              title: "",
-              message: hebrew.are_you_sure_you_want_to_logout,
-              onConfirm: () => API.get_instance()
-                .logout(getUser().id)
-                .then(() => {
-                  clearUserState();
-                  navigation.dispatch(
-                    CommonActions.reset({
-                      index: 0,
-                      routes: [{ name: "LoginScreen", params: {} }],
-                    })
-                  );
-                })
-                .catch((err) => alert(err)),
-            })} testID={""}          />
+          <UserSettingsModal navigation={navigation} updateUsername={updateUsername} />
         </View>
         <CreateProjectButton onAddClick={add_project_click} />
       </View>
