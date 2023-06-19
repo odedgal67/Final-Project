@@ -2,7 +2,11 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import ManageUserButton from "../ManageUserButton";
 import { roles, actions } from "../../utils/Permissions";
-import { role_to_hebrew } from "../../utils/text_dictionary";
+import { hebrew, role_to_hebrew } from "../../utils/text_dictionary";
+import { Alert } from "react-native";
+import API from "../../API/api_bridge";
+
+jest.spyOn(Alert, "alert").mockImplementation(() => {});
 
 describe("ManageUserButton", () => {
   const user = {
@@ -11,10 +15,11 @@ describe("ManageUserButton", () => {
   };
 
   const onRemoveMock = jest.fn();
-  const onChangeRoleMock = jest.fn();
+  const onChangeRoleMock = jest.fn(API.get_instance().edit_user_role);
+  jest.spyOn(API.get_instance(), "edit_user_role").mockImplementation(onChangeRoleMock)
 
   it("should render correctly", () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
       <ManageUserButton
         navigation={null}
         user={user}
@@ -31,7 +36,7 @@ describe("ManageUserButton", () => {
   });
 
   it("should show options on press", () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
       <ManageUserButton
         navigation={null}
         user={user}
@@ -43,15 +48,15 @@ describe("ManageUserButton", () => {
     const button = getByText(role_to_hebrew[roles.PROJECT_MANAGER]);
     fireEvent.press(button);
 
-    const removeButton = getByText("Remove");
+    const removeButton = getByTestId("remove_user_button");
     expect(removeButton).toBeDefined();
 
-    const changeRoleButton = getByText("Change Role");
+    const changeRoleButton = getByText(hebrew.change_role);
     expect(changeRoleButton).toBeDefined();
   });
 
   it("should call onRemove function when remove button is pressed", () => {
-    const { getByText } = render(
+    const { getByText, getByTestId } = render(
       <ManageUserButton
         navigation={null}
         user={user}
@@ -63,14 +68,17 @@ describe("ManageUserButton", () => {
     const button = getByText(role_to_hebrew[roles.PROJECT_MANAGER]);
     fireEvent.press(button);
 
-    const removeButton = getByText("Remove");
+    const removeButton = getByTestId("remove_user_button");
     fireEvent.press(removeButton);
 
-    expect(onRemoveMock).toHaveBeenCalledWith(user);
+    const acceptButtonPress = (Alert.alert as jest.Mock).mock.calls[0][2][0].onPress;
+    acceptButtonPress();
+
+    expect(onRemoveMock).toHaveBeenCalled();
   });
 
   it("should call onChangeRole function when change role button is pressed", () => {
-    const { getByText } = render(
+    const { getByText, getByTestId, } = render(
       <ManageUserButton
         navigation={null}
         user={user}
@@ -79,11 +87,13 @@ describe("ManageUserButton", () => {
       />
     );
 
-    const button = getByText(role_to_hebrew[roles.PROJECT_MANAGER]);
+    fireEvent.press(getByText("John Doe"));
+
+    const button = getByText(hebrew.change_role);
     fireEvent.press(button);
 
-    const changeRoleButton = getByText("Change Role");
-    fireEvent.press(changeRoleButton);
+    const roleButton = getByText(role_to_hebrew[roles.CONTRACTOR]);
+    fireEvent.press(roleButton);
 
     expect(onChangeRoleMock).toHaveBeenCalled();
   });

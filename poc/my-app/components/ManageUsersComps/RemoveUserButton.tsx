@@ -22,6 +22,7 @@ const RemoveUserButton = (props: RemoveUserButtonProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        testID="remove_user_button"
         style={styles.generic_button_container}
         onPress={confirm}
       >
