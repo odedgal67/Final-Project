@@ -17,6 +17,7 @@ const statusColors: Record<Status, string> = {
   [Status.InProgress]: "#f7e350",
   [Status.Done]: "#44ce1b",
   [Status.Invalid]: "#e51f1f",
+  [Status.Undefined]: "black"
 };
 
 const statusIMG = {
@@ -97,7 +98,7 @@ const StatusRectangle = (props: {
       <TouchableOpacity
         style={_styles.s}
         onPress={() => handleChange(value)}
-        // testID={hevalue}
+        testID={String(value)}
       >
         <Text style={styles.text}>{status_to_hebrew[value]}</Text>
       </TouchableOpacity>

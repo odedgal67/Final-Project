@@ -1,7 +1,7 @@
-import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import { Status, Title } from "../../types";
 import StatusRectangle from "../StatusRectangle";
+import React from "react";
 
 describe("StatusRectangle component", () => {
   const onChange = jest.fn();
@@ -28,10 +28,10 @@ describe("StatusRectangle component", () => {
     const button = getByTestId("status-rectangle-button");
     fireEvent.press(button);
 
-    expect(getByTestId(Status.Open)).toBeDefined();
-    expect(getByTestId(Status.InProgress)).toBeDefined();
-    expect(getByTestId(Status.Done)).toBeDefined();
-    expect(getByTestId(Status.Invalid)).toBeDefined();
+    expect(getByTestId(String(Status.Open))).toBeDefined();
+    expect(getByTestId(String(Status.InProgress))).toBeDefined();
+    expect(getByTestId(String(Status.Done))).toBeDefined();
+    expect(getByTestId(String(Status.Invalid))).toBeDefined();
   });
 
   it("should call onChange function with selected status", () => {
@@ -39,7 +39,7 @@ describe("StatusRectangle component", () => {
     const button = getByTestId("status-rectangle-button");
     fireEvent.press(button);
 
-    const inProgressButton = getByTestId(Status.InProgress);
+    const inProgressButton = getByTestId(String(Status.InProgress));
     fireEvent.press(inProgressButton);
 
     expect(onChange).toHaveBeenCalledWith(Status.InProgress);
