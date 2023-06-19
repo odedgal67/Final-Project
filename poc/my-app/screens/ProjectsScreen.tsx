@@ -128,26 +128,22 @@ const ProjectsScreen = ({ navigation }: { navigation: any }) => {
             width={50}
             height={50}
             imagePath={require("../components/imgs/logout.png")}
-            onClick={() =>
-              ConfirmDialogue({
-                title: "",
-                message: hebrew.are_you_sure_you_want_to_logout,
-                onConfirm: () =>
-                  API.get_instance()
-                    .logout(getUser().id)
-                    .then(() => {
-                      clearUserState();
-                      navigation.dispatch(
-                        CommonActions.reset({
-                          index: 0,
-                          routes: [{ name: "LoginScreen", params: {} }],
-                        })
-                      );
+            onClick={() => ConfirmDialogue({
+              title: "",
+              message: hebrew.are_you_sure_you_want_to_logout,
+              onConfirm: () => API.get_instance()
+                .logout(getUser().id)
+                .then(() => {
+                  clearUserState();
+                  navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [{ name: "LoginScreen", params: {} }],
                     })
-                    .catch((err) => alert(err)),
-              })
-            }
-          />
+                  );
+                })
+                .catch((err) => alert(err)),
+            })} testID={""}          />
         </View>
         <CreateProjectButton onAddClick={add_project_click} />
       </View>
