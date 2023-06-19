@@ -3,6 +3,7 @@
   "allowSyntheticDefaultImports": true,
   "compilerOptions": {
     "jsx": "react",
-    "strict": true
+    "strict": true,
+    "allowJs": true,
   },
 }
