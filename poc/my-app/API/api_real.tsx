@@ -105,7 +105,7 @@ export class RealAPI extends api_interface {
     link: string,
     username: string
   ): Promise<Plan> {
-    if (link == "") {
+    if (link == null || link == "") {
       return new PostWrapperPlan().send_request(
       this.get_url("add_empty_plan"), {
       project_id: project_id,
@@ -841,14 +841,9 @@ export class RealAPI extends api_interface {
         handleSheet("עבודות גמר בדירות", Title.ApartmentStages, apartment.apartment_number);
 
       let rows = data["ליקויי בניה"];
-      let fault_id = "";
       for (const row of rows.slice(1)) {
         if(row[1] && row[1] != "")
-          this.add_fault(project_id, row[4], row[5], row[1], username).then((fault: Fault) =>{fault_id = fault.id}).catch((error: string) =>{reject(error);});
-        if(row[2] == "בוצע")
-          this.set_fault_status(project_id, fault_id, Status.Done, username);
-        // if(row[3])
-        //   this.edit_fault_urgency(project_id, fault_id, row[3], username);
+          this.add_fault(project_id, row[4], row[5], row[1], username).catch((error: string) =>{reject(error);});
       }
 
       rows = data["תכניות"];
