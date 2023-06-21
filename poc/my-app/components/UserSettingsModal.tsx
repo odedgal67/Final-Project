@@ -17,7 +17,7 @@ import Background from "./Background";
 import ClickableIcon from "./TableUtils/ClickableIcon";
 
 const UserSettingsModal = ({ navigation, updateUsername }) => {
-  const { getUser, clearUserState } = useContext(UserContext);
+  const { getUser, clearUserState, setLastUsedPassword } = useContext(UserContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [newName, setNewName] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -86,6 +86,7 @@ const UserSettingsModal = ({ navigation, updateUsername }) => {
         setConfirmPassword("");
         setModalVisible(false);
         setShowPasswordChange(false);
+        setLastUsedPassword(newPassword);
       })
       .catch(() => {
         alert(hebrew.password_instructions);
