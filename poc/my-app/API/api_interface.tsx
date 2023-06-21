@@ -272,6 +272,8 @@ abstract class api_interface {
     username: string
   ): Promise<void>;
   abstract logout(username: string): Promise<void>;
+  abstract is_admin(username: string): Promise<boolean>;
+  abstract reset_password_for_user(username_to_reset: string, username_resetting: string): Promise<void>;
 }
 
 export default api_interface;

@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { User } from "../types";
 import { View, StyleSheet, Text, Pressable } from "react-native";
 import { truncate_with_dots } from "../utils/stringFunctions";
 import { hebrew, role_to_hebrew } from "../utils/text_dictionary";
 import { roles } from "../utils/Permissions";
-import RemoveUserButton from "./ManageUsersComps/RemoveUserButton";
+import { RemoveUserButton, ResetUserPasswordButton } from "./ManageUsersComps/ManageUserButton";
 import RoleSelection from "./ManageUsersComps/RoleSelection";
 import { UserContext } from "../utils/UserContext";
 import API from "../API/api_bridge";
@@ -21,8 +21,15 @@ const ManageUserButton = (props: ManageUserButtonProps) => {
   let name = truncate_with_dots(props.user.name, 15);
   const [role, setRole] = useState(role_to_hebrew[props.role]);
   const [pressed, setPressed] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { getProject } = React.useContext(ProjectContext);
   const { getUser } = React.useContext(UserContext);
+  useEffect(() => {
+    API.get_instance()
+      .is_admin(getUser().id)
+      .then((res) => setIsAdmin(res))
+      .catch((err) => console.log(err));
+  }, []);
   let onChangeRole = (val: roles) => {
     API.get_instance()
       .edit_user_role(getProject().id, props.user.id, val, getUser().id)
@@ -42,6 +49,20 @@ const ManageUserButton = (props: ManageUserButtonProps) => {
             username={props.user.name}
           />
           <RoleSelection title={hebrew.change_role} onPress={onChangeRole} />
+          {isAdmin?
+          <ResetUserPasswordButton
+            onPress={() =>{
+              API.get_instance()
+              .reset_password_for_user(props.user.id, getUser().id)
+              .then(() => alert(hebrew.password_reset_success))
+              .catch((err) => {
+                console.log(err);
+                return alert(hebrew.password_reset_fail)
+              });
+            } }
+            title={hebrew.reset_password}
+            username={props.user.name}/>
+            : null}
         </View>
       ) : (
         <Text style={styles.role_text}>{role}</Text>
@@ -67,7 +88,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: "black",
     padding: 10,
-    flex: 1,
+    flex: 0.5,
     textAlign: "center",
   },
   role_text: {

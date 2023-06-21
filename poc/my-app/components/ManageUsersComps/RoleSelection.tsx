@@ -18,9 +18,9 @@ const RoleSelection = (props: RoleSelectionProps) => {
     },
     { key: roles.WORK_MANAGER, value: role_to_hebrew[roles.WORK_MANAGER] },
   ];
-  const [selected, setSelected] = React.useState("");
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1,
+    justifyContent: "center", }}>
       <SelectList
         data={data}
         setSelected={props.onPress}
