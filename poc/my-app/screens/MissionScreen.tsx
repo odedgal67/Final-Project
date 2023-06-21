@@ -158,7 +158,8 @@ const MissionScreen = ({
                       setStatus(new_status);
                       mission.status = new_status;
                       notify();
-                    });
+                    })
+                    .catch((err) => alert(err));
                 }}
               />
             </View>

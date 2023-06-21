@@ -96,7 +96,7 @@ export var title_to_hebrew = {
 export var status_to_hebrew = {
   [Status.Open]: "פתוח",
   [Status.InProgress]: "בתהליך",
-  [Status.Done]: "סגור",
+  [Status.Done]: "הושלם",
   [Status.Invalid]: "לא תקין",
 };
 
