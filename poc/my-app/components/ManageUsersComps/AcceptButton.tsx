@@ -1,5 +1,6 @@
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { hebrew } from "../../utils/text_dictionary";
+import React from "react";
 
 type AcceptButtonProps = {
   onPress: () => void;

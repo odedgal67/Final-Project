@@ -7,8 +7,8 @@ import { hebrew } from "../utils/text_dictionary";
 import { UserContext } from "../utils/UserContext";
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = React.useState("123456789");
-  const [password, setPassword] = React.useState("Password");
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const { setUser, setLastUsedPassword } = React.useContext(UserContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({ title: hebrew.login });
