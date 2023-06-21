@@ -230,3 +230,9 @@ export class StringResponse extends Response<string> {
     return this.result;
   }
 }
+
+export class BooleanResponse extends Response<boolean> {
+  get_result(): boolean {
+    return this.result;
+  }
+}

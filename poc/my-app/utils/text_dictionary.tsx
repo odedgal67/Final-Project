@@ -47,6 +47,7 @@ export var hebrew = {
   manage_users: "ניהול משתמשים",
   close: "סגור",
   remove: "הסרה",
+  reset_password: "איפוס סיסמה",
   change_role: "שינוי תפקיד",
   are_you_sure_you_want_to_remove: "האם ברצונך להסיר את ${userName}?",
   add_user: "הוספת משתמש או מתן גישה",
@@ -92,6 +93,9 @@ export var hebrew = {
   are_you_sure_you_want_to_logout: "האם ברצונך להתנתק?",
   choose_role: "בחירת תפקיד",
   x_projects: "הפרויקטים של",
+  are_you_sure_you_want_to_reset_password: "האם ברצונך לאפס את הסיסמה של ${userName}?",
+  password_reset_success: "הסיסמה אופסה בהצלחה",
+  password_reset_fail: "קרתה תקלה, הסיסמה לא שונתה",
 };
 
 export var title_to_hebrew = {

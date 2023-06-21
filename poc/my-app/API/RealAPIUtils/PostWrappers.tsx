@@ -17,6 +17,7 @@ import {
   RoleResponse,
   VoidResponse,
   StringResponse,
+  BooleanResponse,
 } from "./Responses";
 import { roles } from "../../utils/Permissions";
 import { UserContextWrapper } from "../../utils/UserContext";
@@ -41,9 +42,10 @@ export abstract class PostWrapper<T> {
         .then((response) => {
           console.log("response data:", response.data);
           const responseData = this.get_response_class(response.data);
-          if (responseData.result) resolve(responseData.get_result());
+          if (responseData.result != undefined) resolve(responseData.get_result());
           else {
             console.error("error in send_request: ", responseData.error);
+            console.log(responseData)
             reject(responseData.error);
           }
         })
@@ -173,5 +175,11 @@ export class PostWrapperVoid extends PostWrapper<void> {
 export class PostWrapperString extends PostWrapper<string> {
   get_response_class(data: any): Response<string> {
     return new StringResponse(data);
+  }
+}
+
+export class PostWrapperBoolean extends PostWrapper<boolean> {
+  get_response_class(data: any): Response<boolean> {
+    return new BooleanResponse(data);
   }
 }

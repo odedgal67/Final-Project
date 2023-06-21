@@ -35,6 +35,7 @@ import {
   PostWrapperRole,
   PostWrapperVoid,
   PostWrapperString,
+  PostWrapperBoolean,
 } from "./RealAPIUtils/PostWrappers";
 import api_interface from "./api_interface";
 
@@ -877,6 +878,19 @@ export class RealAPI extends api_interface {
   logout(username: string): Promise<void> {
     return new PostWrapperVoid().send_request(this.get_url("logout"), {
       username: username,
+    });
+  }
+
+  is_admin(username: string): Promise<boolean> {
+    return new PostWrapperBoolean().send_request(this.get_url("is_admin"), {
+      username: username,
+    });
+  }
+
+  reset_password_for_user(username_to_reset: string, username_resetting: string): Promise<void> {
+    return new PostWrapperVoid().send_request(this.get_url("reset_password_for_user"), {
+      username_to_reset: username_to_reset,
+      username_resetting: username_resetting,
     });
   }
 }
