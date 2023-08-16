@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     marginTop: 30,
-    color: "#B0B0B0B",
+    color: "#B0B0B0",
     fontSize: 16,
   },
   registerButton: {

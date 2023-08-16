@@ -1,14 +1,10 @@
 import React from "react";
 import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 const Background = ({ children }: { children: JSX.Element }) => {
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <LinearGradient
-        colors={["#f4efeb", "#f4efeb"]}
-        start={{ x: 0, y: 1 }}
-        end={{ x: -1, y: 0 }}
+      <View
         style={styles.gradient}
       />
       {children}
@@ -22,6 +18,7 @@ const styles = StyleSheet.create({
   },
   gradient: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: "#f4efeb"
   },
 });
 

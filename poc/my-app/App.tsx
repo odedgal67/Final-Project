@@ -17,6 +17,7 @@ import { LogBox } from "react-native";
 import Crane from "./components/Crane";
 import ManageUsersScreen from "./screens/ManageUsersScreen";
 import { registerRootComponent } from "expo";
+import 'react-native-gesture-handler';
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
